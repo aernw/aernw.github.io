@@ -30,9 +30,11 @@ npm run build
 
 ## À compléter
 
-`src/content/artistic.ts` contient des `TODO` : liens musique, morceaux, section
-« en ce moment » et texte « à propos ». Les sections concernées ne s'affichent pas
-tant que leur contenu est vide.
+Plusieurs fichiers de `src/content/` contiennent des `TODO` : musique et plateformes
+(`artistic.ts`), découvertes, top et vinyles (`music.ts`), lectures et apprentissages
+(`personal.ts`). Les sections concernées ne s'affichent pas tant que leur contenu est vide.
+
+**Voir [CONTENU.md](CONTENU.md)** pour la marche à suivre, avec des exemples copiables.
 
 ## Déploiement
 
