@@ -1,21 +1,19 @@
 /* ── Hero ─────────────────────────────────────────────────────────
- * Composition centrée « titre puis objet », à la manière d'Apple :
- * un seul énoncé, beaucoup de vide, aucun élément décoratif concurrent.
- * La cassette viendra s'inscrire ici à l'étape suivante.
+ * Le titre part du bord gauche et occupe une largeur volontairement
+ * supérieure à celle d'une colonne de lecture. Le vide se retrouve à
+ * droite plutôt que réparti des deux côtés : c'est ce déséquilibre qui
+ * donne l'impression d'espace.
  */
 
 .hero {
   display: flex;
-  align-items: center;
-  min-height: 92vh;
-  padding-block: var(--space-6);
+  align-items: flex-end;
+  min-height: 96vh;
+  padding: var(--space-6) var(--page-gutter) var(--space-5);
 }
 
 .hero__inner {
   width: 100%;
-  max-width: var(--page-max);
-  margin-inline: auto;
-  padding-inline: var(--page-gutter);
 }
 
 .hero__eyebrow {
@@ -27,13 +25,14 @@
 
 .hero__title {
   margin-top: var(--space-2);
-  font-size: var(--text-display);
+  /* Débordement typographique assumé : le nom occupe la largeur qu'il mérite. */
+  font-size: clamp(3rem, 12vw, 11rem);
   letter-spacing: var(--tracking-display);
-  line-height: var(--leading-tight);
+  line-height: 0.92;
 }
 
 .hero__subtitle {
-  margin-top: var(--space-1);
+  margin-top: var(--space-2);
   font-size: var(--text-title);
   font-weight: 600;
   letter-spacing: var(--tracking-title);
@@ -53,12 +52,45 @@
   color: var(--accent);
 }
 
-/* ── Projets ──────────────────────────────────────────────────── */
+/* Sur grand écran, le résumé se décale vers la droite : la ligne de lecture
+   n'est plus alignée sur le titre, ce qui casse la colonne unique. */
+@media (min-width: 64rem) {
+  .hero__summary,
+  .hero__availability {
+    margin-left: 38%;
+  }
+}
 
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
-  gap: var(--space-3);
+/* ── Projets ──────────────────────────────────────────────────────
+ * Pas de grille régulière : les cartes ont des largeurs et des décalages
+ * variables. C'est l'irrégularité qui évite l'effet catalogue.
+ */
+
+.projects-flow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+@media (min-width: 60rem) {
+  /* Le projet phare occupe toute la largeur disponible. */
+  .projects-flow > .project--feature {
+    width: 100%;
+  }
+
+  /* Les projets standards alternent : décalés à droite, puis à gauche. */
+  .projects-flow > .project--standard {
+    width: min(62%, 46rem);
+  }
+
+  .projects-flow > .project--standard:nth-of-type(even) {
+    align-self: flex-end;
+  }
+
+  .projects-flow > .project--compact {
+    width: min(44%, 32rem);
+    margin-left: 12%;
+  }
 }
 
 /* ── Parcours ─────────────────────────────────────────────────── */
@@ -161,9 +193,14 @@
 /* ── Compétences ──────────────────────────────────────────────── */
 
 .skills {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-  gap: var(--space-4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-6);
+}
+
+.skills__group {
+  flex: 1 1 16rem;
+  max-width: 26rem;
 }
 
 .skills__label {
@@ -186,10 +223,11 @@
 .contact__links {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: var(--space-3) var(--space-5);
 }
 
 .contact__link {
-  font-size: var(--text-heading);
+  /* Le contact est le dernier geste de la page : il mérite d'être grand. */
+  font-size: clamp(1.5rem, 4vw, 3rem);
   letter-spacing: var(--tracking-title);
 }

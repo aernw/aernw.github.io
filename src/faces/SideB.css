@@ -10,6 +10,14 @@
   color: var(--ink-muted);
 }
 
+/* Même décalage que sur la face A : le texte de lecture n'est pas aligné
+   sur le titre, ce qui casse la colonne unique. */
+@media (min-width: 64rem) {
+  .hero--b .hero__about {
+    margin-left: 38%;
+  }
+}
+
 /* ── Musique ──────────────────────────────────────────────────── */
 
 .releases {
@@ -68,16 +76,25 @@
 
 /* ── Lab ──────────────────────────────────────────────────────── */
 
+/* Flex plutôt que grille : les éléments ont des largeurs variables, ce qui
+   évite les rangées parfaitement régulières qui font « catalogue ». */
 .lab {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
-  gap: var(--space-4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5) var(--space-4);
 }
 
 .lab__item {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+  flex: 1 1 20rem;
+  max-width: 34rem;
+}
+
+/* Un élément sur trois prend plus de place : la respiration devient irrégulière. */
+.lab__item:nth-child(3n + 1) {
+  flex-basis: 28rem;
 }
 
 .lab__name {

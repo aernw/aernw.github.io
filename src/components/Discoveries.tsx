@@ -19,13 +19,15 @@ export function formatMonth(value: string): string {
 
 interface DiscoveriesProps {
   readonly items: readonly Discovery[]
+  /** En rail, la liste devient une rangée horizontale au lieu d'une grille. */
+  readonly layout?: 'grid' | 'row'
 }
 
-export function Discoveries({ items }: DiscoveriesProps) {
+export function Discoveries({ items, layout = 'grid' }: DiscoveriesProps) {
   return (
-    <ul className="discoveries">
+    <ul className={`discoveries discoveries--${layout}`}>
       {items.map((item) => (
-        <li key={item.id} className="discovery">
+        <li key={item.id} className="discovery rail__item">
           <Cover src={item.cover} title={item.title} subtitle={item.artist} />
 
           <div className="discovery__body">

@@ -45,16 +45,24 @@
 .lessons {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  max-width: var(--measure);
+  gap: var(--space-6);
 }
 
-/* La phrase est traitée comme une citation : c'est elle qu'on doit lire. */
+/* La phrase est traitée comme une citation : c'est elle qu'on doit lire, donc
+   elle occupe une largeur généreuse et une taille proche des titres. */
 .lesson__statement {
-  font-size: var(--text-heading);
-  line-height: var(--leading-snug);
+  max-width: 24ch;
+  font-size: clamp(1.5rem, 4.5vw, 3.25rem);
+  line-height: 1.1;
   letter-spacing: var(--tracking-title);
   text-wrap: balance;
+}
+
+/* Les phrases alternent gauche / décalé : la lecture n'est plus une colonne. */
+@media (min-width: 60rem) {
+  .lesson:nth-child(even) {
+    margin-left: 32%;
+  }
 }
 
 .lesson__context {
@@ -65,10 +73,15 @@
 
 /* ── Vinyles ──────────────────────────────────────────────────── */
 
-.vinyls {
+.vinyls--grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr));
   gap: var(--space-3);
+}
+
+/* En rail, chaque pochette a une largeur fixe et défile latéralement. */
+.vinyls--row .vinyl {
+  width: clamp(9rem, 16vw, 13rem);
 }
 
 .vinyl__title {

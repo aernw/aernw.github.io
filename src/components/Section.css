@@ -1,12 +1,20 @@
+/*
+ * Sections en pleine largeur.
+ *
+ * Il n'y a plus de conteneur centré : chaque section occupe toute la largeur de
+ * l'écran, le contenu commence au bord gauche, et c'est la largeur du CONTENU
+ * (pas celle de la section) qui est bornée selon le besoin.
+ */
+
 .section {
   padding-block: var(--space-section);
-  /* Pas de border-top, pas de fond : rien ne doit marquer la frontière. */
+  padding-inline: var(--page-gutter);
 }
 
-.section__inner {
-  max-width: var(--page-max);
-  margin-inline: auto;
-  padding-inline: var(--page-gutter);
+/* Respiration irrégulière : une section sur deux respire davantage, pour éviter
+   le rythme métronomique qui fait « liste de sections ». */
+.section:nth-of-type(even) {
+  padding-block: calc(var(--space-section) * 1.35);
 }
 
 .section__header {
@@ -16,6 +24,7 @@
 .section__title {
   font-size: var(--text-title);
   letter-spacing: var(--tracking-title);
+  text-wrap: balance;
 }
 
 .section__lead {
@@ -26,11 +35,66 @@
   line-height: var(--leading-body);
 }
 
+/* ── Largeur du contenu ──────────────────────────────────────────
+ * Le corps de section est borné, jamais la section elle-même : le vide
+ * se retrouve à droite au lieu d'être réparti symétriquement.
+ */
+
+.section--text .section__body {
+  max-width: var(--measure);
+}
+
+.section--wide .section__body {
+  max-width: var(--measure-wide);
+}
+
+/* Toute la largeur disponible, marges de page conservées. */
+.section--full .section__body {
+  max-width: none;
+}
+
+/* Les rails et blocs pleine largeur débordent jusqu'aux bords de l'écran,
+   en annulant la marge latérale de la section. */
+.section--bleed .section__body {
+  margin-inline: calc(var(--page-gutter) * -1);
+}
+
+/* ── Titre collant ───────────────────────────────────────────────
+ * Le titre reste en haut pendant que son contenu défile. C'est le mécanisme
+ * qui donne le plus fort sentiment d'un site qui « joue avec l'écran ».
+ */
+
+@media (min-width: 60rem) {
+  .section--sticky {
+    display: grid;
+    grid-template-columns: minmax(14rem, 22vw) minmax(0, 1fr);
+    gap: var(--space-5);
+    align-items: start;
+  }
+
+  .section--sticky .section__header {
+    position: sticky;
+    top: var(--sticky-offset);
+    margin-bottom: 0;
+  }
+
+  /* En mise en page collante, le corps porte déjà sa propre largeur. */
+  .section--sticky.section--bleed .section__body {
+    margin-inline: 0;
+    margin-right: calc(var(--page-gutter) * -1);
+  }
+}
+
 /* Mention de fraîcheur en fin de section (ex. « dernier ajout en août 2026 »). */
 .section__footnote {
   margin-top: var(--space-3);
   font-size: var(--text-micro);
   color: var(--ink-faint);
+}
+
+/* Dans une section en pleine largeur, la note doit retrouver la marge de page. */
+.section__footnote--inset {
+  padding-inline: var(--page-gutter);
 }
 
 .subsection__title {
