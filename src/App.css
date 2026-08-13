@@ -1,0 +1,12 @@
+.page {
+  /* Le bouton flottant ne doit jamais recouvrir la fin du contenu. */
+  padding-bottom: var(--space-6);
+}
+
+.footer {
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: var(--space-4) var(--page-gutter) var(--space-5);
+  font-size: var(--text-micro);
+  color: var(--ink-faint);
+}

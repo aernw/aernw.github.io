@@ -1,0 +1,147 @@
+/* Face B : mêmes structures que la face A, plus d'air et de contraste. */
+
+.hero--b .hero__about {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: var(--measure);
+  margin-top: var(--space-3);
+  font-size: var(--text-body-lg);
+  color: var(--ink-muted);
+}
+
+/* ── Musique ──────────────────────────────────────────────────── */
+
+.releases {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: var(--space-3);
+}
+
+.release {
+  padding: var(--space-3);
+  background: var(--surface);
+  border-radius: var(--radius-card);
+}
+
+.release__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.release__title {
+  font-size: var(--text-heading);
+}
+
+.release__year {
+  font-size: var(--text-micro);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-faint);
+}
+
+.release__kind {
+  margin-top: 0.2rem;
+  font-size: var(--text-small);
+  color: var(--ink-faint);
+}
+
+.release__note {
+  margin-top: var(--space-1);
+  color: var(--ink-muted);
+}
+
+.release__links,
+.music-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  font-size: var(--text-small);
+}
+
+.music-links {
+  margin-top: var(--space-4);
+  font-size: var(--text-heading);
+}
+
+/* ── Lab ──────────────────────────────────────────────────────── */
+
+.lab {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: var(--space-4);
+}
+
+.lab__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.lab__name {
+  font-size: var(--text-heading);
+}
+
+.lab__description {
+  color: var(--ink-muted);
+}
+
+.lab__stack {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  color: var(--ink-faint);
+}
+
+.lab__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+  font-size: var(--text-small);
+}
+
+/* ── Now ──────────────────────────────────────────────────────── */
+
+.now {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: var(--measure);
+}
+
+.now__item {
+  font-size: var(--text-body-lg);
+  color: var(--ink-muted);
+}
+
+.now__updated {
+  margin-top: var(--space-3);
+  font-size: var(--text-micro);
+  color: var(--ink-faint);
+}
+
+/* ── Colophon ─────────────────────────────────────────────────── */
+
+.colophon {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.colophon__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  font-size: var(--text-small);
+}
+
+.colophon__label {
+  min-width: 10ch;
+  color: var(--ink-faint);
+}
+
+.colophon__value {
+  color: var(--ink-muted);
+}
