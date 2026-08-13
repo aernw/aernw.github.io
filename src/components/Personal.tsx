@@ -45,13 +45,15 @@ export function LessonList({ items }: LessonListProps) {
 
 interface VinylGridProps {
   readonly items: readonly Vinyl[]
+  /** En rail, la grille devient une rangée horizontale. */
+  readonly layout?: 'grid' | 'row'
 }
 
-export function VinylGrid({ items }: VinylGridProps) {
+export function VinylGrid({ items, layout = 'grid' }: VinylGridProps) {
   return (
-    <ul className="vinyls">
+    <ul className={`vinyls vinyls--${layout}`}>
       {items.map((item) => (
-        <li key={item.id} className="vinyl">
+        <li key={item.id} className="vinyl rail__item">
           <Cover src={item.cover} title={item.title} subtitle={item.artist} />
           <h3 className="vinyl__title">{item.title}</h3>
           <p className="vinyl__artist">{item.artist}</p>

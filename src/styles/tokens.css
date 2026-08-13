@@ -68,9 +68,15 @@
   /* Respiration entre les sections : large, puisque rien ne les sépare visuellement. */
   --space-section: clamp(6rem, 14vh, 12rem);
 
+  /* La mesure s'applique au TEXTE, jamais aux sections : c'est ce qui permet
+     d'occuper toute la largeur sans rendre les paragraphes illisibles. */
   --measure: 62ch;
-  --page-max: 1180px;
+  --measure-wide: 90ch;
+  /* Marge latérale unique. Il n'y a plus de colonne centrée : le contenu part
+     du bord gauche et le vide est déséquilibré, pas réparti symétriquement. */
   --page-gutter: clamp(1.25rem, 5vw, 5rem);
+  /* Hauteur du titre collant, réservée pour éviter que le contenu passe dessous. */
+  --sticky-offset: clamp(4rem, 9vh, 7rem);
 
   /* ── Formes ───────────────────────────────────────────────────── */
   --radius-pill: 980px;

@@ -1,6 +1,7 @@
 import { Section } from '../components/Section'
 import { ProjectCard } from '../components/ProjectCard'
 import { Discoveries, formatMonth } from '../components/Discoveries'
+import { Rail } from '../components/Rail'
 import { TopAlbums, TopArtists } from '../components/TopList'
 import { LessonList, MediaList, VinylGrid } from '../components/Personal'
 import {
@@ -103,10 +104,13 @@ export function SideB() {
           id="decouvertes"
           title="Découvertes"
           lead="Ce que j'écoute en ce moment et que je veux faire écouter."
+          width="bleed"
         >
-          <Discoveries items={discoveries} />
+          <Rail label="Découvertes musicales">
+            <Discoveries items={discoveries} layout="row" />
+          </Rail>
           {latestDiscovery !== null ? (
-            <p className="section__footnote">
+            <p className="section__footnote section__footnote--inset">
               Dernier ajout en {formatMonth(latestDiscovery)}
             </p>
           ) : null}
@@ -118,6 +122,7 @@ export function SideB() {
           id="top"
           title="Mon top de tous les temps"
           lead="Dans l'ordre. Pas de notes — la place suffit."
+          stickyTitle
         >
           {topAlbums.length > 0 ? (
             <>
@@ -140,8 +145,11 @@ export function SideB() {
           id="vinyles"
           title="Vinyles"
           lead="Pas un inventaire — les disques qui comptent."
+          width="bleed"
         >
-          <VinylGrid items={vinyls} />
+          <Rail label="Collection de vinyles">
+            <VinylGrid items={vinyls} layout="row" />
+          </Rail>
         </Section>
       ) : null}
 
@@ -152,7 +160,7 @@ export function SideB() {
       ) : null}
 
       {lessons.length > 0 ? (
-        <Section id="appris" title="Ce que j'ai appris">
+        <Section id="appris" title="Ce que j'ai appris" width="full">
           <LessonList items={lessons} />
         </Section>
       ) : null}
@@ -175,6 +183,7 @@ export function SideB() {
         id="lab"
         title="Lab"
         lead="Des outils et des expériences faits par curiosité, pas pour être finis."
+        stickyTitle
       >
         <ul className="lab">
           {labItems.map((item) => (
