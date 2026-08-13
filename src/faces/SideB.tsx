@@ -1,28 +1,45 @@
 import { Section } from '../components/Section'
 import { ProjectCard } from '../components/ProjectCard'
+import { Discoveries, formatMonth } from '../components/Discoveries'
+import { TopAlbums, TopArtists } from '../components/TopList'
+import { LessonList, MediaList, VinylGrid } from '../components/Personal'
 import {
   aboutDraft,
   colophon,
+  discoveries,
   labItems,
+  lessons,
+  media,
   musicLinks,
   now,
   profile,
   projects,
   releases,
+  topAlbums,
+  topArtists,
+  vinyls,
 } from '../content'
 import './SideB.css'
 
 /**
- * Face B — artistique.
+ * Face B — artistique et personnelle.
  *
- * Les sections dont le contenu n'est pas encore renseigné (musique, now) ne
- * s'affichent pas : mieux vaut une face plus courte qu'une section vide.
- * Voir les TODO dans src/content/artistic.ts.
+ * Chaque section ne s'affiche que si son contenu existe : une face plus courte
+ * vaut mieux qu'une section vide. Les emplacements à remplir sont marqués par
+ * des TODO dans src/content/music.ts, personal.ts et artistic.ts.
  */
 export function SideB() {
   const featured = projects.filter((project) => project.sides.includes('b'))
+
   const hasMusic = musicLinks.length > 0 || releases.length > 0
+  const hasTop = topAlbums.length > 0 || topArtists.length > 0
   const hasNow = now.items.length > 0
+
+  /** Fraîcheur de la section découvertes, calculée depuis l'entrée la plus récente. */
+  const latestDiscovery = discoveries.reduce<string | null>(
+    (latest, item) => (latest === null || item.discovered > latest ? item.discovered : latest),
+    null,
+  )
 
   return (
     <>
@@ -42,7 +59,7 @@ export function SideB() {
       </section>
 
       {hasMusic ? (
-        <Section id="musique" title="Musique">
+        <Section id="musique" title="Ma musique">
           {releases.length > 0 ? (
             <ul className="releases">
               {releases.map((release) => (
@@ -78,6 +95,65 @@ export function SideB() {
               ))}
             </ul>
           ) : null}
+        </Section>
+      ) : null}
+
+      {discoveries.length > 0 ? (
+        <Section
+          id="decouvertes"
+          title="Découvertes"
+          lead="Ce que j'écoute en ce moment et que je veux faire écouter."
+        >
+          <Discoveries items={discoveries} />
+          {latestDiscovery !== null ? (
+            <p className="section__footnote">
+              Dernier ajout en {formatMonth(latestDiscovery)}
+            </p>
+          ) : null}
+        </Section>
+      ) : null}
+
+      {hasTop ? (
+        <Section
+          id="top"
+          title="Mon top de tous les temps"
+          lead="Dans l'ordre. Pas de notes — la place suffit."
+        >
+          {topAlbums.length > 0 ? (
+            <>
+              <h3 className="subsection__title">Albums</h3>
+              <TopAlbums items={topAlbums} />
+            </>
+          ) : null}
+
+          {topArtists.length > 0 ? (
+            <>
+              <h3 className="subsection__title subsection__title--spaced">Artistes</h3>
+              <TopArtists items={topArtists} />
+            </>
+          ) : null}
+        </Section>
+      ) : null}
+
+      {vinyls.length > 0 ? (
+        <Section
+          id="vinyles"
+          title="Vinyles"
+          lead="Pas un inventaire — les disques qui comptent."
+        >
+          <VinylGrid items={vinyls} />
+        </Section>
+      ) : null}
+
+      {media.length > 0 ? (
+        <Section id="lectures" title="Ce que je lis et regarde">
+          <MediaList items={media} />
+        </Section>
+      ) : null}
+
+      {lessons.length > 0 ? (
+        <Section id="appris" title="Ce que j'ai appris">
+          <LessonList items={lessons} />
         </Section>
       ) : null}
 

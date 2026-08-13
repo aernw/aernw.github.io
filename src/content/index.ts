@@ -15,3 +15,9 @@ export { projects } from './projects'
 export { labItems } from './lab'
 export { aboutDraft, colophon, musicLinks, now, releases } from './artistic'
 export type { Release } from './artistic'
+
+export { discoveries, topAlbums, topArtists, vinyls } from './music'
+export type { Discovery, FavouriteAlbum, FavouriteArtist, Vinyl } from './music'
+
+export { lessons, media } from './personal'
+export type { Lesson, MediaItem, MediaKind } from './personal'

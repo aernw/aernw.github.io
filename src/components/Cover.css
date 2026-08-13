@@ -1,0 +1,22 @@
+.cover {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: calc(var(--radius-card) - 6px);
+  background: var(--ground);
+}
+
+/* Repli affiché quand l'URL externe ne répond plus. */
+.cover--fallback {
+  display: grid;
+  place-items: center;
+  background: var(--ground);
+}
+
+.cover__initials {
+  font-family: var(--font-mono);
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--ink-faint);
+}
