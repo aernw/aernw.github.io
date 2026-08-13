@@ -1,0 +1,80 @@
+.rail {
+  position: relative;
+}
+
+.rail__track {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  /* Le contenu commence aligné sur la marge de page et peut défiler jusqu'au bord. */
+  padding-inline: var(--page-gutter);
+  padding-block: var(--space-1);
+  scroll-padding-inline: var(--page-gutter);
+
+  /* La barre de défilement native est masquée : les boutons et le débordement
+     visible du dernier élément suffisent à signaler qu'on peut défiler. */
+  scrollbar-width: none;
+}
+
+.rail__track::-webkit-scrollbar {
+  display: none;
+}
+
+.rail__track > * {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+/* Une liste placée dans le rail porte elle-même la rangée. On évite
+   `display: contents`, qui retirerait la sémantique de liste aux lecteurs d'écran. */
+.rail__track > ul {
+  display: flex;
+  gap: var(--space-3);
+  min-width: min-content;
+}
+
+.rail__track .rail__item {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+/* Le focus clavier doit être visible : c'est ce qui indique que les flèches
+   vont piloter le rail. */
+.rail__track:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  border-radius: var(--radius-card);
+}
+
+.rail__controls {
+  display: flex;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  padding-inline: var(--page-gutter);
+}
+
+.rail__button {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: var(--text-body);
+  color: var(--ink);
+  background: var(--surface);
+  border-radius: 50%;
+  transition:
+    opacity var(--duration-fast) var(--ease),
+    background-color var(--duration-slow) var(--ease);
+}
+
+.rail__button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+@media (hover: hover) {
+  .rail__button:not(:disabled):hover {
+    background: var(--ground);
+  }
+}

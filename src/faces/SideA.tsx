@@ -30,15 +30,16 @@ export function SideA() {
         id="projets"
         title="Projets"
         lead="Ce que j'ai construit, avec mon rôle réel sur chacun."
+        width="full"
       >
-        <div className="projects-grid">
+        <div className="projects-flow">
           {visible.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
         </div>
       </Section>
 
-      <Section id="parcours" title="Parcours">
+      <Section id="parcours" title="Parcours" stickyTitle>
         <ol className="timeline">
           {experiences.map((experience) => (
             <li key={experience.id} className="timeline__item">
