@@ -1,12 +1,17 @@
-import { createRoot } from 'react-dom/client';
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { App } from './App'
+import './styles/tokens.css'
+import './styles/base.css'
 
-const App = () => {
-    return (
-        <div>Hello hi </div>
-    );
-};
+const domNode = document.getElementById('root')
 
-const domNode = document.getElementById("root") as HTMLElement;
-const root = createRoot(domNode);
+if (domNode === null) {
+  throw new Error('Élément racine #root introuvable dans le document')
+}
 
-root.render(<App />);
+createRoot(domNode).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)

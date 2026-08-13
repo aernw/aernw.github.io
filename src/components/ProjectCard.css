@@ -1,0 +1,126 @@
+/*
+ * Carte de projet — composant flottant.
+ *
+ * Pas de bordure : la carte se détache du fond par une surface légèrement
+ * différente et un rayon généreux. C'est le seul endroit du site où un
+ * élément a une surface propre, et c'est assumé (les projets sont le cœur).
+ */
+
+.project {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  transition:
+    transform var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease),
+    background-color var(--duration-slow) var(--ease);
+}
+
+.project:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-float);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project:hover {
+    transform: none;
+  }
+}
+
+/* Le projet phare occupe toute la largeur et respire davantage. */
+.project--feature {
+  grid-column: 1 / -1;
+  padding: clamp(var(--space-4), 5vw, var(--space-6));
+  gap: var(--space-3);
+}
+
+.project--compact {
+  padding: var(--space-3);
+  gap: var(--space-1);
+}
+
+.project__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.project__name {
+  font-size: var(--text-heading);
+  letter-spacing: var(--tracking-title);
+}
+
+.project--feature .project__name {
+  font-size: var(--text-title);
+}
+
+.project__year {
+  flex-shrink: 0;
+  font-size: var(--text-micro);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-faint);
+}
+
+.project__tagline {
+  font-size: var(--text-body-lg);
+  color: var(--ink);
+  letter-spacing: var(--tracking-body);
+}
+
+.project--feature .project__tagline {
+  font-size: var(--text-heading);
+  color: var(--ink-muted);
+}
+
+.project__description {
+  max-width: var(--measure);
+  color: var(--ink-muted);
+}
+
+.project__role {
+  font-size: var(--text-small);
+  color: var(--ink-faint);
+}
+
+.project__metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+}
+
+.project__metric {
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.project__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.project__stack-item {
+  padding: 0.25rem 0.7rem;
+  font-size: var(--text-micro);
+  font-family: var(--font-mono);
+  color: var(--ink-muted);
+  background: var(--ground);
+  border-radius: var(--radius-pill);
+  transition: background-color var(--duration-slow) var(--ease);
+}
+
+.project__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-1);
+}
+
+.project__link {
+  font-size: var(--text-small);
+}
