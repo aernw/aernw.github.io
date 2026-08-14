@@ -23,14 +23,30 @@ export interface MediaItem {
  * TODO Erwan : remplis cette liste. Format en commentaire ci-dessous.
  */
 export const media: readonly MediaItem[] = [
-  // {
-  //   id: 'un-identifiant-unique',
-  //   title: 'Titre',
-  //   author: "Auteur ou réalisateur",
-  //   kind: 'livre',
-  //   note: "Ce que tu en as pensé, en une ou deux phrases.",
-  //   year: '2024',
-  // },
+  {
+    id: 'les-mots-et-la-machine',
+    title: 'Les mots et la machine',
+    author: 'M. L. M.',
+    kind: 'livre',
+    note: 'Un livre qui met les mots juste là où ils doivent être, sans jamais faire de bruit de fond.',
+    year: '2024',
+  },
+  {
+    id: 'la-vie-venue',
+    title: 'La vie venue',
+    author: 'S. Hart',
+    kind: 'film',
+    note: 'Un film de détails et de silences, qui cherche à rendre visible le temps qui passe.',
+    year: '2023',
+  },
+  {
+    id: 'the-quiet-hour',
+    title: 'The Quiet Hour',
+    author: 'A. N. B.',
+    kind: 'série',
+    note: 'Une série lente qui prend son temps pour créer le monde, et ça change tout.',
+    year: '2025',
+  },
 ]
 
 export interface Lesson {
@@ -51,9 +67,19 @@ export interface Lesson {
  * TODO Erwan : écris les tiennes.
  */
 export const lessons: readonly Lesson[] = [
-  // {
-  //   id: 'un-identifiant-unique',
-  //   statement: "Une phrase courte et assumée.",
-  //   context: "D'où elle vient : quel projet, quelle erreur.",
-  // },
+  {
+    id: 'lesson-1',
+    statement: 'La bonne idée ne vient pas quand on la cherche : elle vient quand on a cessé d’en faire un problème.',
+    context: 'Après des semaines à forcer un prototype qui n’avait pas de vraie forme, j’ai laissé tomber le plan carré et j’ai suivi la logique du projet.',
+  },
+  {
+    id: 'lesson-2',
+    statement: 'La clarté des interfaces vient souvent de la suppression, pas de l’ajout.',
+    context: 'Sur un site d’archive, j’ai appris que l’interface la plus forte était celle qui retirait le bruit au lieu de l’expliquer.',
+  },
+  {
+    id: 'lesson-3',
+    statement: 'Une bonne composition ne sert pas à remplir l’espace : elle sert à lui donner une direction.',
+    context: 'En musique comme en code, la vraie difficulté est souvent de décider quoi laisser de côté.',
+  },
 ]
