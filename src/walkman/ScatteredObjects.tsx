@@ -34,7 +34,6 @@ const MODELS = {
  */
 const PIECES = {
   cassette: { model: 'walkman', node: 'Box013_cassette01_0' },
-  cassetteInterne: { model: 'walkman', node: 'Box010_cassette_0' },
   // `node: null` prend le modèle entier. Les enceintes sont découpées par
   // matériau, pas par objet : `polySurface11_lambert2_0` ne porte que les cônes
   // et `lambert3` que les caissons. Pris séparément, aucun des deux ne se lit
@@ -92,9 +91,10 @@ const UNITS_PER_VIEWPORT = 4.13
  * Motif de dispersion, répété sur toute la hauteur de la page.
  *
  * Chaque entrée vaut pour un écran de défilement : `at` situe l'objet dans cet
- * écran (0 = haut, 1 = bas). Le motif fait sept écrans avant de se répéter, et
- * deux écrans sur sept sont laissés vides — sans ces respirations, le fond
- * devient un papier peint régulier au lieu d'une dispersion.
+ * écran (0 = haut, 1 = bas). Le motif fait dix écrans avant de se répéter, avec
+ * **un seul objet par modèle** et un écran vide entre chacun — sans ces
+ * respirations, le fond devient un papier peint régulier au lieu d'une
+ * dispersion.
  */
 const PATTERN: readonly {
   readonly screen: number
@@ -105,85 +105,62 @@ const PATTERN: readonly {
   readonly rotation: readonly [number, number, number]
   readonly scale: number
 }[] = [
-  // L'envergure des modèles n'est pas la même : les enceintes mesurent ~3,9
-  // unités et la carte son 14,3. D'où des échelles très différentes pour une
+  // Un seul objet par modèle, et un écran vide entre chacun : la place ainsi
+  // libérée est rendue en taille. Chaque objet est plus grand et plus proche
+  // qu'avant, donc réellement identifiable, sans que le fond se charge.
+  //
+  // L'envergure des modèles n'est pas la même — les enceintes mesurent ~3,9
+  // unités, la carte son 14,3 — d'où des échelles très différentes pour une
   // taille comparable à l'écran.
   {
     screen: 0,
     at: 0.6,
     piece: 'enceintes',
     x: -3.4,
-    z: -4.5,
+    z: -4,
     rotation: [0.1, 0.7, 0.1],
-    scale: 0.8,
-  },
-  {
-    screen: 1,
-    at: 0.35,
-    piece: 'carteSon',
-    x: 3.6,
-    z: -3.5,
-    rotation: [0.5, -0.6, -0.25],
-    scale: 0.28,
+    scale: 1.05,
   },
   {
     screen: 2,
-    at: 0.7,
-    piece: 'cassette',
-    x: -3.4,
-    z: -3,
-    rotation: [1.1, 0.3, 0.15],
-    scale: 1.4,
-  },
-  {
-    screen: 3,
-    at: 0.25,
-    piece: 'enceintes',
-    x: 3.6,
-    z: -4.5,
-    rotation: [-0.15, -0.8, 0.15],
-    scale: 0.7,
+    at: 0.35,
+    piece: 'carteSon',
+    x: 3.4,
+    z: -2.5,
+    rotation: [0.5, -0.6, -0.25],
+    scale: 0.5,
   },
   {
     screen: 4,
-    at: 0.5,
-    piece: 'carteSon',
-    x: -3.8,
-    z: -4,
-    rotation: [0.35, 0.55, -0.3],
-    scale: 0.32,
-  },
-  {
-    screen: 5,
-    at: 0.8,
-    piece: 'cassetteInterne',
-    x: 3.4,
-    z: -3.2,
-    rotation: [-0.5, -0.25, 0.2],
-    scale: 1.35,
+    at: 0.7,
+    piece: 'cassette',
+    x: -3.3,
+    z: -2.8,
+    rotation: [1.1, 0.3, 0.15],
+    scale: 1.8,
   },
   {
     screen: 6,
     at: 0.45,
     piece: 'airpods',
-    x: -3.3,
-    z: -3.5,
-    rotation: [0.3, 0.8, 0.2],
-    scale: 2.6,
+    x: 3.4,
+    z: -3.2,
+    rotation: [0.3, -0.7, -0.2],
+    scale: 3.6,
   },
   {
-    screen: 7,
+    screen: 8,
     at: 0.65,
     piece: 'ecouteurs',
-    x: 3.5,
-    z: -3.8,
-    rotation: [0.2, -0.5, 0.4],
-    scale: 1.3,
+    x: -3.4,
+    z: -3,
+    rotation: [0.2, 0.5, 0.4],
+    scale: 2.3,
   },
 ]
 
 /** Longueur du motif, en écrans de défilement. */
-const PATTERN_SCREENS = 8
+const PATTERN_SCREENS = 10
 
 /**
  * Déroule le motif sur toute la hauteur de la page.
