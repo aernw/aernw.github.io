@@ -30,6 +30,11 @@
   }
 }
 
+.page__content {
+  position: relative;
+  z-index: 1;
+}
+
 /* Aligné sur la marge de page comme le reste du site — il n'y a plus de
    conteneur centré depuis la refonte de mise en page. */
 .footer {

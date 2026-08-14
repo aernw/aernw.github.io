@@ -25,54 +25,60 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
   return (
     <article className={`project project--${emphasis}`} style={style}>
-      <ProjectVisual visual={project.visual} />
+      <div className="project__layout">
+        <div className="project__content">
+          <div className="project__head">
+            <h3 className="project__name">{name}</h3>
+            <span className="project__year">{year}</span>
+          </div>
 
-      <div className="project__head">
-        <h3 className="project__name">{name}</h3>
-        <span className="project__year">{year}</span>
+          <p className="project__tagline">{tagline}</p>
+
+          {!isCompact ? <p className="project__description">{description}</p> : null}
+
+          <p className="project__role">{role}</p>
+
+          {metrics && metrics.length > 0 ? (
+            <ul className="project__metrics">
+              {metrics.map((metric) => (
+                <li key={metric} className="project__metric">
+                  {metric}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+
+          <ul className="project__stack">
+            {stack.map((item) => (
+              <li key={item} className="project__stack-item">
+                {item}
+              </li>
+            ))}
+          </ul>
+
+          {links.length > 0 ? (
+            <ul className="project__links">
+              {links.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="project__link"
+                  >
+                    {link.label}
+                    <span className="visually-hidden"> — {name} (nouvel onglet)</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+
+        <div className="project__visual" aria-hidden="true">
+          <ProjectVisual visual={project.visual} />
+        </div>
       </div>
-
-      <p className="project__tagline">{tagline}</p>
-
-      {!isCompact ? <p className="project__description">{description}</p> : null}
-
-      <p className="project__role">{role}</p>
-
-      {metrics && metrics.length > 0 ? (
-        <ul className="project__metrics">
-          {metrics.map((metric) => (
-            <li key={metric} className="project__metric">
-              {metric}
-            </li>
-          ))}
-        </ul>
-      ) : null}
-
-      <ul className="project__stack">
-        {stack.map((item) => (
-          <li key={item} className="project__stack-item">
-            {item}
-          </li>
-        ))}
-      </ul>
-
-      {links.length > 0 ? (
-        <ul className="project__links">
-          {links.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="project__link"
-              >
-                {link.label}
-                <span className="visually-hidden"> — {name} (nouvel onglet)</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      ) : null}
     </article>
   )
 }
