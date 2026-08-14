@@ -48,14 +48,17 @@ export function SideB() {
           <h1 id="hero-b-title" className="hero__title">
             {profile.name}
           </h1>
-          <p className="hero__subtitle">Musique, images, expériences</p>
-          <div className="hero__about">
-            {aboutDraft.body.map((line) => (
-              <p key={line}>{line}</p>
-            ))}
-          </div>
+          <p className="hero__subtitle">Musique et expériences personnelles</p>
         </div>
       </section>
+
+      <Section id="a-propos" title="À propos" hideTitle width="text">
+        <div className="intro__about">
+          {aboutDraft.body.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+        </div>
+      </Section>
 
       <Section
         id="decouvertes"
