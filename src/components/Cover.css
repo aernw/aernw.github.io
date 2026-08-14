@@ -4,6 +4,26 @@
   object-fit: cover;
   border-radius: calc(var(--radius-card) - 6px);
   background: var(--ground);
+  transition:
+    transform var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+}
+
+/* Au survol, la pochette se soulève légèrement — le geste évoque un disque
+   qu'on sort de son bac. L'amplitude reste faible pour ne pas déranger la grille. */
+.vinyl:hover .cover,
+.discovery:hover .cover,
+.top__item:hover .cover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-float);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vinyl:hover .cover,
+  .discovery:hover .cover,
+  .top__item:hover .cover {
+    transform: none;
+  }
 }
 
 /* Repli affiché quand l'URL externe ne répond plus. */

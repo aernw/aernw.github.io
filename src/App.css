@@ -1,11 +1,35 @@
 .page {
   /* Le bouton flottant ne doit jamais recouvrir la fin du contenu. */
   padding-bottom: var(--space-6);
+  transition:
+    opacity 0.26s var(--ease),
+    transform 0.26s var(--ease);
 }
 
+/*
+ * Fondu sortant pendant le retournement de la cassette.
+ * La durée doit rester alignée sur FLIP_DURATION_MS dans App.tsx : c'est elle
+ * qui décide du moment où le contenu de l'autre face est monté.
+ */
+.page--flipping {
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page {
+    transition: none;
+  }
+
+  .page--flipping {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Aligné sur la marge de page comme le reste du site — il n'y a plus de
+   conteneur centré depuis la refonte de mise en page. */
 .footer {
-  max-width: var(--page-max);
-  margin-inline: auto;
   padding: var(--space-4) var(--page-gutter) var(--space-5);
   font-size: var(--text-micro);
   color: var(--ink-faint);

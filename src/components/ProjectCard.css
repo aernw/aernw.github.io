@@ -160,7 +160,14 @@
   color: var(--ink-muted);
   background: var(--ground);
   border-radius: var(--radius-pill);
-  transition: background-color var(--duration-slow) var(--ease);
+  transition:
+    background-color var(--duration-slow) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+/* Au survol de la carte, la stack prend la teinte du projet. */
+.project:hover .project__stack-item {
+  color: color-mix(in srgb, var(--project-accent, var(--ink-muted)) 70%, var(--ink));
 }
 
 .project__links {
