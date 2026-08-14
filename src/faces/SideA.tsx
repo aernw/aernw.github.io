@@ -36,7 +36,7 @@ export function SideA() {
       <Section
         id="projets"
         title="Projets"
-        lead="Ce que j'ai construit, avec mon rôle réel sur chacun."
+        lead="Ce que j'ai construit, avec mon rôle sur chacun."
         width="full"
       >
         <div className="projects-flow">

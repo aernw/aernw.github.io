@@ -63,7 +63,7 @@ export function SideB() {
       <Section
         id="decouvertes"
         title="Découvertes"
-        lead="Ce que j'écoute en ce moment et que je veux faire écouter."
+        lead="Ce que j'écoute en ce moment et que je veux faire découvrir."
         width="bleed"
       >
         {discoveries.length > 0 ? (
@@ -84,7 +84,6 @@ export function SideB() {
       <Section
         id="top"
         title="Mon top de tous les temps"
-        lead="Dans l'ordre. Pas de notes — la place suffit."
         stickyTitle
       >
         {topAlbums.length > 0 ? (
@@ -107,7 +106,7 @@ export function SideB() {
       <Section
         id="vinyles"
         title="Vinyles"
-        lead="Pas un inventaire — les disques qui comptent."
+        lead="les disques qui comptent."
         width="bleed"
       >
         {vinyls.length > 0 ? (
