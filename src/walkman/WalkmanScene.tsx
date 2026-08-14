@@ -1,104 +1,41 @@
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, useMemo } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Environment } from '@react-three/drei'
 import { Vector3 } from 'three'
-import type { Object3D } from 'three'
 import { WalkmanModel } from './WalkmanModel'
 import { Cable } from './Cable'
-import { HoverProbe } from './HoverProbe'
 import './WalkmanScene.css'
 
 interface WalkmanSceneProps {
-  /** Appelé au clic sans glisser : le walkman sert aussi de bouton de bascule. */
-  readonly onActivate?: () => void
   readonly label: string
   readonly cableColor: string
 }
 
-/** Au-delà de ce déplacement, le geste est un glisser et non un clic. */
-const DRAG_THRESHOLD_PX = 6
-const ROTATION_SPEED = 0.008
+/**
+ * Point de branchement du câble, en fractions de la taille du walkman depuis
+ * son centre. Le modèle ne comporte pas de prise femelle : on la place ici, en
+ * bas à droite du boîtier.
+ */
+const SOCKET_OFFSET = { x: 0.3, y: -0.44, z: 0.12 }
+
+/** Extrémité basse du câble : hors champ, sous le bord de l'écran. */
+const CABLE_END: readonly [number, number, number] = [0.4, -5.5, 0]
 
 /**
  * Scène 3D couvrant toute la page.
  *
- * Le canvas est plein écran pour que le câble puisse descendre derrière le
- * contenu, mais il est transparent aux événements : `pointer-events: none` sur
- * le conteneur, réactivé uniquement sur les objets. Sans cela, un canvas de
- * cette taille intercepterait tous les clics sur les liens et le scroll de la
- * page — c'est le défaut le plus courant des scènes 3D plein écran.
+ * Le canvas est plein écran pour que le câble descende derrière le contenu,
+ * mais il n'intercepte aucun événement : `pointer-events: none`. La scène est
+ * purement décorative — la navigation passe par le bouton de bascule, qui lui
+ * est focusable au clavier.
  */
-export function WalkmanScene({ onActivate, label, cableColor }: WalkmanSceneProps) {
-  const dragRotation = useRef({ x: 0.15, y: -0.6 })
-  const pointerStart = useRef<{ x: number; y: number } | null>(null)
-  const dragged = useRef(false)
-  const [interacting, setInteracting] = useState(false)
-  const [hovering, setHovering] = useState(false)
-  const [reducedMotion, setReducedMotion] = useState(false)
-
-  // Position du point de branchement, partagée avec le câble.
-  const jackAnchor = useMemo(() => ({ current: new Vector3(0, 0, 0) }), [])
-
-  // Le casque est extrait du modèle puis confié au câble, qui le porte à son
-  // extrémité. Un state est justifié ici : l'extraction n'a lieu qu'une fois.
-  const [headphone, setHeadphone] = useState<Object3D | null>(null)
-
-  useEffect(() => {
-    const query = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReducedMotion(query.matches)
-
-    const onChange = (event: MediaQueryListEvent) => setReducedMotion(event.matches)
-    query.addEventListener('change', onChange)
-    return () => query.removeEventListener('change', onChange)
-  }, [])
-
-  const handlePointerDown = useCallback((event: React.PointerEvent) => {
-    pointerStart.current = { x: event.clientX, y: event.clientY }
-    dragged.current = false
-    setInteracting(true)
-  }, [])
-
-  const handlePointerMove = useCallback((event: React.PointerEvent) => {
-    const start = pointerStart.current
-    if (start === null) return
-
-    const dx = event.clientX - start.x
-    const dy = event.clientY - start.y
-
-    if (!dragged.current && Math.hypot(dx, dy) > DRAG_THRESHOLD_PX) {
-      dragged.current = true
-    }
-
-    if (dragged.current) {
-      dragRotation.current.y += event.movementX * ROTATION_SPEED
-      // L'inclinaison verticale est bornée : sans cela, l'objet se retrouve
-      // sur la tête et devient illisible.
-      dragRotation.current.x = Math.max(
-        -0.6,
-        Math.min(0.6, dragRotation.current.x + event.movementY * ROTATION_SPEED),
-      )
-    }
-  }, [])
-
-  const handlePointerUp = useCallback(() => {
-    // Un appui sans déplacement est un clic : il retourne la cassette.
-    if (!dragged.current && onActivate !== undefined) {
-      onActivate()
-    }
-    pointerStart.current = null
-    setInteracting(false)
-  }, [onActivate])
-
-  const classes = [
-    'walkman-scene',
-    hovering ? 'walkman-scene--hot' : '',
-    interacting ? 'walkman-scene--interacting' : '',
-  ]
-    .filter(Boolean)
-    .join(' ')
+export function WalkmanScene({ label, cableColor }: WalkmanSceneProps) {
+  // Position du point de branchement, partagée avec le câble. Une référence
+  // plutôt qu'un state : elle est lue à chaque frame par la boucle de rendu.
+  const socketAnchor = useMemo(() => ({ current: new Vector3(0, 0, 0) }), [])
 
   return (
-    <div className={classes}>
+    <div className="walkman-scene">
       <Canvas
         camera={{ position: [0, 0, 6], fov: 38 }}
         // Fond transparent : les objets flottent sur la page, la scène n'a pas
@@ -106,38 +43,24 @@ export function WalkmanScene({ onActivate, label, cableColor }: WalkmanSceneProp
         gl={{ alpha: true, antialias: true }}
         // Plafonné à 2 : au-delà, le coût de rendu double sans gain visible.
         dpr={[1, 2]}
-        // Dimensions données explicitement : la mesure automatique du parent
-        // laissait le canvas à sa taille par défaut de 300×150.
-        style={{ background: 'transparent', width: '100vw', height: '100vh' }}
+        style={{ background: 'transparent' }}
       >
-        <ambientLight intensity={0.7} />
+        <ambientLight intensity={0.75} />
         <directionalLight position={[4, 6, 5]} intensity={2.2} />
         <directionalLight position={[-4, -1, -3]} intensity={0.6} />
 
         <Suspense fallback={null}>
           {/*
-            Deux groupes imbriqués, et non un seul : la rotation est appliquée à
-            l'intérieur, la position à l'extérieur. Sur un groupe unique, la
-            rotation ferait décrire au walkman un arc autour de l'origine de la
-            scène, et l'objet sortirait du cadre.
+            Décalé vers la droite et vers le haut : le walkman occupe le vide du
+            hero sans recouvrir le titre, qui part du bord gauche.
+            Si le cadrage ne convient pas, c'est cette valeur qu'il faut ajuster
+            (x vers la droite, y vers le haut).
           */}
-          <group
-            position={[1.9, 0.7, 0]}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-          >
-            <WalkmanModel
-              jackAnchor={jackAnchor}
-              onHeadphoneReady={setHeadphone}
-              dragRotation={dragRotation}
-              autoRotate={!interacting && !reducedMotion}
-            />
+          <group position={[3.4, 1.4, 0]}>
+            <WalkmanModel socketAnchor={socketAnchor} socketOffset={SOCKET_OFFSET} />
           </group>
 
-          <Cable anchorRef={jackAnchor} headphone={headphone} color={cableColor} />
-
-          <HoverProbe onHoverChange={setHovering} />
+          <Cable anchorRef={socketAnchor} endPoint={CABLE_END} color={cableColor} />
 
           {/* L'environnement donne des reflets crédibles au plastique et au métal. */}
           <Environment preset="city" />

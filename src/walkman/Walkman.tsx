@@ -1,4 +1,4 @@
-import { Suspense, lazy, useCallback, useEffect, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import { useSide } from '../side/SideContext'
 import './Walkman.css'
 
@@ -71,17 +71,15 @@ export function Walkman() {
     }
   }, [side])
 
-  const handleActivate = useCallback(() => flip(), [flip])
-
-  const label =
-    `Face ${side.toUpperCase()} — cliquer sur le walkman pour passer sur la face ` +
-    `${other.toUpperCase()}, glisser pour le faire tourner ou déplacer le câble`
+  // La scène est décorative : elle décrit ce qu'elle montre, sans annoncer
+  // d'interaction, puisque toute la navigation passe par le bouton ci-dessous.
+  const label = `Walkman et son câble — face ${side.toUpperCase()}`
 
   return (
     <>
       {webglAvailable === true ? (
         <Suspense fallback={null}>
-          <WalkmanScene onActivate={handleActivate} label={label} cableColor={cableColor} />
+          <WalkmanScene label={label} cableColor={cableColor} />
         </Suspense>
       ) : null}
 

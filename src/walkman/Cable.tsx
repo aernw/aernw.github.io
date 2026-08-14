@@ -1,182 +1,91 @@
 import { useEffect, useMemo, useRef } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
-import type { ThreeEvent } from '@react-three/fiber'
-import {
-  CatmullRomCurve3,
-  Mesh,
-  Object3D,
-  Plane,
-  Raycaster,
-  TubeGeometry,
-  Vector2,
-  Vector3,
-} from 'three'
-import {
-  CABLE_CONFIG,
-  anchorCable,
-  createCable,
-  findClosestPoint,
-  stepCable,
-  toVectors,
-} from '../thread/simulation3d'
-import type { Point3 } from '../thread/simulation3d'
+import { useFrame } from '@react-three/fiber'
+import { CatmullRomCurve3, Mesh, TubeGeometry, Vector3 } from 'three'
 
 /** Rayon du tube, en unités de scène. */
-const TUBE_RADIUS = 0.028
+const TUBE_RADIUS = 0.03
 /** Segments le long de la courbe. Au-delà, le gain visuel ne paie plus le coût. */
-const TUBE_SEGMENTS = 64
+const TUBE_SEGMENTS = 48
 const TUBE_RADIAL_SEGMENTS = 8
-/** Distance maximale pour attraper le câble. */
-const GRAB_RADIUS = 0.45
 
-/** Axe de référence pour orienter le casque le long du câble. */
-const UP = new Vector3(0, 1, 0)
+/** Points de contrôle de la courbe. Peu nombreux : le tracé doit rester lisible. */
+const CONTROL_POINTS = 7
+
+/** Amplitude du balancement, en unités de scène. */
+const SWAY_X = 0.55
+const SWAY_Z = 0.35
+/** Vitesse du balancement. Lente : le câble pend, il ne s'agite pas. */
+const SWAY_SPEED = 0.45
 
 interface CableProps {
-  /** Position du point de branchement sur le walkman, en coordonnées de scène. */
+  /** Position du point de branchement sur le walkman. */
   readonly anchorRef: { current: Vector3 }
-  /**
-   * Ensemble casque extrait du modèle. Il est porté par l'extrémité libre du
-   * câble et orienté selon sa direction, comme un vrai casque au bout d'un fil.
-   */
-  readonly headphone: Object3D | null
+  /** Extrémité basse du câble, fixe — le câble descend hors de l'écran. */
+  readonly endPoint: readonly [number, number, number]
   readonly color: string
 }
 
 /**
  * Le câble des écouteurs, en volume.
  *
- * Rendu en tube reconstruit à chaque frame depuis la simulation Verlet. Un tube
- * 3D permet ce qu'un tracé SVG ne pourra jamais faire : passer devant et
- * derrière le walkman selon sa position, et recevoir les ombres de la scène.
+ * Volontairement sans simulation physique : une chaîne de points libre partait
+ * en vrille dès que son ancrage bougeait, et rendait la scène illisible. Ici la
+ * courbe est déterministe — deux extrémités fixes et un balancement sinusoïdal
+ * entre les deux — donc toujours stable et prévisible.
  *
- * On peut l'attraper à la souris : le point le plus proche du curseur est
- * épinglé et suit le déplacement, la physique s'occupe du reste. Le premier
- * point est exclu de la saisie — il appartient à la prise.
+ * Le balancement s'atténue vers les extrémités : un câble tendu ne bouge pas à
+ * ses points d'attache.
  */
-export function Cable({ anchorRef, headphone, color }: CableProps) {
+export function Cable({ anchorRef, endPoint, color }: CableProps) {
   const meshRef = useRef<Mesh>(null)
-  const { camera, size } = useThree()
 
-  const points = useMemo<Point3[]>(() => createCable(anchorRef.current), [anchorRef])
+  // Points de contrôle réutilisés à chaque frame : la courbe est reconstruite
+  // en continu, aucune allocation n'est acceptable dans la boucle.
+  const points = useMemo(
+    () => Array.from({ length: CONTROL_POINTS }, () => new Vector3()),
+    [],
+  )
+  const curve = useMemo(() => new CatmullRomCurve3(points), [points])
+  const end = useMemo(() => new Vector3(...endPoint), [endPoint])
+  const elapsed = useRef(0)
+  const reducedMotion = useRef(false)
 
-  /**
-   * Le câble n'est simulé qu'une fois la prise localisée.
-   *
-   * Au montage, l'ancrage vaut encore (0,0,0) : démarrer là ferait partir le
-   * câble de l'origine, très loin du walkman, et il s'étirerait sur des dizaines
-   * d'unités avant de rattraper sa position réelle.
-   */
-  const initialised = useRef(false)
-
-  // Index du point tenu à la souris, -1 quand le câble est libre.
-  const grabbedIndex = useRef(-1)
-
-  // Objets de travail, réutilisés à chaque frame.
-  const raycaster = useMemo(() => new Raycaster(), [])
-  const pointer = useMemo(() => new Vector2(), [])
-  const dragPlane = useMemo(() => new Plane(), [])
-  const dragTarget = useMemo(() => new Vector3(), [])
-  const planeNormal = useMemo(() => new Vector3(), [])
-  const direction = useMemo(() => new Vector3(), [])
-
-  /** Projette la position écran du curseur sur le plan de travail du câble. */
-  const projectPointer = (clientX: number, clientY: number, out: Vector3): boolean => {
-    const rect = document.body.getBoundingClientRect()
-    pointer.set(
-      ((clientX - rect.left) / size.width) * 2 - 1,
-      -((clientY - rect.top) / size.height) * 2 + 1,
-    )
-    raycaster.setFromCamera(pointer, camera)
-
-    // Plan face à la caméra, passant par la prise : le câble se manipule dans
-    // le plan où il vit, sans partir vers l'infini en profondeur.
-    camera.getWorldDirection(planeNormal)
-    dragPlane.setFromNormalAndCoplanarPoint(planeNormal, anchorRef.current)
-
-    return raycaster.ray.intersectPlane(dragPlane, out) !== null
-  }
-
-  const handlePointerDown = (event: ThreeEvent<PointerEvent>) => {
-    if (!projectPointer(event.clientX, event.clientY, dragTarget)) return
-
-    const index = findClosestPoint(points, dragTarget, GRAB_RADIUS)
-    if (index === -1) return
-
-    // Le geste appartient au câble : il ne doit pas aussi faire pivoter le walkman.
-    event.stopPropagation()
-    grabbedIndex.current = index
-
-    const grabbed = points[index]
-    if (grabbed !== undefined) grabbed.pinned = true
-  }
-
-  const handlePointerMove = (event: ThreeEvent<PointerEvent>) => {
-    if (grabbedIndex.current === -1) return
-    event.stopPropagation()
-
-    if (!projectPointer(event.clientX, event.clientY, dragTarget)) return
-
-    const grabbed = points[grabbedIndex.current]
-    if (grabbed === undefined) return
-
-    grabbed.position.copy(dragTarget)
-    grabbed.previous.copy(dragTarget)
-  }
-
-  const release = () => {
-    const index = grabbedIndex.current
-    if (index === -1) return
-
-    const grabbed = points[index]
-    if (grabbed !== undefined) grabbed.pinned = false
-    grabbedIndex.current = -1
-  }
-
-  // Un relâchement hors du câble doit aussi le libérer, sinon il reste collé
-  // au curseur après que la souris a quitté la zone.
   useEffect(() => {
-    window.addEventListener('pointerup', release)
-    window.addEventListener('pointercancel', release)
-    return () => {
-      window.removeEventListener('pointerup', release)
-      window.removeEventListener('pointercancel', release)
-    }
+    reducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   }, [])
 
-  useFrame((_, rawDelta) => {
+  useFrame((_, delta) => {
     const mesh = meshRef.current
     if (mesh === null) return
 
-    const anchor = anchorRef.current
-
-    // Tant que la prise n'est pas localisée, il n'y a rien à simuler.
-    if (anchor.lengthSq() === 0) return
-
-    // Au premier ancrage valide, le câble est replacé d'un coup sous la prise
-    // plutôt que de s'y traîner depuis l'origine.
-    if (!initialised.current) {
-      initialised.current = true
-      points.forEach((point, index) => {
-        point.position.set(
-          anchor.x + index * 0.02,
-          anchor.y - index * 0.17,
-          anchor.z + index * 0.01,
-        )
-        point.previous.copy(point.position)
-      })
+    if (!reducedMotion.current) {
+      elapsed.current += delta * SWAY_SPEED
     }
 
-    // Borné : un onglet revenant d'arrière-plan produit un delta énorme qui
-    // ferait exploser la simulation.
-    const dt = Math.min(2.5, rawDelta * 60)
+    const start = anchorRef.current
+    const time = elapsed.current
 
-    anchorCable(points, anchor)
-    stepCable(points, CABLE_CONFIG, dt)
+    for (let i = 0; i < CONTROL_POINTS; i += 1) {
+      const t = i / (CONTROL_POINTS - 1)
+      const point = points[i]
+      if (point === undefined) continue
+
+      // Interpolation entre les deux extrémités fixes.
+      point.lerpVectors(start, end, t)
+
+      // Le balancement est nul aux extrémités et maximal au milieu.
+      const amplitude = Math.sin(t * Math.PI)
+
+      point.x += Math.sin(time + t * 2.2) * SWAY_X * amplitude
+      point.z += Math.cos(time * 0.8 + t * 1.7) * SWAY_Z * amplitude
+      // Léger ventre vers le bas : le câble pend sous son propre poids.
+      point.y -= amplitude * 0.35
+    }
+
+    curve.updateArcLengths()
 
     // La géométrie est reconstruite à chaque frame et l'ancienne libérée :
     // sans ce dispose, on fuit la mémoire GPU en quelques secondes.
-    const curve = new CatmullRomCurve3(toVectors(points))
     const geometry = new TubeGeometry(
       curve,
       TUBE_SEGMENTS,
@@ -187,48 +96,11 @@ export function Cable({ anchorRef, headphone, color }: CableProps) {
 
     mesh.geometry.dispose()
     mesh.geometry = geometry
-
-    placeHeadphone()
   })
 
-  /**
-   * Place le casque au bout du câble et l'oriente selon la direction du fil.
-   *
-   * Sans cette orientation, la fiche pointerait toujours dans le même sens et
-   * le fil semblerait sortir de son milieu plutôt que de son extrémité.
-   */
-  function placeHeadphone(): void {
-    if (headphone === null) return
-
-    const last = points[points.length - 1]
-    const previous = points[points.length - 4] ?? points[points.length - 2]
-    if (last === undefined || previous === undefined) return
-
-    headphone.position.copy(last.position)
-
-    // Aligner l'axe Y du casque sur la direction du câble : le modèle sort de
-    // Maya, où cet axe est l'axe long de la fiche.
-    direction.subVectors(last.position, previous.position)
-    if (direction.lengthSq() < 1e-8) return
-
-    direction.normalize()
-    headphone.quaternion.setFromUnitVectors(UP, direction)
-  }
-
   return (
-    <>
-      <mesh
-        ref={meshRef}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={release}
-      >
-        <meshStandardMaterial color={color} roughness={0.55} metalness={0.1} />
-      </mesh>
-
-      {/* Le casque, extrait du modèle, est monté ici pour être porté par le
-          bout du câble plutôt que de rester collé au walkman. */}
-      {headphone === null ? null : <primitive object={headphone} />}
-    </>
+    <mesh ref={meshRef}>
+      <meshStandardMaterial color={color} roughness={0.6} metalness={0.05} />
+    </mesh>
   )
 }
