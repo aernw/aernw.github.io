@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import { Box3, Vector3 } from 'three'
 import type { Group, Object3D } from 'three'
@@ -27,8 +27,12 @@ const KEPT_GROUPS = new Set(['walkman', 'tape_1', 'head_phone'])
 const JACK_NODE = 'jack'
 
 interface WalkmanModelProps {
-  /** Reçoit la position écran de la prise jack, en pixels. */
-  readonly onJackPosition?: (point: { x: number; y: number }) => void
+  /**
+   * Reçoit la position de la prise jack en coordonnées de scène, pour que le
+   * câble s'y accroche. On reste en 3D : projeter en pixels puis revenir en
+   * unités de scène ferait perdre la profondeur.
+   */
+  readonly jackAnchor: { current: Vector3 }
   readonly dragRotation: { current: { x: number; y: number } }
   readonly autoRotate: boolean
 }
@@ -39,11 +43,10 @@ interface WalkmanModelProps {
  * Le modèle est recentré et mis à l'échelle au chargement : un GLB issu de
  * Sketchfab arrive rarement à l'origine et rarement à une taille exploitable.
  */
-export function WalkmanModel({ onJackPosition, dragRotation, autoRotate }: WalkmanModelProps) {
+export function WalkmanModel({ jackAnchor, dragRotation, autoRotate }: WalkmanModelProps) {
   const { scene } = useGLTF(MODEL_URL)
   const groupRef = useRef<Group>(null)
   const jackRef = useRef<Object3D | null>(null)
-  const { camera, size, gl } = useThree()
 
   // Le GLB est partagé par useGLTF : on le clone pour pouvoir le modifier
   // sans affecter d'autres usages éventuels.
@@ -71,8 +74,17 @@ export function WalkmanModel({ onJackPosition, dragRotation, autoRotate }: Walkm
       }
     })
 
-    // Recentrage et normalisation d'échelle : la boîte englobante donne une
-    // taille indépendante des unités choisies par l'auteur du modèle.
+    // Repartir d'une transformation neutre : l'effet peut se rejouer, et
+    // cumuler deux normalisations éloignerait le modèle un peu plus à chaque fois.
+    model.position.set(0, 0, 0)
+    model.scale.setScalar(1)
+    model.rotation.set(0, 0, 0)
+
+    // Les matrices doivent être à jour avant la mesure, sinon la boîte est
+    // calculée sur les transformations internes du GLB — qui placent ce modèle
+    // à une soixantaine d'unités de l'origine.
+    model.updateWorldMatrix(true, true)
+
     const box = new Box3().setFromObject(model)
     const center = box.getCenter(new Vector3())
     const sizeVec = box.getSize(new Vector3())
@@ -95,8 +107,6 @@ export function WalkmanModel({ onJackPosition, dragRotation, autoRotate }: Walkm
     publishJackPosition()
   }, [model])
 
-  const worldPosition = useMemo(() => new Vector3(), [])
-
   useFrame((_, delta) => {
     const group = groupRef.current
     if (group === null) return
@@ -113,25 +123,17 @@ export function WalkmanModel({ onJackPosition, dragRotation, autoRotate }: Walkm
   })
 
   /**
-   * Projette la prise jack en coordonnées écran, pour y accrocher le fil.
+   * Publie la position de la prise jack en coordonnées de scène.
    *
-   * Les coordonnées sont relatives au canvas ; on y ajoute son décalage dans la
-   * page, puisque le fil est dessiné dans un SVG couvrant tout le viewport.
+   * Le walkman tourne : la prise décrit un arc, et le câble doit rester
+   * accroché dessus. On reste en 3D — le câble vit dans la même scène, aucune
+   * conversion en pixels n'est nécessaire.
    */
   function publishJackPosition(): void {
     const jack = jackRef.current
-    if (jack === null || onJackPosition === undefined) return
+    if (jack === null) return
 
-    jack.getWorldPosition(worldPosition)
-    worldPosition.project(camera)
-
-    const canvas = gl.domElement
-    const rect = canvas.getBoundingClientRect()
-
-    onJackPosition({
-      x: rect.left + (worldPosition.x * 0.5 + 0.5) * size.width,
-      y: rect.top + (worldPosition.y * -0.5 + 0.5) * size.height,
-    })
+    jack.getWorldPosition(jackAnchor.current)
   }
 
   return (
