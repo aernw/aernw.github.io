@@ -7,13 +7,18 @@ interface MediaListProps {
 }
 
 export function MediaList({ items }: MediaListProps) {
+  /* Quand tout est du même type, l'étiquette ne distingue plus rien : la
+     répéter à chaque ligne n'ajoute que du bruit. Elle réapparaît d'elle-même
+     dès qu'un film ou une série entre dans la liste. */
+  const showKind = new Set(items.map((item) => item.kind)).size > 1
+
   return (
     <ul className="media">
       {items.map((item) => (
         <li key={item.id} className="media__item">
           <div className="media__head">
             <h3 className="media__title">{item.title}</h3>
-            <span className="media__kind">{item.kind}</span>
+            {showKind ? <span className="media__kind">{item.kind}</span> : null}
           </div>
           <p className="media__author">
             {item.author}
