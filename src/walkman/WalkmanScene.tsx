@@ -49,14 +49,16 @@ const HERO_CONFIG = {
     name: 'computer-hero',
     position: [0.14, 0.18, -0.15] as const,
     rotation: [0.08, -1.35, 0.03] as const,
-    scale: 0.6,
+    scale: 1,
+    targetSize: 3.2,
     asset: 'computer' as const,
   },
   b: {
     name: 'walkman-hero',
-    position: [-0.80, 0.70, -0.8] as const,
+    position: [-0.80, 1.0, -0.8] as const,
     rotation: [0.18, -0.1, 0] as const,
-    scale: 0.82,
+    scale: 1,
+    targetSize: 2.8,
     asset: 'walkman' as const,
   },
 } as const
@@ -103,7 +105,11 @@ export function WalkmanScene({ label, side }: WalkmanSceneProps) {
             position={hero.position as unknown as [number, number, number]}
             scale={hero.scale}
           >
-            <WalkmanModel rotation={hero.rotation} asset={hero.asset} />
+            <WalkmanModel
+              rotation={hero.rotation}
+              asset={hero.asset}
+              targetSize={hero.targetSize}
+            />
           </group>
 
           {/* L'environnement donne des reflets crédibles au plastique et au métal. */}
