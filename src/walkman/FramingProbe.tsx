@@ -20,8 +20,8 @@ import { Box3, Vector3 } from 'three'
  * cadrage ou de la disposition des objets de fond.
  */
 
-/** Nom du groupe portant le walkman du hero, posé par `WalkmanScene`. */
-const WALKMAN_GROUP = 'walkman-hero'
+/** Noms des groupes du hero, selon la face affichée. */
+const HERO_GROUP_NAMES = ['computer-hero', 'walkman-hero'] as const
 
 export function FramingProbe() {
   const { camera, scene, gl } = useThree()
@@ -31,26 +31,26 @@ export function FramingProbe() {
     const timer = window.setTimeout(() => {
       const box = new Box3()
 
-      // La sonde ne mesure QUE le walkman du hero, jamais les cassettes du
+      // La sonde ne mesure QUE le cœur du hero, jamais les cassettes du
       // sketchbook : celles-ci sont posées volontairement hors du cadre, et les
-      // inclure ferait conclure à un mauvais cadrage. Les clones gardant le nom
-      // de leur nœud d'origine, on ne peut pas les distinguer par le nom — on
-      // part donc du groupe du walkman, seul sous-arbre qui compte.
-      const walkman = scene.getObjectByName(WALKMAN_GROUP)
+      // inclure ferait conclure à un mauvais cadrage.
+      const hero = HERO_GROUP_NAMES.map((name) => scene.getObjectByName(name)).find(Boolean)
 
-      if (walkman === undefined) {
-        Object.assign(window, { __framing: { erreur: `groupe « ${WALKMAN_GROUP} » introuvable` } })
+      if (hero === undefined) {
+        Object.assign(window, {
+          __framing: { erreur: `aucun groupe hero trouvé (${HERO_GROUP_NAMES.join(', ')})` },
+        })
         return
       }
 
-      walkman.traverse((object) => {
+      hero.traverse((object) => {
         if ((object as { isMesh?: boolean }).isMesh === true) {
           box.expandByObject(object)
         }
       })
 
       if (box.isEmpty()) {
-        Object.assign(window, { __framing: { erreur: 'aucun mesh dans le groupe du walkman' } })
+        Object.assign(window, { __framing: { erreur: 'aucun mesh dans le groupe du hero' } })
         return
       }
 

@@ -1,27 +1,26 @@
 import { useMemo } from 'react'
 import { useGLTF } from '@react-three/drei'
 
-const MODEL_URL = `${import.meta.env.BASE_URL}models/walkman.glb`
+const MODEL_URLS = {
+  walkman: `${import.meta.env.BASE_URL}models/walkman.glb`,
+  computer: `${import.meta.env.BASE_URL}models/macbook_air_m2.glb`,
+} as const
 
 interface WalkmanModelProps {
   /** Rotation fixe de l'objet, en radians. */
   readonly rotation: readonly [number, number, number]
+  readonly asset: keyof typeof MODEL_URLS
 }
 
 /**
- * Le walkman, chargé depuis un GLB préparé hors ligne.
+ * Le modèle 3D principal du hero, qui peut être un walkman ou un ordinateur.
  *
- * Ce composant ne fait que charger et orienter : ni recentrage, ni mise à
+ * Le composant ne fait que charger et orienter : ni recentrage, ni mise à
  * l'échelle, ni suppression de pièces. Tout cela est fait une fois pour toutes
  * dans le fichier livré (voir `scripts/audit-glb.py` pour les critères).
- *
- * C'est délibéré. Les versions précédentes normalisaient le modèle au
- * chargement, dans un effet qui devait rester idempotent et manipulait deux
- * repères différents — c'est de là que venaient les bugs de cadrage. Le code
- * qui n'existe pas ne peut pas se tromper.
  */
-export function WalkmanModel({ rotation }: WalkmanModelProps) {
-  const { scene } = useGLTF(MODEL_URL)
+export function WalkmanModel({ rotation, asset }: WalkmanModelProps) {
+  const { scene } = useGLTF(MODEL_URLS[asset])
 
   // Le GLB est partagé par useGLTF : on le clone pour que d'éventuels autres
   // usages ne partagent pas nos transformations.
@@ -34,6 +33,7 @@ export function WalkmanModel({ rotation }: WalkmanModelProps) {
   )
 }
 
-// Préchargé dès l'évaluation du module, c'est-à-dire au chargement différé de
+// Préchargés dès l'évaluation du module, c'est-à-dire au chargement différé de
 // la scène — jamais avant.
-useGLTF.preload(MODEL_URL)
+useGLTF.preload(MODEL_URLS.walkman)
+useGLTF.preload(MODEL_URLS.computer)

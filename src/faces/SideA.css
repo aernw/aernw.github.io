@@ -12,20 +12,30 @@
  */
 
 .hero {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: var(--space-5) var(--page-gutter);
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: 0 var(--page-gutter);
   text-align: center;
 }
 
 .hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
+  transform: translateY(-2vh);
   /* Au-dessus de la scène 3D, qui vit en z-index 0 : le texte se lit
      par-dessus l'objet. */
   position: relative;
   z-index: 1;
+}
+
+@media (max-width: 48rem) {
+  .hero__inner {
+    transform: translateY(-1.2vh);
+  }
 }
 
 /*

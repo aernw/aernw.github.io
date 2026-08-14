@@ -35,6 +35,7 @@ function RenderOnDemand() {
 
 interface WalkmanSceneProps {
   readonly label: string
+  readonly side: 'a' | 'b'
 }
 
 /* ── Réglages du cadrage ───────────────────────────────────────────
@@ -43,24 +44,22 @@ interface WalkmanSceneProps {
  * Le modèle livré mesure 3,1 unités sur son plus grand axe et est centré.
  */
 
-/**
- * Position du walkman : au centre, devant le nom.
- *
- * Le chevauchement avec le titre est voulu — c'est lui qui donne la profondeur.
- * Légèrement au-dessus du centre pour mordre sur le nom sans le noyer.
- */
-const WALKMAN_POSITION: readonly [number, number, number] = [0, 0.1, 0]
-
-/** Orientation du walkman, légèrement de trois quarts. */
-const WALKMAN_ROTATION: readonly [number, number, number] = [0.12, -0.4, 0]
-
-/**
- * Échelle du walkman.
- *
- * Généreuse : l'objet passant derrière le texte, il peut occuper largement
- * l'écran sans jamais gêner la lecture.
- */
-const WALKMAN_SCALE = 0.95
+const HERO_CONFIG = {
+  a: {
+    name: 'computer-hero',
+    position: [0.14, 0.18, -0.15] as const,
+    rotation: [0.08, -1.35, 0.03] as const,
+    scale: 0.6,
+    asset: 'computer' as const,
+  },
+  b: {
+    name: 'walkman-hero',
+    position: [-0.80, 0.70, -0.8] as const,
+    rotation: [0.18, -0.1, 0] as const,
+    scale: 0.82,
+    asset: 'walkman' as const,
+  },
+} as const
 
 /**
  * Scène 3D couvrant toute la page.
@@ -73,11 +72,13 @@ const WALKMAN_SCALE = 0.95
  * Le canvas n'intercepte aucun événement : il couvre tout le viewport, et le
  * moindre `pointer-events: auto` bloquerait les liens et le scroll du site.
  */
-export function WalkmanScene({ label }: WalkmanSceneProps) {
+export function WalkmanScene({ label, side }: WalkmanSceneProps) {
+  const hero = HERO_CONFIG[side]
+
   return (
     <div className="walkman-scene">
       <Canvas
-        camera={{ position: [0, 0, 6], fov: 38 }}
+        camera={{ position: [0, 0, 7.8], fov: 45 }}
         frameloop="demand"
         // Fond transparent : les objets flottent sur la page.
         gl={{ alpha: true, antialias: true }}
@@ -85,9 +86,10 @@ export function WalkmanScene({ label }: WalkmanSceneProps) {
         dpr={[1, 2]}
         style={{ background: 'transparent' }}
       >
-        <ambientLight intensity={0.8} />
-        <directionalLight position={[3, 5, 6]} intensity={2.3} />
-        <directionalLight position={[-4, 0, -2]} intensity={0.5} />
+        <ambientLight intensity={0.72} />
+        <directionalLight position={[3, 5, 6]} intensity={1.25} />
+        <directionalLight position={[-4, 1, -2]} intensity={0.42} />
+        <directionalLight position={[0, -2, 5]} intensity={0.35} />
 
         <RenderOnDemand />
         {/* Sonde de cadrage, active seulement en développement : elle mesure
@@ -96,14 +98,12 @@ export function WalkmanScene({ label }: WalkmanSceneProps) {
         {import.meta.env.DEV ? <FramingProbe /> : null}
 
         <Suspense fallback={null}>
-          {/* Nommé : la sonde de cadrage s'appuie sur ce nom pour mesurer le
-              walkman seul, sans les cassettes du fond. */}
           <group
-            name="walkman-hero"
-            position={WALKMAN_POSITION as unknown as [number, number, number]}
-            scale={WALKMAN_SCALE}
+            name={hero.name}
+            position={hero.position as unknown as [number, number, number]}
+            scale={hero.scale}
           >
-            <WalkmanModel rotation={WALKMAN_ROTATION} />
+            <WalkmanModel rotation={hero.rotation} asset={hero.asset} />
           </group>
 
           {/* L'environnement donne des reflets crédibles au plastique et au métal. */}
