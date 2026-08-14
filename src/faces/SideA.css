@@ -28,6 +28,17 @@
   z-index: 1;
 }
 
+/*
+ * Halo derrière les trois lignes du hero : il les détache de l'objet 3D qui
+ * passe derrière. Sans lui, les lettres se confondent avec le walkman dès
+ * qu'elles tombent sur une zone claire du modèle.
+ */
+.hero__eyebrow,
+.hero__title,
+.hero__subtitle {
+  text-shadow: var(--halo-text);
+}
+
 .hero__eyebrow {
   font-size: var(--text-micro);
   text-transform: uppercase;
