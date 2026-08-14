@@ -197,31 +197,54 @@ export interface Vinyl {
 /**
  * Collection de vinyles.
  *
- * TODO Erwan : ajoute tes disques. Inutile de tout lister — les plus marquants
- * racontent mieux qu'un inventaire complet.
+ * `year` est l'année de sortie de l'album ; `pressing` ne sert qu'à signaler
+ * une édition qui a un intérêt (réédition, vinyle coloré, coffret). Sur les
+ * disques pressés à leur sortie, il est simplement omis.
  */
 export const vinyls: readonly Vinyl[] = [
   {
-    id: 'vinyl-geogaddi',
-    artist: 'Boards of Canada',
-    title: 'Geogaddi',
-    year: '2002',
-    pressing: 'Pressage 2021',
-    cover: '/covers/vinyls/autechre.svg',
+    id: 'vinyl-radiohead-ok-computer',
+    artist: 'Radiohead',
+    title: 'OK Computer',
+    year: '1997',
+    pressing: 'Réédition 2016',
+    cover: '/covers/vinyls/radiohead-ok-computer.webp',
   },
   {
-    id: 'vinyl-untrue',
-    artist: 'Burial',
-    title: 'Untrue',
-    year: '2007',
-    cover: '/covers/vinyls/burial.svg',
+    id: 'vinyl-nirvana-nevermind',
+    artist: 'Nirvana',
+    title: 'Nevermind',
+    year: '1991',
+    pressing: 'Réédition 2011',
+    cover: '/covers/vinyls/nirvana-nevermind.webp',
   },
   {
-    id: 'vinyl-ambient-s',
-    artist: 'Various Artists',
-    title: 'Ambient Selection',
+    id: 'vinyl-rhcp-californication',
+    artist: 'Red Hot Chili Peppers',
+    title: 'Californication',
     year: '1999',
-    pressing: 'Compilation',
-    cover: '/covers/vinyls/ambient-selection.svg',
+    pressing: 'Réédition 2012',
+    cover: '/covers/vinyls/red-hot-chili-peppers-californication.webp',
+  },
+  {
+    id: 'vinyl-the-weeknd-starboy',
+    artist: 'The Weeknd',
+    title: 'Starboy',
+    year: '2016',
+    cover: '/covers/vinyls/the-weeknd-starboy.webp',
+  },
+  {
+    id: 'vinyl-the-weeknd-after-hours',
+    artist: 'The Weeknd',
+    title: 'After Hours',
+    year: '2020',
+    cover: '/covers/vinyls/the-weeknd-after-hours.webp',
+  },
+  {
+    id: 'vinyl-the-weeknd-dawn-fm',
+    artist: 'The Weeknd',
+    title: 'Dawn FM',
+    year: '2022',
+    cover: '/covers/vinyls/the-weeknd-dawn-fm.webp',
   },
 ]

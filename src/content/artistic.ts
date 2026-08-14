@@ -1,5 +1,3 @@
-import type { Link } from './types'
-
 /**
  * Contenu de la face B (artistique).
  *
@@ -7,57 +5,6 @@ import type { Link } from './types'
  * les champs vides sont vides, et les sections concernées ne s'affichent pas tant
  * qu'ils le sont. Voir les TODO ci-dessous.
  */
-
-/** TODO Erwan : ajouter tes plateformes (SoundCloud, Bandcamp, Spotify…). */
-export const musicLinks: readonly Link[] = [
-  { label: 'Spotify', href: 'https://open.spotify.com/' },
-  { label: 'Bandcamp', href: 'https://bandcamp.com/' },
-  { label: 'SoundCloud', href: 'https://soundcloud.com/' },
-  { label: 'YouTube', href: 'https://www.youtube.com/' },
-]
-
-export interface Release {
-  readonly id: string
-  readonly title: string
-  readonly kind: string
-  readonly year: string
-  readonly note?: string
-  readonly links: readonly Link[]
-}
-
-/** TODO Erwan : ajouter tes morceaux, EP ou projets musicaux. */
-export const releases: readonly Release[] = [
-  {
-    id: 'soft-circuit',
-    title: 'Soft Circuit',
-    kind: 'EP',
-    year: '2026',
-    note: 'Un court voyage entre synthés doux, rythmes cassés et texture de nuit.',
-    links: [
-      { label: 'Spotify', href: 'https://open.spotify.com/' },
-      { label: 'Bandcamp', href: 'https://bandcamp.com/' },
-    ],
-  },
-  {
-    id: 'late-night-archive',
-    title: 'Late Night Archive',
-    kind: 'Single',
-    year: '2025',
-    note: 'Une piste pensée comme un souvenir qui s’allume au bout d’un couloir vide.',
-    links: [
-      { label: 'Spotify', href: 'https://open.spotify.com/' },
-      { label: 'YouTube', href: 'https://www.youtube.com/' },
-    ],
-  },
-  {
-    id: 'studio-notes',
-    title: 'Studio Notes',
-    kind: 'Live session',
-    year: '2024',
-    note: 'Des idées venues en direct, sans filtre, juste l’envie d’enregistrer le moment.',
-    links: [{ label: 'SoundCloud', href: 'https://soundcloud.com/' }],
-  },
-]
 
 /**
  * Le texte qui relie les deux faces. C'est la section la plus personnelle du site
