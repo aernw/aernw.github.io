@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { SideProvider, useSide } from './side/SideContext'
-import { Cassette } from './cassette/Cassette'
+import { Walkman } from './walkman/Walkman'
 import { Thread } from './thread/Thread'
 import { SideA } from './faces/SideA'
 import { SideB } from './faces/SideB'
@@ -77,7 +77,7 @@ function Faces() {
         </p>
       </footer>
 
-      <Cassette onAnchorChange={handleAnchorChange} />
+      <Walkman onJackPosition={handleAnchorChange} />
     </>
   )
 }

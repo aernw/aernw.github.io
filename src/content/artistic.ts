@@ -50,8 +50,22 @@ export const now = {
   items: [] as readonly string[],
 }
 
-/** Colophon : ce qui a servi à faire ce site. Rempli au fur et à mesure de la construction. */
-export const colophon: readonly { readonly label: string; readonly value: string }[] = [
-  { label: 'Construit avec', value: 'React, TypeScript, Vite' },
+/**
+ * Colophon : ce qui a servi à faire ce site.
+ *
+ * Le crédit du modèle 3D n'est pas décoratif : le walkman est sous licence
+ * CC Attribution, qui impose de nommer son auteur.
+ */
+export const colophon: readonly {
+  readonly label: string
+  readonly value: string
+  readonly href?: string
+}[] = [
+  { label: 'Construit avec', value: 'React, TypeScript, Vite, Three.js' },
   { label: 'Hébergé sur', value: 'GitHub Pages' },
+  {
+    label: 'Modèle 3D',
+    value: 'Sony walkman tps-l2 par enKi (CC Attribution)',
+    href: 'https://sketchfab.com/3d-models/sony-walkman-tps-l2-3d072a29fd6342cd8af9ebb6664100e2',
+  },
 ]

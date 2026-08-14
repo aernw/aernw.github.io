@@ -1,13 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
-import type { CSSProperties, ElementType, ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import './Reveal.css'
+
+/**
+ * Balises acceptées.
+ *
+ * Volontairement restreint aux éléments HTML utilisés ici : depuis l'ajout de
+ * Three.js, `ElementType` englobe aussi les éléments de scène 3D, dont les
+ * props sont incompatibles avec celles d'un conteneur DOM.
+ */
+type RevealTag = 'div' | 'header' | 'section' | 'li' | 'article'
 
 interface RevealProps {
   readonly children: ReactNode
   /** Décale l'apparition, pour que des éléments voisins se révèlent en cascade. */
   readonly delay?: number
   /** Balise rendue. `div` par défaut ; utiliser `li` dans une liste. */
-  readonly as?: ElementType
+  readonly as?: RevealTag
   readonly className?: string
 }
 
@@ -63,8 +72,13 @@ export function Reveal({ children, delay = 0, as: Tag = 'div', className }: Reve
     .filter(Boolean)
     .join(' ')
 
+  // La balise étant une union, TypeScript exige une ref satisfaisant *toutes*
+  // les balises possibles à la fois. Le cast est sûr : toutes sont des éléments
+  // HTML, et la ref ne sert qu'à observer l'intersection.
+  const tagRef = ref as React.Ref<never>
+
   return (
-    <Tag ref={ref} className={classes} style={style}>
+    <Tag ref={tagRef} className={classes} style={style}>
       {children}
     </Tag>
   )
