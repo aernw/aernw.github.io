@@ -79,9 +79,9 @@ public/models/
 
 | | gzip |
 |---|---|
-| Bundle principal | ~68 Ko |
-| Scène 3D (chargée en différé) | ~264 Ko |
-| Modèle GLB | 80 Ko |
+| Bundle principal | ~69 Ko |
+| Scène 3D (chargée en différé) | ~274 Ko |
+| Modèles GLB | 316 Ko (walkman 80, enceintes 117, Focusrite 112) |
 
 La 3D est en `lazy()` : le texte s'affiche avant elle.
 
@@ -200,8 +200,31 @@ Pièces du modèle, toutes nommées séparément :
 | Arceau (probable) | `Loft001_superblack_0` |
 | Cassettes | `Box010_cassette_0`, `Box013_cassette01_0` |
 
-⚠️ **Le casque ne fonctionne pas en objet isolé** : modélisé en deux nœuds et
-détaché de son arceau, il ne se lit plus comme un casque. Essayé, écarté.
+Trois modèles alimentent le fond :
+
+| Modèle | Auteur | Licence | Poids |
+|---|---|---|---|
+| Walkman WM-22 | ima_ethan | CC Attribution | 80 Ko |
+| Speakers low poly | Condo | CC BY 4.0 | 117 Ko |
+| Focusrite Scarlett Solo | Ivan_WSK | CC BY 4.0 | 112 Ko |
+
+Les trois crédits sont dans le colophon de la face B — les licences l'imposent.
+
+Les sources non retenues restent dans `modèles/` (AirPods Max, Rode NT1-A,
+écouteurs…), non préparées.
+
+⚠️ **Une pièce isolée n'est pas forcément lisible.** Deux cas rencontrés :
+
+- le **casque du walkman** est modélisé en deux nœuds ; détaché de son arceau,
+  il ne se lit plus comme un casque. Écarté.
+- les **enceintes** sont découpées par matériau, pas par objet : un nœud porte
+  les cônes, l'autre les caissons. Isolés, ni l'un ni l'autre n'évoque une
+  enceinte. Elles sont donc prises entières (`node: null` dans `PIECES`).
+
+⚠️ **La préparation d'un modèle peut demander une mise à l'échelle manuelle.**
+La Focusrite sortait de la chaîne à 0,143 sur son plus grand axe et
+`gltf-transform` n'a pas d'option pour ça — l'échelle est appliquée dans le JSON
+du GLB, **avant** draco, qui doit rester la dernière étape.
 
 ⚠️ **Poser un objet demande de mesurer, pas d'estimer.** À z=6 avec un fov de
 38°, la demi-hauteur visible vaut 2,07 unités et la demi-largeur descend à 1,62
@@ -326,6 +349,12 @@ observation — chaque correction en cassait une autre.
 en coordonnées écran et répond sans ambiguïté à « dans le cadre ou hors champ ».
 Une capture vide ne dit pas si le défaut vient du code ou du navigateur —
 l'environnement de test suspend le rendu quand l'onglet passe en arrière-plan.
+
+**Le serveur de dev peut mentir.** Après un renommage, le navigateur a continué
+d'exécuter l'ancien module et de lever une erreur sur du code qui n'existait
+plus — alors que `tsc` passait et que le fichier servi par le serveur était
+correct. Un doute sur une erreur de ce genre se tranche avec
+`npm run build && npx vite preview`, qui ne dépend d'aucun cache de dev.
 
 **Ne pas conclure d'une heuristique silencieuse.** J'avais déclaré « ce modèle
 n'a pas de câble » parce que mon test cherchait une pièce allongée sur un axe.
