@@ -4,7 +4,7 @@
   gap: var(--space-3);
 }
 
-/* En rail, chaque carte prend une largeur fixe et défile latéralement. */
+/* En rail, chaque élément prend une largeur fixe et défile latéralement. */
 .discoveries--row .discovery {
   width: min(30rem, 82vw);
 }
@@ -13,10 +13,17 @@
   display: grid;
   grid-template-columns: 96px minmax(0, 1fr);
   gap: var(--space-2);
-  padding: var(--space-2);
-  background: var(--surface);
-  border-radius: var(--radius-card);
-  transition: background-color var(--duration-slow) var(--ease);
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  transition: none;
+  border: 0;
+}
+
+.discovery__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .discovery__head {
