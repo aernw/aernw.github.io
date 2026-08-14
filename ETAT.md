@@ -66,7 +66,7 @@ src/
   content/     Toutes les données du site. Aucun texte codé en dur ailleurs.
   faces/       Composition des deux faces (SideA, SideB)
   components/  Section, ProjectCard, Rail, Reveal, Cover, Discoveries, TopList…
-  walkman/     Scène 3D
+  walkman/     Scènes 3D : WalkmanScene (hero) et ScatterScene (objets de fond)
   side/        Contexte de la face active + synchronisation de l'URL
   styles/      tokens.css (deux palettes derrière un même jeu de rôles), base.css
 scripts/
@@ -79,9 +79,9 @@ public/models/
 
 | | gzip |
 |---|---|
-| Bundle principal | ~68 Ko |
-| Scène 3D (chargée en différé) | ~264 Ko |
-| Modèle GLB | 80 Ko |
+| Bundle principal | ~69 Ko |
+| Scène 3D (chargée en différé) | ~274 Ko |
+| Modèles GLB | 1,2 Mo au total, chargés en différé (voir le détail plus bas) |
 
 La 3D est en `lazy()` : le texte s'affiche avant elle.
 
@@ -114,7 +114,10 @@ La 3D est en `lazy()` : le texte s'affiche avant elle.
 
 - Apparition au scroll (`Reveal`), avec repli si `IntersectionObserver` manque
 - Transition entre les faces, scroll remis en haut au changement
-- Halo derrière le texte du hero pour le détacher de l'objet 3D
+- Halo derrière le texte du hero pour le détacher de l'objet 3D. Deux niveaux :
+  `--halo-text` pour le hero, `--halo-text-dense` pour le texte qui croise les
+  cassettes — presque noires, elles demandent un noyau opaque là où le walkman,
+  clair et rouge, se contente d'une lueur diffuse
 - Micro-interactions : pochettes qui se soulèvent, stack qui prend la teinte du projet
 
 ### Scène 3D
@@ -124,11 +127,14 @@ La 3D est en `lazy()` : le texte s'affiche avant elle.
 - Préparé hors ligne : `dedup → flatten → join → center → resize → webp → draco`
   (draco en dernier, sinon chaque étape suivante le décompresse). 63 → 14 nœuds,
   7 → 1 niveau de profondeur, 0,58 Mo → 80 Ko
-- Scène **entièrement statique** : `frameloop="demand"`, aucune boucle de rendu
-- Le canvas est en `pointer-events: none` et `z-index: 0` — il ne capte aucun
-  événement et passe derrière le texte
-- La scène est dans le flux de la page (`position: absolute`), donc le walkman
-  défile avec le hero au lieu de rester collé au viewport
+- `frameloop="demand"` sur les deux scènes : aucune boucle de rendu. La scène du
+  hero est peinte une fois ; celle des objets ne repeint que quand la position de
+  scroll change
+- Les canvas sont en `pointer-events: none` et `z-index: 0` — ils ne captent
+  aucun événement et passent derrière le texte
+- La scène du hero est dans le flux de la page (`position: absolute`), donc le
+  walkman défile avec le hero ; celle des objets est `fixed` et c'est sa caméra
+  qui défile
 
 ### Accessibilité
 
@@ -141,10 +147,49 @@ La 3D est en `lazy()` : le texte s'affiche avant elle.
 
 ## 4. Ce qui reste à faire
 
-### Priorité 1 — Câble et casque (le sujet en cours)
+> **Plan arrêté le 14/08/2026 avec Erwan.** Pas de deadline : le chantier 3D
+> passe devant le contenu.
+>
+> **Le câble est abandonné.** Trop coûteux pour un gain incertain : il imposait
+> de la modélisation, pas du code. Le fil conducteur passe désormais par des
+> **objets de fond façon sketchbook** — fait, voir ci-dessous.
+>
+> **`FramingProbe` est conservé** — contrairement à ce qu'indiquait la P4.
+> Il est derrière `import.meta.env.DEV` et vérifié absent du bundle de
+> production ; il resservira à chaque retouche du cadrage.
 
-Le modèle contient walkman, casque, câble et fiche, **tous nommés séparément** —
-c'est ce qui le rend réagençable :
+### ✅ Fait — Le fil conducteur : objets de fond
+
+Des cassettes flottent derrière le contenu **sur toute la hauteur de la page**,
+clonées depuis les nœuds déjà présents dans le GLB. La géométrie étant déjà
+chargée, le coût tient en quelques centaines d'octets.
+
+**Il y a deux scènes 3D**, et c'est structurant :
+
+| Scène | Rôle | Positionnement |
+|---|---|---|
+| `WalkmanScene` | Le walkman du hero | Dans le flux, 170vh, défile avec le hero |
+| `ScatterScene` | Les objets de fond | Fixée au viewport, caméra défilant au scroll |
+
+⚠️ **La scène du hero ne peut pas grandir.** Sa caméra a un fov vertical fixe :
+étirer son canvas en hauteur rétrécit la largeur visible en unités de scène.
+Tenté à 260vh, le walkman débordait à 140 % de la largeur (`dansLeCadre: false`).
+C'est pour ça que les objets de fond ont leur propre scène plutôt qu'une
+première scène agrandie.
+
+⚠️ **Les deux canvas n'ont pas le même ratio**, donc pas les mêmes bornes
+latérales. Celui du hero est étroit et haut (demi-largeur ±1,62) ; celui des
+objets est fixé au viewport, donc large et bas (±3,68 à z=-2,5, jusqu'à ±5,52 à
+z=-6). Reprendre les x du hero agglutine tous les objets au centre.
+
+Les positions sont **générées** depuis un motif de 10 écrans (`PATTERN`), déroulé
+sur la hauteur réelle mesurée au montage — elle dépend de la face affichée, de la
+fenêtre et des données de `src/content`, donc rien n'est codé en dur.
+
+Le rendu reste à la demande : la caméra n'appelle `invalidate()` que lorsque la
+position de scroll a changé. Immobile, la scène ne consomme rien.
+
+Pièces du modèle, toutes nommées séparément :
 
 | Pièce | Nœud |
 |---|---|
@@ -155,22 +200,73 @@ c'est ce qui le rend réagençable :
 | Arceau (probable) | `Loft001_superblack_0` |
 | Cassettes | `Box010_cassette_0`, `Box013_cassette01_0` |
 
-**À décider** : le câble modélisé est court et relie le casque au walkman dans la
-position voulue par l'auteur. Si l'on veut un câble qui descende derrière le
-contenu (le « fil conducteur » du concept d'origine), il faudra masquer le câble
-d'origine et en redessiner un — **la géométrie d'un câble ne peut pas être
-allongée, seulement remplacée**.
+Cinq modèles alimentent le fond, **un objet visible par modèle** :
 
-Positions actuelles des pièces disponibles via :
+| Modèle | Auteur | Licence | Poids |
+|---|---|---|---|
+| Walkman WM-22 | ima_ethan | CC Attribution | 80 Ko |
+| Speakers low poly | Condo | CC BY 4.0 | 117 Ko |
+| Focusrite Scarlett Solo | Ivan_WSK | CC BY 4.0 | 112 Ko |
+| AirPods Max | Mr.Philin | CC BY 4.0 | 829 Ko |
+| Écouteurs filaires | Ethereal Grace | CC BY 4.0 | 124 Ko |
+
+Tous les crédits sont dans le colophon de la face B — les licences l'imposent.
+
+⚠️ **Le poids brut d'un GLB ne dit rien de son coût réel.** Le seul critère utile
+est la part de texture : si le poids vient des images, `webp` l'écrase ; s'il
+vient de la géométrie, rien ne le sauve. Les enceintes sont passées de 7,4 Mo à
+117 Ko ; `earphones_draft`, sans aucune texture mais avec 691 508 triangles, est
+inutilisable — draco réduirait le fichier, pas le coût de rendu.
+
+Modèles écartés, mesures à l'appui :
+
+| Modèle | Raison |
+|---|---|
+| `earphones_draft` | 691 508 triangles, 0 texture — 260× le walkman entier |
+| `rode_nt1-a__arm` | 152 558 triangles, 54 nœuds |
+| `headphones` | Son poids venait d'un **plan de décor Sketchfab** qui écrasait tout ; retiré, le casque se révèle minuscule |
+
+⚠️ **Une pièce isolée n'est pas forcément lisible.** Deux cas rencontrés :
+
+- le **casque du walkman** est modélisé en deux nœuds ; détaché de son arceau,
+  il ne se lit plus comme un casque. Écarté.
+- les **enceintes** sont découpées par matériau, pas par objet : un nœud porte
+  les cônes, l'autre les caissons. Isolés, ni l'un ni l'autre n'évoque une
+  enceinte. Elles sont donc prises entières (`node: null` dans `PIECES`).
+
+⚠️ **La préparation d'un modèle peut demander une mise à l'échelle manuelle.**
+La Focusrite sortait de la chaîne à 0,143 sur son plus grand axe et
+`gltf-transform` n'a pas d'option pour ça — l'échelle est appliquée dans le JSON
+du GLB, **avant** draco, qui doit rester la dernière étape.
+
+⚠️ **Poser un objet demande de mesurer, pas d'estimer.** À z=6 avec un fov de
+38°, la demi-hauteur visible vaut 2,07 unités et la demi-largeur descend à 1,62
+sur une fenêtre étroite. Un premier essai à x=±3,4 tombait entièrement hors
+champ. La sonde donne ces valeurs ; `scripts/audit-glb.py` donne les positions
+des pièces :
 
 ```bash
 python3 scripts/audit-glb.py public/models/walkman.glb
 ```
 
-### Priorité 2 — Animations 3D
+### ❌ Écarté — La cassette qui se rembobine au scroll
+
+Idée séduisante, techniquement infondée : **la cassette n'a pas de bobines
+modélisées**. `Box010_cassette_0` est un nœud unique avec un seul matériau — les
+bobines sont peintes dans la texture. Les faire tourner supposerait de dessiner
+de vrais cylindres en code et de les aligner sur la texture existante.
+
+Écarté pour garder la scène statique. À rouvrir seulement si le fond paraît trop
+figé à l'usage.
+
+### Priorité 1 — Animations 3D (si l'envie revient)
 
 Idée d'Erwan, non commencée : ouvrir le couvercle du walkman et y insérer une
 cassette au changement de face.
+
+⚠️ Le sketchbook a été choisi **statique** à dessein. Toute animation rouvre la
+question de la boucle de rendu, aujourd'hui fermée — à ne pas engager sans le
+vouloir explicitement.
 
 **Le modèle ne contient aucune animation** (`animations: 0`). Il faudrait donc
 animer les nœuds à la main — trouver l'axe de rotation du couvercle, sa position
@@ -180,7 +276,7 @@ de repos, son amplitude.
 alors demander un rendu pendant l'animation seulement, sinon la scène se figera
 en milieu de mouvement.
 
-### Priorité 3 — Contenu de la face B
+### Priorité 2 — Contenu de la face B
 
 **10 marqueurs `TODO Erwan`** dans `src/content/` :
 
@@ -192,13 +288,23 @@ en milieu de mouvement.
 Les sections concernées ne s'affichent pas tant que leur contenu est vide. Voir
 [CONTENU.md](CONTENU.md) pour la marche à suivre, avec exemples copiables.
 
-⚠️ La section « Ma musique » vide à côté d'une section « Découvertes » remplie
-enverrait un message involontaire — à remplir en priorité.
+**Décision (14/08/2026)** : Erwan remplira lui-même, plus tard. Les placeholders
+sont assumés, ce n'est pas un chantier ouvert.
 
-### Priorité 4 — Divers
+À ce jour **toutes** les listes de la face B sont vides, `discoveries` comprise :
+la face se replie proprement sur hero + Lab + Colophon. Il n'y a donc aucun
+déséquilibre entre sections — l'ancienne alerte sur « Ma musique vide à côté de
+Découvertes remplie » était fondée sur une lecture erronée et a été retirée.
+
+⚠️ En revanche, `aboutDraft.isDraft` n'est lu par **aucun** composant : le
+brouillon s'affiche en ligne comme un texte normal. Choix assumé au merge de la
+PR #4, mais c'est le premier texte à réécrire.
+
+### Priorité 3 — Divers
 
 - **CV en PDF** téléchargeable : prévu au plan, jamais ajouté
-- Nettoyer `FramingProbe.tsx` (sonde de développement) une fois le cadrage figé
+- ~~Nettoyer `FramingProbe.tsx`~~ — **conservé volontairement**, voir l'encadré
+  en tête de section
 - Mobile : jamais travaillé, seulement vérifié qu'il ne déborde pas
 - Le README d'AREA crédite `@aernw1` — lien mort, à signaler à l'équipe
 
@@ -206,10 +312,15 @@ enverrait un message involontaire — à remplir en priorité.
 
 ## 5. État Git
 
-Branche courante : **`feat/walkman-3d`**, 15 commits d'avance sur `main`.
+Branche courante : **`feat/walkman-3d`**, à jour avec `main`.
 
-Les PR #1 (visuels) et #2 (cassette 2D) sont mergées. Le travail 3D actuel n'a
-pas encore de PR.
+Les PR #1 (visuels), #2 (cassette 2D), #3 et #4 sont mergées. **Tout le travail
+3D est en ligne** : le site déployé sert le walkman en fond de hero.
+
+⚠️ Le workflow ne se déclenche que sur `push` vers `main` — une PR n'affiche donc
+aucun check. La vérification de typage tourne *après* le merge, pendant le
+déploiement. Il faut valider `npx tsc --noEmit && npm run build` en local avant
+de merger.
 
 Branches conservées mais obsolètes : `feat/cassette-fil` (approche 2D
 abandonnée), `feat/portfolio-v1`, `feat/layout-libre`, `feat/face-b-content`,
@@ -251,6 +362,12 @@ observation — chaque correction en cassait une autre.
 en coordonnées écran et répond sans ambiguïté à « dans le cadre ou hors champ ».
 Une capture vide ne dit pas si le défaut vient du code ou du navigateur —
 l'environnement de test suspend le rendu quand l'onglet passe en arrière-plan.
+
+**Le serveur de dev peut mentir.** Après un renommage, le navigateur a continué
+d'exécuter l'ancien module et de lever une erreur sur du code qui n'existait
+plus — alors que `tsc` passait et que le fichier servi par le serveur était
+correct. Un doute sur une erreur de ce genre se tranche avec
+`npm run build && npx vite preview`, qui ne dépend d'aucun cache de dev.
 
 **Ne pas conclure d'une heuristique silencieuse.** J'avais déclaré « ce modèle
 n'a pas de câble » parce que mon test cherchait une pièce allongée sur un axe.

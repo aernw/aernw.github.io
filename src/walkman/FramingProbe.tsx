@@ -15,8 +15,14 @@ import { Box3, Vector3 } from 'three'
  * cadre ? », là où une capture d'écran vide ne dit pas si le défaut vient du
  * code ou du navigateur.
  *
- * À retirer une fois le cadrage validé.
+ * Conservée volontairement : elle est derrière `import.meta.env.DEV` et absente
+ * du bundle de production (vérifié), et elle resservira à chaque retouche du
+ * cadrage ou de la disposition des objets de fond.
  */
+
+/** Nom du groupe portant le walkman du hero, posé par `WalkmanScene`. */
+const WALKMAN_GROUP = 'walkman-hero'
+
 export function FramingProbe() {
   const { camera, scene, gl } = useThree()
 
@@ -25,17 +31,26 @@ export function FramingProbe() {
     const timer = window.setTimeout(() => {
       const box = new Box3()
 
-      scene.traverse((object) => {
-        // Seuls les meshes du MODÈLE : le câble descend volontairement hors du
-        // cadre, et l'inclure ferait croire à un mauvais cadrage du walkman.
-        // Les pièces du GLB sont nommées, le tube du câble ne l'est pas.
-        if ((object as { isMesh?: boolean }).isMesh === true && object.name !== '') {
+      // La sonde ne mesure QUE le walkman du hero, jamais les cassettes du
+      // sketchbook : celles-ci sont posées volontairement hors du cadre, et les
+      // inclure ferait conclure à un mauvais cadrage. Les clones gardant le nom
+      // de leur nœud d'origine, on ne peut pas les distinguer par le nom — on
+      // part donc du groupe du walkman, seul sous-arbre qui compte.
+      const walkman = scene.getObjectByName(WALKMAN_GROUP)
+
+      if (walkman === undefined) {
+        Object.assign(window, { __framing: { erreur: `groupe « ${WALKMAN_GROUP} » introuvable` } })
+        return
+      }
+
+      walkman.traverse((object) => {
+        if ((object as { isMesh?: boolean }).isMesh === true) {
           box.expandByObject(object)
         }
       })
 
       if (box.isEmpty()) {
-        Object.assign(window, { __framing: { erreur: 'aucun mesh nommé dans la scène' } })
+        Object.assign(window, { __framing: { erreur: 'aucun mesh dans le groupe du walkman' } })
         return
       }
 

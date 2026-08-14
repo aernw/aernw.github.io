@@ -8,6 +8,9 @@
   margin-top: var(--space-3);
   font-size: var(--text-body-lg);
   color: var(--ink-muted);
+  /* Ce texte tombe en plein sur le walkman, et dans une teinte atténuée : il
+     lui faut le halo dense, celui du hero ne suffit pas à l'en détacher. */
+  text-shadow: var(--halo-text-dense);
 }
 
 /* Même décalage que sur la face A : le texte de lecture n'est pas aligné
