@@ -2,24 +2,44 @@ import { useEffect, useMemo, useState } from 'react'
 import { useGLTF } from '@react-three/drei'
 import type { Object3D } from 'three'
 
-const MODEL_URL = `${import.meta.env.BASE_URL}models/walkman.glb`
+const base = import.meta.env.BASE_URL
 
 /**
- * Pièces du modèle réutilisables isolément.
+ * Les modèles dont proviennent les objets de fond.
  *
- * Le GLB livré porte chaque pièce sur son propre nœud — c'est ce qui permet de
- * les détacher sans ajouter un seul octet. On ne recharge rien : `useGLTF` sert
- * le même fichier que le walkman, déjà en cache.
+ * Chacun est préparé hors ligne par la même chaîne que le walkman
+ * (`dedup → flatten → join → center → resize → webp → draco`), qui les fait
+ * tomber sous 120 Ko chacun — l'essentiel de leur poids d'origine étant des
+ * textures, pas de la géométrie (7,4 Mo → 117 Ko pour les enceintes).
+ */
+const MODELS = {
+  walkman: `${base}models/walkman.glb`,
+  speakers: `${base}models/speakers.glb`,
+  focusrite: `${base}models/focusrite.glb`,
+} as const
+
+/**
+ * Les pièces réutilisées, chacune désignée par son modèle et son nœud.
  *
- * Seules les cassettes sont retenues. Le casque a été essayé puis écarté : il
- * est modélisé en deux nœuds (coque grise et mousse orange) et, détaché de son
- * arceau, il ne se lit plus comme un casque — juste une forme noire. Un objet
- * de fond doit être reconnaissable d'un coup d'œil, ou ne pas y être.
+ * Les cassettes viennent du walkman, dont chaque pièce porte son propre nœud :
+ * elles ne coûtent donc rien de plus, le fichier étant déjà chargé pour le hero.
+ *
+ * ⚠️ Le casque du walkman a été essayé puis écarté : modélisé en deux nœuds et
+ * détaché de son arceau, il ne se lit plus comme un casque — juste une forme
+ * noire. Un objet de fond doit être reconnaissable d'un coup d'œil, ou ne pas y
+ * être. C'est aussi pour ça que les enceintes sont prises entières plutôt que
+ * découpées.
  */
 const PIECES = {
-  cassette: 'Box013_cassette01_0',
-  cassetteInterne: 'Box010_cassette_0',
-} as const
+  cassette: { model: 'walkman', node: 'Box013_cassette01_0' },
+  cassetteInterne: { model: 'walkman', node: 'Box010_cassette_0' },
+  // `node: null` prend le modèle entier. Les enceintes sont découpées par
+  // matériau, pas par objet : `polySurface11_lambert2_0` ne porte que les cônes
+  // et `lambert3` que les caissons. Pris séparément, aucun des deux ne se lit
+  // comme une enceinte — même piège que le casque du walkman.
+  enceintes: { model: 'speakers', node: null },
+  carteSon: { model: 'focusrite', node: 'Scarlett_Scarlett_MTL_0' },
+} as const satisfies Record<string, { model: keyof typeof MODELS; node: string | null }>
 
 type PieceName = keyof typeof PIECES
 
@@ -81,35 +101,54 @@ const PATTERN: readonly {
   readonly rotation: readonly [number, number, number]
   readonly scale: number
 }[] = [
-  { screen: 0, at: 0.6, piece: 'cassette', x: -3.1, z: -2.5, rotation: [0.2, 0.6, 0.35], scale: 1.5 },
+  // L'envergure des modèles n'est pas la même : les enceintes mesurent ~3,9
+  // unités et la carte son 14,3. D'où des échelles très différentes pour une
+  // taille comparable à l'écran.
+  {
+    screen: 0,
+    at: 0.6,
+    piece: 'enceintes',
+    x: -3.4,
+    z: -4.5,
+    rotation: [0.1, 0.7, 0.1],
+    scale: 0.8,
+  },
   {
     screen: 1,
     at: 0.35,
-    piece: 'cassette',
+    piece: 'carteSon',
     x: 3.6,
     z: -3.5,
-    rotation: [0.45, -0.7, -0.2],
-    scale: 1.7,
+    rotation: [0.5, -0.6, -0.25],
+    scale: 0.28,
   },
   {
     screen: 2,
     at: 0.7,
-    piece: 'cassetteInterne',
+    piece: 'cassette',
     x: -3.4,
     z: -3,
     rotation: [1.1, 0.3, 0.15],
-    scale: 1.3,
+    scale: 1.4,
   },
   {
     screen: 3,
     at: 0.25,
-    piece: 'cassette',
-    x: 3.2,
-    z: -2.5,
-    rotation: [-0.3, -0.55, 0.25],
-    scale: 1.4,
+    piece: 'enceintes',
+    x: 3.6,
+    z: -4.5,
+    rotation: [-0.15, -0.8, 0.15],
+    scale: 0.7,
   },
-  { screen: 4, at: 0.5, piece: 'cassette', x: -3.8, z: -4, rotation: [0.6, 0.35, -0.4], scale: 1.8 },
+  {
+    screen: 4,
+    at: 0.5,
+    piece: 'carteSon',
+    x: -3.8,
+    z: -4,
+    rotation: [0.35, 0.55, -0.3],
+    scale: 0.32,
+  },
   {
     screen: 5,
     at: 0.8,
@@ -175,7 +214,21 @@ function countScreens(): number {
  * position change.
  */
 export function ScatteredObjects() {
-  const { scene } = useGLTF(MODEL_URL)
+  // Un appel par modèle : `useGLTF` est un hook, il ne peut pas être appelé
+  // dans une boucle dont la longueur varierait.
+  const walkman = useGLTF(MODELS.walkman)
+  const speakers = useGLTF(MODELS.speakers)
+  const focusrite = useGLTF(MODELS.focusrite)
+
+  const scenes = useMemo(
+    () => ({
+      walkman: walkman.scene,
+      speakers: speakers.scene,
+      focusrite: focusrite.scene,
+    }),
+    [walkman.scene, speakers.scene, focusrite.scene],
+  )
+
   const [screens, setScreens] = useState(countScreens)
 
   // La hauteur de page n'est pas connue au premier rendu — les sections
@@ -202,7 +255,9 @@ export function ScatteredObjects() {
   const items = useMemo(
     () =>
       scatter.map((item) => {
-        const source = scene.getObjectByName(PIECES[item.piece])
+        const piece = PIECES[item.piece]
+        const root = scenes[piece.model]
+        const source = piece.node === null ? root : root.getObjectByName(piece.node)
 
         if (source === undefined) {
           return null
@@ -210,14 +265,21 @@ export function ScatteredObjects() {
 
         const clone = source.clone(true)
 
-        // Le nœud d'origine porte la position qu'il occupe DANS le walkman.
-        // On la remet à zéro : ici, seule la position de l'emplacement compte.
-        clone.position.set(0, 0, 0)
-        clone.rotation.set(0, 0, 0)
+        // Une pièce détachée porte la position qu'elle occupait DANS son modèle
+        // (la cassette est posée à côté du walkman, par exemple) : on la remet à
+        // zéro, seule la position de l'emplacement comptant ici.
+        //
+        // Un modèle pris en entier, lui, est déjà centré à l'origine par la
+        // préparation hors ligne — et remettre sa racine à zéro déplacerait
+        // l'ensemble par rapport à ses propres enfants.
+        if (piece.node !== null) {
+          clone.position.set(0, 0, 0)
+          clone.rotation.set(0, 0, 0)
+        }
 
         return { item, object: clone as Object3D }
       }).filter((entry): entry is { item: ScatterItem; object: Object3D } => entry !== null),
-    [scene, scatter],
+    [scenes, scatter],
   )
 
   return (
@@ -235,3 +297,9 @@ export function ScatteredObjects() {
     </group>
   )
 }
+
+// Préchargés dès l'évaluation du module, c'est-à-dire au chargement différé de
+// la scène — jamais avant. Le walkman n'est pas répété : il est déjà préchargé
+// par `WalkmanModel`, et `useGLTF` sert le même cache.
+useGLTF.preload(MODELS.speakers)
+useGLTF.preload(MODELS.focusrite)
