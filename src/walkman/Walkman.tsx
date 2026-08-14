@@ -21,10 +21,11 @@ function detectWebGL(): boolean {
 }
 
 /**
- * Le walkman et son câble : objet central du site et commande de bascule.
+ * Le walkman : objet central du site et commande de bascule.
  *
- * La scène occupe tout le viewport pour que le câble puisse descendre derrière
- * le contenu. Sans WebGL, un bouton prend le relais et garde la navigation.
+ * La scène occupe tout le viewport pour que les cassettes de fond puissent se
+ * poser derrière le contenu. Sans WebGL, un bouton prend le relais et garde la
+ * navigation.
  */
 export function Walkman() {
   const { side, other, flip } = useSide()
@@ -58,7 +59,7 @@ export function Walkman() {
 
   // La scène est décorative : elle décrit ce qu'elle montre, sans annoncer
   // d'interaction, puisque toute la navigation passe par le bouton ci-dessous.
-  const label = `Walkman et son câble — face ${side.toUpperCase()}`
+  const label = `Walkman et cassettes — face ${side.toUpperCase()}`
 
   return (
     <>

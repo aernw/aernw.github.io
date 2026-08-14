@@ -97,7 +97,10 @@ export function WalkmanScene({ label }: WalkmanSceneProps) {
         {import.meta.env.DEV ? <FramingProbe /> : null}
 
         <Suspense fallback={null}>
+          {/* Nommé : la sonde de cadrage s'appuie sur ce nom pour mesurer le
+              walkman seul, sans les cassettes du fond. */}
           <group
+            name="walkman-hero"
             position={WALKMAN_POSITION as unknown as [number, number, number]}
             scale={WALKMAN_SCALE}
           >
