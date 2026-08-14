@@ -10,10 +10,8 @@ import {
   labItems,
   lessons,
   media,
-  musicLinks,
   now,
   profile,
-  releases,
   topAlbums,
   topArtists,
   vinyls,
@@ -58,46 +56,6 @@ export function SideB() {
           </div>
         </div>
       </section>
-
-      <Section id="musique" title="Ma musique">
-        {releases.length > 0 ? (
-          <ul className="releases">
-            {releases.map((release) => (
-              <li key={release.id} className="release">
-                <div className="release__head">
-                  <h3 className="release__title">{release.title}</h3>
-                  <span className="release__year">{release.year}</span>
-                </div>
-                <p className="release__kind">{release.kind}</p>
-                {release.note ? <p className="release__note">{release.note}</p> : null}
-                <ul className="release__links">
-                  {release.links.map((link) => (
-                    <li key={link.href}>
-                      <a href={link.href} target="_blank" rel="noreferrer noopener">
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <Placeholder>Ajoute ici tes plateformes, morceaux ou projets musicaux.</Placeholder>
-        )}
-
-        {musicLinks.length > 0 ? (
-          <ul className="music-links">
-            {musicLinks.map((link) => (
-              <li key={link.href}>
-                <a href={link.href} target="_blank" rel="noreferrer noopener">
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-      </Section>
 
       <Section
         id="decouvertes"
