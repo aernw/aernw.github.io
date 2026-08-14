@@ -223,7 +223,15 @@ export function SideB() {
           {colophon.map((entry) => (
             <div key={entry.label} className="colophon__row">
               <dt className="colophon__label">{entry.label}</dt>
-              <dd className="colophon__value">{entry.value}</dd>
+              <dd className="colophon__value">
+                {entry.href === undefined ? (
+                  entry.value
+                ) : (
+                  <a href={entry.href} target="_blank" rel="noreferrer noopener">
+                    {entry.value}
+                  </a>
+                )}
+              </dd>
             </div>
           ))}
         </dl>

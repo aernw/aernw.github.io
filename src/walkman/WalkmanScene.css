@@ -1,0 +1,19 @@
+.walkman-scene {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  /* `pan-y` laisse passer le défilement vertical au doigt tout en autorisant
+     la rotation horizontale : la scène ne piège jamais le scroll de la page. */
+  touch-action: pan-y;
+}
+
+.walkman-scene--interacting {
+  cursor: grabbing;
+}
+
+.walkman-scene canvas {
+  /* Le canvas hérite du conteneur ; sans cela il garde sa taille intrinsèque. */
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
