@@ -81,7 +81,7 @@ public/models/
 |---|---|
 | Bundle principal | ~69 Ko |
 | Scène 3D (chargée en différé) | ~274 Ko |
-| Modèles GLB | 316 Ko (walkman 80, enceintes 117, Focusrite 112) |
+| Modèles GLB | 1,2 Mo au total, chargés en différé (voir le détail plus bas) |
 
 La 3D est en `lazy()` : le texte s'affiche avant elle.
 
@@ -182,7 +182,7 @@ latérales. Celui du hero est étroit et haut (demi-largeur ±1,62) ; celui des
 objets est fixé au viewport, donc large et bas (±3,68 à z=-2,5, jusqu'à ±5,52 à
 z=-6). Reprendre les x du hero agglutine tous les objets au centre.
 
-Les positions sont **générées** depuis un motif de 6 écrans (`PATTERN`), déroulé
+Les positions sont **générées** depuis un motif de 10 écrans (`PATTERN`), déroulé
 sur la hauteur réelle mesurée au montage — elle dépend de la face affichée, de la
 fenêtre et des données de `src/content`, donc rien n'est codé en dur.
 
@@ -200,18 +200,31 @@ Pièces du modèle, toutes nommées séparément :
 | Arceau (probable) | `Loft001_superblack_0` |
 | Cassettes | `Box010_cassette_0`, `Box013_cassette01_0` |
 
-Trois modèles alimentent le fond :
+Cinq modèles alimentent le fond, **un objet visible par modèle** :
 
 | Modèle | Auteur | Licence | Poids |
 |---|---|---|---|
 | Walkman WM-22 | ima_ethan | CC Attribution | 80 Ko |
 | Speakers low poly | Condo | CC BY 4.0 | 117 Ko |
 | Focusrite Scarlett Solo | Ivan_WSK | CC BY 4.0 | 112 Ko |
+| AirPods Max | Mr.Philin | CC BY 4.0 | 829 Ko |
+| Écouteurs filaires | Ethereal Grace | CC BY 4.0 | 124 Ko |
 
-Les trois crédits sont dans le colophon de la face B — les licences l'imposent.
+Tous les crédits sont dans le colophon de la face B — les licences l'imposent.
 
-Les sources non retenues restent dans `modèles/` (AirPods Max, Rode NT1-A,
-écouteurs…), non préparées.
+⚠️ **Le poids brut d'un GLB ne dit rien de son coût réel.** Le seul critère utile
+est la part de texture : si le poids vient des images, `webp` l'écrase ; s'il
+vient de la géométrie, rien ne le sauve. Les enceintes sont passées de 7,4 Mo à
+117 Ko ; `earphones_draft`, sans aucune texture mais avec 691 508 triangles, est
+inutilisable — draco réduirait le fichier, pas le coût de rendu.
+
+Modèles écartés, mesures à l'appui :
+
+| Modèle | Raison |
+|---|---|
+| `earphones_draft` | 691 508 triangles, 0 texture — 260× le walkman entier |
+| `rode_nt1-a__arm` | 152 558 triangles, 54 nœuds |
+| `headphones` | Son poids venait d'un **plan de décor Sketchfab** qui écrasait tout ; retiré, le casque se révèle minuscule |
 
 ⚠️ **Une pièce isolée n'est pas forcément lisible.** Deux cas rencontrés :
 
