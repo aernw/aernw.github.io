@@ -66,7 +66,7 @@ src/
   content/     Toutes les données du site. Aucun texte codé en dur ailleurs.
   faces/       Composition des deux faces (SideA, SideB)
   components/  Section, ProjectCard, Rail, Reveal, Cover, Discoveries, TopList…
-  walkman/     Scène 3D
+  walkman/     Scènes 3D : WalkmanScene (hero) et ScatterScene (objets de fond)
   side/        Contexte de la face active + synchronisation de l'URL
   styles/      tokens.css (deux palettes derrière un même jeu de rôles), base.css
 scripts/
@@ -114,7 +114,10 @@ La 3D est en `lazy()` : le texte s'affiche avant elle.
 
 - Apparition au scroll (`Reveal`), avec repli si `IntersectionObserver` manque
 - Transition entre les faces, scroll remis en haut au changement
-- Halo derrière le texte du hero pour le détacher de l'objet 3D
+- Halo derrière le texte du hero pour le détacher de l'objet 3D. Deux niveaux :
+  `--halo-text` pour le hero, `--halo-text-dense` pour le texte qui croise les
+  cassettes — presque noires, elles demandent un noyau opaque là où le walkman,
+  clair et rouge, se contente d'une lueur diffuse
 - Micro-interactions : pochettes qui se soulèvent, stack qui prend la teinte du projet
 
 ### Scène 3D
@@ -124,11 +127,14 @@ La 3D est en `lazy()` : le texte s'affiche avant elle.
 - Préparé hors ligne : `dedup → flatten → join → center → resize → webp → draco`
   (draco en dernier, sinon chaque étape suivante le décompresse). 63 → 14 nœuds,
   7 → 1 niveau de profondeur, 0,58 Mo → 80 Ko
-- Scène **entièrement statique** : `frameloop="demand"`, aucune boucle de rendu
-- Le canvas est en `pointer-events: none` et `z-index: 0` — il ne capte aucun
-  événement et passe derrière le texte
-- La scène est dans le flux de la page (`position: absolute`), donc le walkman
-  défile avec le hero au lieu de rester collé au viewport
+- `frameloop="demand"` sur les deux scènes : aucune boucle de rendu. La scène du
+  hero est peinte une fois ; celle des objets ne repeint que quand la position de
+  scroll change
+- Les canvas sont en `pointer-events: none` et `z-index: 0` — ils ne captent
+  aucun événement et passent derrière le texte
+- La scène du hero est dans le flux de la page (`position: absolute`), donc le
+  walkman défile avec le hero ; celle des objets est `fixed` et c'est sa caméra
+  qui défile
 
 ### Accessibilité
 
@@ -154,12 +160,34 @@ La 3D est en `lazy()` : le texte s'affiche avant elle.
 
 ### ✅ Fait — Le fil conducteur : objets de fond
 
-Quatre cassettes flottent derrière le contenu, clonées depuis les nœuds déjà
-présents dans le GLB (`src/walkman/ScatteredObjects.tsx`). Coût réel :
-**+0,31 Ko gzip**, la géométrie étant déjà chargée.
+Des cassettes flottent derrière le contenu **sur toute la hauteur de la page**,
+clonées depuis les nœuds déjà présents dans le GLB. La géométrie étant déjà
+chargée, le coût tient en quelques centaines d'octets.
 
-La scène reste **entièrement statique** — `frameloop="demand"` intact, coût
-processeur nul.
+**Il y a deux scènes 3D**, et c'est structurant :
+
+| Scène | Rôle | Positionnement |
+|---|---|---|
+| `WalkmanScene` | Le walkman du hero | Dans le flux, 170vh, défile avec le hero |
+| `ScatterScene` | Les objets de fond | Fixée au viewport, caméra défilant au scroll |
+
+⚠️ **La scène du hero ne peut pas grandir.** Sa caméra a un fov vertical fixe :
+étirer son canvas en hauteur rétrécit la largeur visible en unités de scène.
+Tenté à 260vh, le walkman débordait à 140 % de la largeur (`dansLeCadre: false`).
+C'est pour ça que les objets de fond ont leur propre scène plutôt qu'une
+première scène agrandie.
+
+⚠️ **Les deux canvas n'ont pas le même ratio**, donc pas les mêmes bornes
+latérales. Celui du hero est étroit et haut (demi-largeur ±1,62) ; celui des
+objets est fixé au viewport, donc large et bas (±3,68 à z=-2,5, jusqu'à ±5,52 à
+z=-6). Reprendre les x du hero agglutine tous les objets au centre.
+
+Les positions sont **générées** depuis un motif de 6 écrans (`PATTERN`), déroulé
+sur la hauteur réelle mesurée au montage — elle dépend de la face affichée, de la
+fenêtre et des données de `src/content`, donc rien n'est codé en dur.
+
+Le rendu reste à la demande : la caméra n'appelle `invalidate()` que lorsque la
+position de scroll a changé. Immobile, la scène ne consomme rien.
 
 Pièces du modèle, toutes nommées séparément :
 
