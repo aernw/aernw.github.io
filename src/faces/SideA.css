@@ -5,15 +5,27 @@
  * donne l'impression d'espace.
  */
 
+/* ── Hero ─────────────────────────────────────────────────────────
+ * Nom et métier seuls, centrés sur toute la hauteur de l'écran. Le walkman
+ * se pose par-dessus le texte : c'est ce chevauchement qui donne la
+ * profondeur, le nom restant lisible parce qu'on en devine la suite.
+ */
+
 .hero {
   display: flex;
-  align-items: flex-end;
-  min-height: 96vh;
-  padding: var(--space-6) var(--page-gutter) var(--space-5);
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-5) var(--page-gutter);
+  text-align: center;
 }
 
 .hero__inner {
   width: 100%;
+  /* Au-dessus de la scène 3D, qui vit en z-index 0 : le texte se lit
+     par-dessus l'objet. */
+  position: relative;
+  z-index: 1;
 }
 
 .hero__eyebrow {
@@ -24,41 +36,39 @@
 }
 
 .hero__title {
-  margin-top: var(--space-2);
+  margin-top: var(--space-3);
   /* Débordement typographique assumé : le nom occupe la largeur qu'il mérite. */
-  font-size: clamp(3rem, 12vw, 11rem);
+  font-size: clamp(3rem, 13vw, 12rem);
   letter-spacing: var(--tracking-display);
-  line-height: 0.92;
+  line-height: 0.9;
 }
 
 .hero__subtitle {
-  margin-top: var(--space-2);
-  font-size: var(--text-title);
+  margin-top: var(--space-3);
+  font-size: var(--text-heading);
   font-weight: 600;
-  letter-spacing: var(--tracking-title);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
   color: var(--ink-muted);
 }
 
-.hero__summary {
-  max-width: var(--measure);
+/* ── Intro ────────────────────────────────────────────────────────
+ * Le texte long vit sous la ligne de flottaison : il se découvre au scroll,
+ * une fois le nom et l'objet passés.
+ */
+
+.intro__summary {
+  font-size: var(--text-title);
+  line-height: 1.3;
+  letter-spacing: var(--tracking-title);
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.intro__availability {
   margin-top: var(--space-3);
   font-size: var(--text-body-lg);
-  color: var(--ink-muted);
-}
-
-.hero__availability {
-  margin-top: var(--space-3);
-  font-size: var(--text-small);
   color: var(--accent);
-}
-
-/* Sur grand écran, le résumé se décale vers la droite : la ligne de lecture
-   n'est plus alignée sur le titre, ce qui casse la colonne unique. */
-@media (min-width: 64rem) {
-  .hero__summary,
-  .hero__availability {
-    margin-left: 38%;
-  }
 }
 
 /* ── Projets ──────────────────────────────────────────────────────

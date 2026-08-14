@@ -46,20 +46,28 @@ interface WalkmanSceneProps {
  */
 
 /**
- * Position du walkman : à droite, pour laisser le titre respirer.
+ * Position du walkman : au centre, devant le nom.
  *
- * Réglée par mesure : l'objet occupe 60 % de la largeur de l'écran, il faut
- * donc que son centre tombe vers 70 % pour qu'il tienne dans le cadre.
+ * Le chevauchement avec le titre est voulu — c'est lui qui donne la profondeur.
+ * Légèrement au-dessus du centre pour mordre sur le nom sans le noyer.
  */
-const WALKMAN_POSITION: readonly [number, number, number] = [2.1, 0.55, 0]
+const WALKMAN_POSITION: readonly [number, number, number] = [0, 0.1, 0]
 
 /** Orientation du walkman, légèrement de trois quarts. */
-const WALKMAN_ROTATION: readonly [number, number, number] = [0.1, -0.35, 0]
+const WALKMAN_ROTATION: readonly [number, number, number] = [0.12, -0.4, 0]
+
+/**
+ * Échelle du walkman.
+ *
+ * Généreuse : l'objet passant derrière le texte, il peut occuper largement
+ * l'écran sans jamais gêner la lecture.
+ */
+const WALKMAN_SCALE = 0.95
 
 /** Départ du câble, au bas du walkman. */
 const CABLE_START: readonly [number, number, number] = [
-  WALKMAN_POSITION[0] - 0.4,
-  WALKMAN_POSITION[1] - 1.1,
+  WALKMAN_POSITION[0] + 0.3,
+  WALKMAN_POSITION[1] - 1.05,
   0.2,
 ]
 
@@ -97,11 +105,9 @@ export function WalkmanScene({ label, cableColor }: WalkmanSceneProps) {
         {import.meta.env.DEV ? <FramingProbe /> : null}
 
         <Suspense fallback={null}>
-          {/* Réduit à 55 % : à taille réelle l'objet occupait 60 % de la
-              largeur de l'écran, trop pour un élément d'arrière-plan. */}
           <group
             position={WALKMAN_POSITION as unknown as [number, number, number]}
-            scale={0.55}
+            scale={WALKMAN_SCALE}
           >
             <WalkmanModel rotation={WALKMAN_ROTATION} />
           </group>
