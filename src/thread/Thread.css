@@ -1,0 +1,37 @@
+/*
+ * Le fil traverse toute la page, derrière le contenu.
+ *
+ * `position: fixed` et non `absolute` : le fil vit dans le viewport et réagit
+ * au scroll par sa physique, il ne défile pas avec la page.
+ */
+
+.thread {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Derrière tout le contenu, mais au-dessus du fond de page. */
+  z-index: 0;
+  pointer-events: none;
+}
+
+.thread__path {
+  stroke: var(--thread);
+  stroke-width: var(--thread-width);
+  stroke-linecap: round;
+  opacity: var(--thread-opacity);
+  transition:
+    stroke var(--duration-slow) var(--ease),
+    stroke-width var(--duration-slow) var(--ease),
+    opacity var(--duration-slow) var(--ease);
+}
+
+/*
+ * Face B : le fil devient un câble jack, plus épais et plus présent.
+ * Les valeurs viennent des tokens, qui changent déjà avec la face — cette règle
+ * n'existe que pour la texture tressée, propre au câble.
+ */
+.thread[data-side='b'] .thread__path {
+  stroke-dasharray: 0.5 7;
+  stroke-linecap: round;
+}

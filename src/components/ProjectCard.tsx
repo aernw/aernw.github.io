@@ -1,9 +1,14 @@
+import type { CSSProperties } from 'react'
 import type { Project } from '../content'
+import { ProjectVisual } from './ProjectVisual'
 import './ProjectCard.css'
 
 interface ProjectCardProps {
   readonly project: Project
 }
+
+/** La teinte du projet est exposée en variable CSS, consommée par la feuille de style. */
+type AccentStyle = CSSProperties & { readonly '--project-accent'?: string }
 
 /**
  * Carte de projet.
@@ -15,9 +20,13 @@ interface ProjectCardProps {
 export function ProjectCard({ project }: ProjectCardProps) {
   const { name, tagline, description, role, metrics, stack, links, year, emphasis } = project
   const isCompact = emphasis === 'compact'
+  const style: AccentStyle =
+    project.accent === undefined ? {} : { '--project-accent': project.accent }
 
   return (
-    <article className={`project project--${emphasis}`}>
+    <article className={`project project--${emphasis}`} style={style}>
+      <ProjectVisual visual={project.visual} />
+
       <div className="project__head">
         <h3 className="project__name">{name}</h3>
         <span className="project__year">{year}</span>

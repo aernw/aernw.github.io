@@ -30,6 +30,8 @@ export const projects: readonly Project[] = [
     year: '2026',
     emphasis: 'feature',
     sides: ['a', 'b'],
+    // Violet repris du design system de StemHub (docs/DESIGN_SYSTEM.md).
+    accent: '#9c57df',
   },
   {
     id: 'r-type',
@@ -47,6 +49,12 @@ export const projects: readonly Project[] = [
     year: '2025',
     emphasis: 'standard',
     sides: ['a'],
+    accent: '#3ecfa0',
+    // Vrais sprites du jeu, récupérés depuis assets/spaceships du dépôt.
+    visual: {
+      kind: 'sprites',
+      sources: ['projects/rtype-nave2.png', 'projects/rtype-enemy-purple-boss.png'],
+    },
   },
   {
     id: 'area',
@@ -64,6 +72,7 @@ export const projects: readonly Project[] = [
     year: '2026',
     emphasis: 'standard',
     sides: ['a'],
+    accent: '#4b8bf5',
   },
   {
     id: 'onepoint',
@@ -79,5 +88,6 @@ export const projects: readonly Project[] = [
     year: '2025',
     emphasis: 'compact',
     sides: ['a'],
+    accent: '#5fb87a',
   },
 ]

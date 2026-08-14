@@ -1,0 +1,35 @@
+/*
+ * Apparition au scroll.
+ *
+ * Le déplacement est faible (14px) et la durée courte : l'animation doit
+ * accompagner la lecture, pas la retarder. Une apparition trop ample donne
+ * l'impression d'un site lent.
+ */
+
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  transition:
+    opacity 0.55s var(--ease),
+    transform 0.55s var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+  /* will-change est volontairement absent : sur des dizaines d'éléments, il
+     coûte plus de mémoire qu'il ne fait gagner. */
+}
+
+.reveal--visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/*
+ * Sans animation demandée, le contenu est visible immédiatement et sans
+ * transition — y compris si le JavaScript n'a pas encore ajouté sa classe.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
