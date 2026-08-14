@@ -105,6 +105,7 @@ export function WalkmanModel({ jackAnchor, dragRotation, autoRotate }: WalkmanMo
     // détaché jusqu'au retour de l'utilisateur.
     model.updateWorldMatrix(true, true)
     publishJackPosition()
+
   }, [model])
 
   useFrame((_, delta) => {
