@@ -51,44 +51,58 @@ interface ScatterItem {
  * Ils débordent légèrement sur les fenêtres étroites — c'est voulu, ils sont
  * censés être coupés — sans jamais sortir totalement du champ.
  *
- * En hauteur, le walkman occupe le hero (y≈0) : les objets commencent sous lui
- * et descendent jusqu'à y=-5, la scène faisant 170vh.
+ * ⚠️ La bande utile est COURTE. Le canvas s'arrête au bas de la scène (170vh,
+ * une hauteur qu'on ne peut pas augmenter sans casser le cadrage du hero — voir
+ * WalkmanScene.css) : passé y≈-3,2, un objet est dessiné hors canvas et reste
+ * invisible. C'est pour ça que les quatre objets sont étagés sur x et z plutôt
+ * que sur y.
  *
- * Règle tenue : un objet qu'on devine vaut mieux qu'un objet qu'on détaille.
- * Le `z` négatif les éloigne, donc les rapetisse et les fond dans le fond.
+ * ⚠️ Le cadre visible DÉPEND DE `z`. À la distance d de la caméra (d = 6 - z),
+ * la demi-hauteur visible vaut tan(fov/2) × d. Un objet à z=-4 dispose donc
+ * d'un cadre bien plus large qu'un objet à z=0 : raisonner avec les bornes du
+ * plan z=0 (±2,07 et ±1,62) conclut à tort que tout est hors champ.
+ *
+ * Les objets sont assumés GRANDS, comme le walkman du hero : ils passent
+ * derrière le texte plutôt que de l'éviter. C'est le halo typographique
+ * (`--halo-text`) qui garantit la lisibilité, exactement comme dans le hero —
+ * pas l'effacement des objets.
  */
 const SCATTER: readonly ScatterItem[] = [
-  // Cassette debout, mordue par le bord gauche.
+  // Cassette debout, mordue par le bord gauche. Volontairement haute : plus bas,
+  // elle tomberait en plein sur le premier paragraphe, et une cassette presque
+  // noire sous un texte noir ne se rattrape pas au halo.
   {
     id: 'cassette-gauche',
     piece: 'cassette',
-    position: [-1.9, -2.8, -5],
+    position: [-2.1, -2.3, -2.5],
     rotation: [0.2, 0.6, 0.35],
-    scale: 0.75,
+    scale: 1.9,
   },
-  // Cassette de trois quarts à droite, plus loin.
+  // Cassette de trois quarts à droite, plus haute et plus loin. Décalée en
+  // hauteur à dessein : à la même ordonnée que celle de gauche, les deux
+  // formaient une haie symétrique de part et d'autre du texte.
   {
     id: 'cassette-droite',
     piece: 'cassette',
-    position: [2, -4.2, -6.5],
+    position: [2.3, -1.7, -3],
     rotation: [0.45, -0.7, -0.2],
-    scale: 0.7,
+    scale: 1.8,
   },
-  // Cassette à plat, presque hors champ à gauche.
+  // Cassette à plat, mordue par le bord gauche, sous la première.
   {
     id: 'cassette-basse',
     piece: 'cassetteInterne',
-    position: [-1.7, -5.8, -6],
+    position: [-1.6, -2.95, -2.8],
     rotation: [1.1, 0.3, 0.15],
-    scale: 0.6,
+    scale: 1.4,
   },
-  // La plus lointaine et la plus discrète du lot.
+  // La plus lointaine du lot, en bas à droite, à la limite de la scène.
   {
     id: 'cassette-fond',
     piece: 'cassette',
-    position: [1.6, -7.2, -8],
+    position: [2.5, -3.2, -4],
     rotation: [-0.25, -0.5, 0.5],
-    scale: 0.75,
+    scale: 2,
   },
 ]
 
