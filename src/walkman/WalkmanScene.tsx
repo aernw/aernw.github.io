@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { Environment } from '@react-three/drei'
 import { WalkmanModel } from './WalkmanModel'
@@ -36,6 +36,8 @@ function RenderOnDemand() {
 interface WalkmanSceneProps {
   readonly label: string
   readonly side: 'a' | 'b'
+  readonly onFlip: () => void
+  readonly pulseTick: number
 }
 
 /* ── Réglages du cadrage ───────────────────────────────────────────
@@ -66,16 +68,15 @@ const HERO_CONFIG = {
 /**
  * Scène 3D couvrant toute la page.
  *
- * Entièrement statique : `frameloop="demand"` demande à Three.js de ne rendre
- * que lorsqu'il y a une raison de le faire, au lieu de tourner soixante fois
- * par seconde. Rien ne bougeant ici, la scène est rendue une fois puis laissée
- * en l'état — coût processeur nul, et résultat identique partout.
- *
- * Le canvas n'intercepte aucun événement : il couvre tout le viewport, et le
- * moindre `pointer-events: auto` bloquerait les liens et le scroll du site.
+ * `frameloop="demand"` demande à Three.js de ne rendre que lorsqu'il y a une
+ * raison de le faire, au lieu de tourner soixante fois par seconde. Le fond
+ * reste statique, mais le modèle du hero répond au survol et au clic pour
+ * rendre la bascule plus vivante.
  */
-export function WalkmanScene({ label, side }: WalkmanSceneProps) {
+export function WalkmanScene({ label, side, onFlip, pulseTick }: WalkmanSceneProps) {
   const hero = HERO_CONFIG[side]
+  const [hovered, setHovered] = useState(false)
+  const [pressed, setPressed] = useState(false)
 
   return (
     <div className="walkman-scene">
@@ -109,6 +110,9 @@ export function WalkmanScene({ label, side }: WalkmanSceneProps) {
               rotation={hero.rotation}
               asset={hero.asset}
               targetSize={hero.targetSize}
+              hovered={hovered}
+              pressed={pressed}
+              pulseTick={pulseTick}
             />
           </group>
 
@@ -116,6 +120,20 @@ export function WalkmanScene({ label, side }: WalkmanSceneProps) {
           <Environment preset="city" />
         </Suspense>
       </Canvas>
+
+      <button
+        type="button"
+        className={`walkman-scene__hotspot walkman-scene__hotspot--${side}`}
+        aria-label={`Basculer sur la face ${side === 'a' ? 'B' : 'A'}`}
+        onPointerEnter={() => setHovered(true)}
+        onPointerLeave={() => {
+          setHovered(false)
+          setPressed(false)
+        }}
+        onPointerDown={() => setPressed(true)}
+        onPointerUp={() => setPressed(false)}
+        onClick={onFlip}
+      />
 
       <span className="visually-hidden">{label}</span>
     </div>

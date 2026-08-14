@@ -38,17 +38,6 @@
   }
 }
 
-/*
- * Halo derrière les trois lignes du hero : il les détache de l'objet 3D qui
- * passe derrière. Sans lui, les lettres se confondent avec le walkman dès
- * qu'elles tombent sur une zone claire du modèle.
- */
-.hero__eyebrow,
-.hero__title,
-.hero__subtitle {
-  text-shadow: var(--halo-text);
-}
-
 .hero__eyebrow {
   font-size: var(--text-micro);
   text-transform: uppercase;
@@ -158,6 +147,8 @@
 .timeline__summary {
   max-width: var(--measure);
   margin-top: var(--space-1);
+  font-size: var(--text-body-reading);
+  line-height: var(--leading-body);
   color: var(--ink-muted);
 }
 
@@ -214,7 +205,8 @@
 
 .education__detail {
   grid-column: 1;
-  font-size: var(--text-small);
+  font-size: var(--text-body-reading);
+  line-height: var(--leading-body);
   color: var(--ink-muted);
 }
 

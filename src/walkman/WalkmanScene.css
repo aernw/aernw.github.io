@@ -2,9 +2,9 @@
  * Scène 3D plein écran, purement décorative.
  *
  * Le canvas couvre tout le viewport pour que les objets de fond puissent se
- * poser derrière le contenu. Il n'intercepte jamais les événements : sans cela,
- * il bloquerait chaque clic sur les liens du site et chaque geste de scroll.
- * Toute la navigation passe par le bouton de bascule, focusable au clavier.
+ * poser derrière le contenu. Le fond reste non interactif, mais le hero garde
+ * sa propre zone de clic pour rendre la bascule plus dynamique. Le bouton
+ * reste la commande focusable au clavier.
  */
 
 /*
@@ -44,4 +44,79 @@
    */
   display: block;
   pointer-events: none;
+}
+
+.walkman-scene__hotspot {
+  position: absolute;
+  z-index: 1;
+  border: 0;
+  background: transparent;
+  color: transparent;
+  cursor: pointer;
+  padding: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.walkman-scene__hotspot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 42% 58% 48% 52% / 44% 42% 58% 56%;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.12), transparent 68%);
+  opacity: 0;
+  transform: scale(0.92);
+  transition:
+    opacity var(--duration) var(--ease),
+    transform var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.walkman-scene__hotspot:hover::before,
+.walkman-scene__hotspot:focus-visible::before {
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18), 0 0 28px rgba(255, 255, 255, 0.12);
+}
+
+.walkman-scene__hotspot:active::before {
+  transform: scale(0.96);
+}
+
+.walkman-scene__hotspot--a {
+  top: clamp(6rem, 14vh, 11rem);
+  left: 50%;
+  width: min(30vw, 24rem);
+  height: min(36vw, 28rem);
+  transform: translateX(-50%);
+}
+
+.walkman-scene__hotspot--b {
+  top: clamp(5rem, 12vh, 9rem);
+  left: 42%;
+  width: min(26vw, 22rem);
+  height: min(34vw, 26rem);
+  transform: translateX(-50%);
+}
+
+@media (max-width: 48rem) {
+  .walkman-scene__hotspot--a {
+    top: clamp(5rem, 12vh, 8rem);
+    width: min(48vw, 18rem);
+    height: min(56vw, 20rem);
+  }
+
+  .walkman-scene__hotspot--b {
+    top: clamp(4rem, 10vh, 7rem);
+    left: 40%;
+    width: min(44vw, 16rem);
+    height: min(54vw, 19rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .walkman-scene__hotspot::before {
+    transition: none;
+  }
 }
