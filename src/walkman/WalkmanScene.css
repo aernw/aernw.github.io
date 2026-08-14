@@ -1,0 +1,28 @@
+/*
+ * Scène 3D plein écran, purement décorative.
+ *
+ * Le canvas couvre tout le viewport pour que le câble descende derrière le
+ * contenu. Il n'intercepte donc jamais les événements : sans cela, il bloquerait
+ * chaque clic sur les liens du site et chaque geste de scroll. Toute la
+ * navigation passe par le bouton de bascule, qui est focusable au clavier.
+ */
+
+.walkman-scene {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.walkman-scene canvas {
+  /*
+   * Aucune règle de dimension ici : React Three Fiber pose lui-même la taille
+   * du canvas en style inline, et la forcer en CSS l'empêcherait de
+   * redimensionner son tampon de rendu.
+   */
+  display: block;
+  pointer-events: none;
+}
