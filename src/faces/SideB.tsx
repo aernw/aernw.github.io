@@ -1,5 +1,4 @@
 import { Section } from '../components/Section'
-import { ProjectCard } from '../components/ProjectCard'
 import { Discoveries, formatMonth } from '../components/Discoveries'
 import { Rail } from '../components/Rail'
 import { TopAlbums, TopArtists } from '../components/TopList'
@@ -14,7 +13,6 @@ import {
   musicLinks,
   now,
   profile,
-  projects,
   releases,
   topAlbums,
   topArtists,
