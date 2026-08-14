@@ -68,4 +68,14 @@ export const colophon: readonly {
     value: 'Low poly Sony Walkman WM-22 par ima_ethan (CC Attribution)',
     href: 'https://sketchfab.com/3d-models/low-poly-sony-walkman-wm-22-6462c2c1ed444922b6d45c4f13695ffd',
   },
+  {
+    label: 'Modèle 3D',
+    value: 'Speakers low poly par Condo (CC BY 4.0)',
+    href: 'https://sketchfab.com/3d-models/speakers-low-poly-b2e3d6ecef4e40d994066416c395bf0a',
+  },
+  {
+    label: 'Modèle 3D',
+    value: 'Focusrite Scarlett Solo 4th Gen par Ivan_WSK (CC BY 4.0)',
+    href: 'https://sketchfab.com/3d-models/focusrite-scarlett-solo-4th-gen-9cdbec90442a4fd1a6aa7fd4b1be136a',
+  },
 ]
