@@ -79,10 +79,6 @@ export function WalkmanModel({ jackAnchor, dragRotation, autoRotate }: WalkmanMo
     model.position.set(0, 0, 0)
     model.scale.setScalar(1)
     model.rotation.set(0, 0, 0)
-
-    // Les matrices doivent être à jour avant la mesure, sinon la boîte est
-    // calculée sur les transformations internes du GLB — qui placent ce modèle
-    // à une soixantaine d'unités de l'origine.
     model.updateWorldMatrix(true, true)
 
     const box = new Box3().setFromObject(model)
@@ -90,12 +86,25 @@ export function WalkmanModel({ jackAnchor, dragRotation, autoRotate }: WalkmanMo
     const sizeVec = box.getSize(new Vector3())
     const maxAxis = Math.max(sizeVec.x, sizeVec.y, sizeVec.z)
 
-    // L'ordre compte : on met à l'échelle d'abord, puis on recentre en unités
-    // déjà mises à l'échelle. L'inverse laisse le modèle décalé de son centre.
+    /*
+     * Mise à l'échelle puis recentrage, en deux temps mesurés.
+     *
+     * `Box3.setFromObject` renvoie un centre en coordonnées MONDE. On ne peut
+     * donc pas le soustraire à une position locale : les nœuds internes de ce
+     * GLB portent leurs propres transformations (dont une échelle de 0,01), et
+     * le décalage serait appliqué dans le mauvais repère — le walkman se
+     * retrouvait à (-31, -10, -24), hors du champ de la caméra.
+     *
+     * On applique donc l'échelle d'abord, puis on remesure : le nouveau centre
+     * monde est alors directement soustractible à la position du modèle, qui
+     * est ici l'enfant direct du groupe de scène.
+     */
     if (maxAxis > 0) {
-      const scale = 3.2 / maxAxis
-      model.scale.setScalar(scale)
-      model.position.copy(center).multiplyScalar(-scale)
+      model.scale.setScalar(3.2 / maxAxis)
+      model.updateWorldMatrix(true, true)
+
+      const scaledCenter = new Box3().setFromObject(model).getCenter(new Vector3())
+      model.position.sub(scaledCenter)
     } else {
       model.position.sub(center)
     }
@@ -105,6 +114,15 @@ export function WalkmanModel({ jackAnchor, dragRotation, autoRotate }: WalkmanMo
     // détaché jusqu'au retour de l'utilisateur.
     model.updateWorldMatrix(true, true)
     publishJackPosition()
+
+    // Diagnostic temporaire — à retirer une fois le cadrage validé.
+    const check = new Box3().setFromObject(model)
+    const fmt = (v: Vector3) => v.toArray().map((n) => +n.toFixed(2)).join(', ')
+    console.warn(
+      `[walkman] centre=(${fmt(check.getCenter(new Vector3()))}) ` +
+        `taille=(${fmt(check.getSize(new Vector3()))}) ` +
+        `jack=(${fmt(jackAnchor.current)})`,
+    )
 
   }, [model])
 
