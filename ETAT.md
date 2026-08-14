@@ -142,22 +142,26 @@ La 3D est en `lazy()` : le texte s'affiche avant elle.
 ## 4. Ce qui reste à faire
 
 > **Plan arrêté le 14/08/2026 avec Erwan.** Pas de deadline : le chantier 3D
-> passe devant le contenu. L'ordre est celui des priorités ci-dessous, avec une
-> réserve — l'animation du couvercle (P2) ne commence qu'une fois le fil
-> conducteur (P1) stable, pour ne pas empiler deux sources d'instabilité.
+> passe devant le contenu.
 >
-> **Décision sur le fil : il sera statique.** Pas de réaction au scroll, afin de
-> préserver `frameloop="demand"` et le coût processeur nul. On pourra l'animer
-> ensuite, une fois la géométrie juste.
+> **Le câble est abandonné.** Trop coûteux pour un gain incertain : il imposait
+> de la modélisation, pas du code. Le fil conducteur passe désormais par des
+> **objets de fond façon sketchbook** — fait, voir ci-dessous.
 >
 > **`FramingProbe` est conservé** — contrairement à ce qu'indiquait la P4.
 > Il est derrière `import.meta.env.DEV` et vérifié absent du bundle de
-> production ; il resservira pour régler le fil.
+> production ; il resservira à chaque retouche du cadrage.
 
-### Priorité 1 — Câble et casque (le sujet en cours)
+### ✅ Fait — Le fil conducteur : objets de fond
 
-Le modèle contient walkman, casque, câble et fiche, **tous nommés séparément** —
-c'est ce qui le rend réagençable :
+Quatre cassettes flottent derrière le contenu, clonées depuis les nœuds déjà
+présents dans le GLB (`src/walkman/ScatteredObjects.tsx`). Coût réel :
+**+0,31 Ko gzip**, la géométrie étant déjà chargée.
+
+La scène reste **entièrement statique** — `frameloop="demand"` intact, coût
+processeur nul.
+
+Pièces du modèle, toutes nommées séparément :
 
 | Pièce | Nœud |
 |---|---|
@@ -168,22 +172,37 @@ c'est ce qui le rend réagençable :
 | Arceau (probable) | `Loft001_superblack_0` |
 | Cassettes | `Box010_cassette_0`, `Box013_cassette01_0` |
 
-**À décider** : le câble modélisé est court et relie le casque au walkman dans la
-position voulue par l'auteur. Si l'on veut un câble qui descende derrière le
-contenu (le « fil conducteur » du concept d'origine), il faudra masquer le câble
-d'origine et en redessiner un — **la géométrie d'un câble ne peut pas être
-allongée, seulement remplacée**.
+⚠️ **Le casque ne fonctionne pas en objet isolé** : modélisé en deux nœuds et
+détaché de son arceau, il ne se lit plus comme un casque. Essayé, écarté.
 
-Positions actuelles des pièces disponibles via :
+⚠️ **Poser un objet demande de mesurer, pas d'estimer.** À z=6 avec un fov de
+38°, la demi-hauteur visible vaut 2,07 unités et la demi-largeur descend à 1,62
+sur une fenêtre étroite. Un premier essai à x=±3,4 tombait entièrement hors
+champ. La sonde donne ces valeurs ; `scripts/audit-glb.py` donne les positions
+des pièces :
 
 ```bash
 python3 scripts/audit-glb.py public/models/walkman.glb
 ```
 
-### Priorité 2 — Animations 3D
+### ❌ Écarté — La cassette qui se rembobine au scroll
+
+Idée séduisante, techniquement infondée : **la cassette n'a pas de bobines
+modélisées**. `Box010_cassette_0` est un nœud unique avec un seul matériau — les
+bobines sont peintes dans la texture. Les faire tourner supposerait de dessiner
+de vrais cylindres en code et de les aligner sur la texture existante.
+
+Écarté pour garder la scène statique. À rouvrir seulement si le fond paraît trop
+figé à l'usage.
+
+### Priorité 1 — Animations 3D (si l'envie revient)
 
 Idée d'Erwan, non commencée : ouvrir le couvercle du walkman et y insérer une
 cassette au changement de face.
+
+⚠️ Le sketchbook a été choisi **statique** à dessein. Toute animation rouvre la
+question de la boucle de rendu, aujourd'hui fermée — à ne pas engager sans le
+vouloir explicitement.
 
 **Le modèle ne contient aucune animation** (`animations: 0`). Il faudrait donc
 animer les nœuds à la main — trouver l'axe de rotation du couvercle, sa position
@@ -193,7 +212,7 @@ de repos, son amplitude.
 alors demander un rendu pendant l'animation seulement, sinon la scène se figera
 en milieu de mouvement.
 
-### Priorité 3 — Contenu de la face B
+### Priorité 2 — Contenu de la face B
 
 **10 marqueurs `TODO Erwan`** dans `src/content/` :
 
@@ -217,7 +236,7 @@ Découvertes remplie » était fondée sur une lecture erronée et a été retir
 brouillon s'affiche en ligne comme un texte normal. Choix assumé au merge de la
 PR #4, mais c'est le premier texte à réécrire.
 
-### Priorité 4 — Divers
+### Priorité 3 — Divers
 
 - **CV en PDF** téléchargeable : prévu au plan, jamais ajouté
 - ~~Nettoyer `FramingProbe.tsx`~~ — **conservé volontairement**, voir l'encadré

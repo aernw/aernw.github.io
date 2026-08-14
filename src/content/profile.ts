@@ -7,8 +7,8 @@ export const profile: Profile = {
   email: 'seytorerwan@gmail.com',
   availability: 'Ouvert aux projets qui me plaisent',
   summary:
-    "Développeur en 4ème année à Epitech. Je viens de la programmation système (C/C++) " +
-    "et je travaille aujourd'hui surtout en TypeScript . Je fais aussi de la musique — " +
+    "Développeur en 4ème année à Epitech. Je viens de la programmation système (C/C++)" +
+    "et je suis passioné . Je fais aussi de la musique — " +
     "les deux se rejoignent plus souvent qu'on ne le croit.",
   links: [
     { label: 'GitHub', href: 'https://github.com/aernw' },
