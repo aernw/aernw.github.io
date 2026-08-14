@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { SideProvider, useSide } from './side/SideContext'
-import { SideToggle } from './components/SideToggle'
+import { Cassette } from './cassette/Cassette'
+import { Thread } from './thread/Thread'
 import { SideA } from './faces/SideA'
 import { SideB } from './faces/SideB'
 import { profile } from './content'
@@ -17,6 +18,16 @@ function Faces() {
   const [renderedSide, setRenderedSide] = useState<Side>(side)
   const [flipping, setFlipping] = useState(false)
   const isFirstRender = useRef(true)
+
+  /**
+   * Position d'ancrage du fil, partagée par référence plutôt que par state :
+   * la cassette la met à jour à chaque frame, et un state provoquerait un rendu
+   * React par frame.
+   */
+  const anchorRef = useRef({ x: 0, y: 0 })
+  const handleAnchorChange = useCallback((point: { x: number; y: number }) => {
+    anchorRef.current = point
+  }, [])
 
   useEffect(() => {
     // Au premier rendu il n'y a rien à faire disparaître.
@@ -54,6 +65,8 @@ function Faces() {
         Aller au contenu
       </a>
 
+      <Thread anchorRef={anchorRef} />
+
       <main id="contenu" className={`page${flipping ? ' page--flipping' : ''}`}>
         {renderedSide === 'a' ? <SideA /> : <SideB />}
       </main>
@@ -64,7 +77,7 @@ function Faces() {
         </p>
       </footer>
 
-      <SideToggle />
+      <Cassette onAnchorChange={handleAnchorChange} />
     </>
   )
 }
