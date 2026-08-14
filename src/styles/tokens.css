@@ -28,10 +28,6 @@
   --accent-quiet: #0071e3;
   --hairline: rgba(0, 0, 0, 0.08);
 
-  /* Le fil : fin et sage en face A. */
-  --thread: #1d1d1f;
-  --thread-width: 1.5;
-  --thread-opacity: 0.28;
 
   /* ── Typographie ──────────────────────────────────────────────── */
   --font-sans:
@@ -115,10 +111,6 @@
   --accent-quiet: #d98324;
   --hairline: rgba(247, 243, 232, 0.12);
 
-  /* Le fil devient un câble jack : plus épais, plus présent. */
-  --thread: #f5a524;
-  --thread-width: 2.5;
-  --thread-opacity: 0.55;
 
   --shadow-float: 0 8px 40px rgba(0, 0, 0, 0.5);
 
