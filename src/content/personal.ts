@@ -20,32 +20,101 @@ export interface MediaItem {
 /**
  * Ce que tu lis et regardes.
  *
- * TODO Erwan : remplis cette liste. Format en commentaire ci-dessous.
+ * Les titres sont gardés en anglais : ce sont les éditions lues.
+ * `year` est l'année de l'édition possédée, pas celle de la parution originale.
+ * `note` est volontairement vide — à remplir à la main, livre par livre.
  */
 export const media: readonly MediaItem[] = [
   {
-    id: 'les-mots-et-la-machine',
-    title: 'Les mots et la machine',
-    author: 'M. L. M.',
+    id: 'blood-meridian',
+    title: 'Blood Meridian',
+    author: 'Cormac McCarthy',
     kind: 'livre',
-    note: 'Un livre qui met les mots juste là où ils doivent être, sans jamais faire de bruit de fond.',
-    year: '2024',
+    year: '2015',
   },
   {
-    id: 'la-vie-venue',
-    title: 'La vie venue',
-    author: 'S. Hart',
-    kind: 'film',
-    note: 'Un film de détails et de silences, qui cherche à rendre visible le temps qui passe.',
-    year: '2023',
+    id: 'project-hail-mary',
+    title: 'Project Hail Mary',
+    author: 'Andy Weir',
+    kind: 'livre',
+    year: '2022',
   },
   {
-    id: 'the-quiet-hour',
-    title: 'The Quiet Hour',
-    author: 'A. N. B.',
-    kind: 'série',
-    note: 'Une série lente qui prend son temps pour créer le monde, et ça change tout.',
+    id: 'the-three-body-problem',
+    title: 'The Three-Body Problem',
+    author: 'Cixin Liu',
+    kind: 'livre',
+    year: '2014',
+  },
+  {
+    id: 'i-have-no-mouth-and-i-must-scream',
+    title: 'I Have No Mouth and I Must Scream',
+    author: 'Harlan Ellison',
+    kind: 'livre',
+    year: '2014',
+  },
+  {
+    id: 'sapiens',
+    title: 'Sapiens: A Brief History of Humankind',
+    author: 'Yuval Noah Harari',
+    kind: 'livre',
     year: '2025',
+  },
+  {
+    id: 'the-selfish-gene',
+    title: 'The Selfish Gene',
+    author: 'Richard Dawkins',
+    kind: 'livre',
+    year: '2010',
+  },
+  {
+    id: 'atomic-habits',
+    title: 'Atomic Habits',
+    author: 'James Clear',
+    kind: 'livre',
+    year: '2018',
+  },
+  {
+    id: 'deep-work',
+    title: 'Deep Work',
+    author: 'Cal Newport',
+    kind: 'livre',
+    year: '2016',
+  },
+  {
+    id: 'so-good-they-cant-ignore-you',
+    title: "So Good They Can't Ignore You",
+    author: 'Cal Newport',
+    kind: 'livre',
+    year: '2012',
+  },
+  {
+    id: 'indistractable',
+    title: 'Indistractable',
+    author: 'Nir Eyal',
+    kind: 'livre',
+    year: '2019',
+  },
+  {
+    id: 'clean-code',
+    title: 'Clean Code',
+    author: 'Robert C. Martin',
+    kind: 'livre',
+    year: '2008',
+  },
+  {
+    id: 'i-will-teach-you-to-be-rich',
+    title: 'I Will Teach You to Be Rich',
+    author: 'Ramit Sethi',
+    kind: 'livre',
+    year: '2019',
+  },
+  {
+    id: 'the-phoenix-project-collection',
+    title: 'The Phoenix Project Collection',
+    author: 'Candice M. Wright',
+    kind: 'livre',
+    year: '2021',
   },
 ]
 
