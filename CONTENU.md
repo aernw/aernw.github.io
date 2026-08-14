@@ -24,6 +24,7 @@ Les images de couverture vivent dans le dossier `public/covers/` et sont classé
 
 - `public/covers/discoveries/` → découvertes musicales
 - `public/covers/albums/` → top albums
+- `public/covers/artists/` → portraits du top artistes
 - `public/covers/vinyls/` → vinyles
 
 Exemple de structure :
@@ -35,8 +36,10 @@ public/
       fennes.svg
       saaz.svg
     albums/
-      autechre.svg
-      burial.svg
+      bladee-333.webp
+      retro-x-heroes.webp
+    artists/
+      bladee.webp
     vinyls/
       ambient-selection.svg
 ```
@@ -45,8 +48,20 @@ Ensuite, dans les données, on pointe vers le chemin public :
 
 ```ts
 cover: '/covers/discoveries/fennes.svg'
-cover: '/covers/albums/autechre.svg'
+cover: '/covers/albums/bladee-333.webp'
+cover: '/covers/artists/bladee.webp'
 cover: '/covers/vinyls/ambient-selection.svg'
+```
+
+Convention de nommage : minuscules, tirets, `artiste-titre` pour un album et
+`artiste` pour un portrait — le même slug que l'`id` de l'entrée.
+
+Format : privilégie le **WebP en 400×400**. Les pochettes des services de
+streaming font souvent 768×768 pour 300–500 Ko, alors qu'elles s'affichent à
+88 px. Pour convertir une image téléchargée :
+
+```bash
+sips -Z 400 pochette.jpg --out pochette.jpg && cwebp -q 82 pochette.jpg -o pochette.webp
 ```
 
 Cette méthode est préférable aux URLs externes parce qu’elle est stable, versionnée dans le dépôt et intégrée automatiquement par Vite au build.
@@ -87,12 +102,27 @@ entrée est le n° 1. Pour changer un rang, déplace la ligne.
   title: "Titre de l'album",
   year: '1997',
   note: 'Une ligne : pourquoi celui-ci.',
-  cover: '/covers/albums/artiste-titre.svg',
+  cover: '/covers/albums/artiste-titre.webp',
 },
 ```
 
 Il n'y a pas de note en étoiles, volontairement : sur un top de tous les temps, tout
 serait à cinq étoiles. La place dans le classement porte le jugement.
+
+`note` est facultatif : le classement actuel vient des écoutes cumulées
+(stats.fm) et les notes sont laissées vides, à remplir à la main disque par
+disque. Sans note, seuls le rang, le titre et l'artiste s'affichent.
+
+## Ajouter un artiste au top
+
+Dans `music.ts`, `topArtists` — même principe, l'ordre du tableau est le classement :
+
+```ts
+{ id: 'artiste', name: 'Artiste', cover: '/covers/artists/artiste.webp' },
+```
+
+`cover` est un portrait carré, affiché en rond. Sans image, le composant retombe
+sur les initiales. `note` et `href` sont facultatifs.
 
 ## Ajouter un vinyle
 

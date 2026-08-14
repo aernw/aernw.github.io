@@ -42,7 +42,7 @@
   color: var(--ink-faint);
 }
 
-/* ── Artistes : même logique, sans pochette ─────────────────────── */
+/* ── Artistes : même logique, avec un portrait rond ──────────────── */
 
 /* flex plutôt que grid : une grille auto-fit laissait une colonne vide résiduelle
    qui se lisait comme un trait vertical parasite. */
@@ -59,9 +59,16 @@
 
 .top-artist {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: baseline;
+  grid-template-columns: auto 56px minmax(0, 1fr);
+  /* center plutôt que baseline : avec une image dans la ligne, un alignement
+     sur la ligne de base fait flotter le portrait au-dessus du texte. */
+  align-items: center;
   gap: var(--space-2);
+}
+
+/* Rond : distingue au premier coup d'œil un portrait d'une pochette carrée. */
+.top-artist .cover {
+  border-radius: 50%;
 }
 
 .top-artist__rank {
@@ -87,5 +94,9 @@
   .top__item {
     grid-template-columns: auto 64px minmax(0, 1fr);
     gap: var(--space-2);
+  }
+
+  .top-artist {
+    grid-template-columns: auto 44px minmax(0, 1fr);
   }
 }
