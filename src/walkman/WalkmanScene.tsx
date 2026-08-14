@@ -1,73 +1,104 @@
-import { Suspense, useMemo } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { Suspense, useEffect } from 'react'
+import { Canvas, useThree } from '@react-three/fiber'
 import { Environment } from '@react-three/drei'
-import { Vector3 } from 'three'
 import { WalkmanModel } from './WalkmanModel'
 import { Cable } from './Cable'
 import './WalkmanScene.css'
+
+/**
+ * Redemande un rendu quand l'onglet redevient visible ou que la fenêtre change
+ * de taille.
+ *
+ * Avec `frameloop="demand"`, la scène n'est peinte que sur demande. Si l'unique
+ * frame initiale tombe alors que l'onglet est en arrière-plan, le navigateur ne
+ * la peint jamais et la page reste vide au retour de l'utilisateur.
+ */
+function RenderOnDemand() {
+  const invalidate = useThree((state) => state.invalidate)
+
+  useEffect(() => {
+    const request = () => invalidate()
+
+    document.addEventListener('visibilitychange', request)
+    window.addEventListener('resize', request)
+    window.addEventListener('pageshow', request)
+
+    return () => {
+      document.removeEventListener('visibilitychange', request)
+      window.removeEventListener('resize', request)
+      window.removeEventListener('pageshow', request)
+    }
+  }, [invalidate])
+
+  return null
+}
 
 interface WalkmanSceneProps {
   readonly label: string
   readonly cableColor: string
 }
 
-/**
- * Position du walkman dans la scène.
- *
- * Suffisamment à droite pour ne pas recouvrir le titre, qui part du bord gauche
- * et occupe environ les deux tiers de la largeur.
+/* ── Réglages du cadrage ───────────────────────────────────────────
+ * Toutes les valeurs qui décident de l'allure de la scène sont ici.
+ * À z=6 avec un fov de 38°, la demi-largeur visible fait environ 5,2 unités.
  */
-const WALKMAN_POSITION: readonly [number, number, number] = [4.6, 1.4, 0]
+
+/** Position du walkman : à droite, pour laisser le titre respirer. */
+const WALKMAN_POSITION: readonly [number, number, number] = [3.4, 1.3, 0]
 
 /**
- * Point de branchement du câble, en fractions de la taille du walkman depuis
- * son centre. Le modèle ne comporte pas de prise femelle : on la place ici, au
- * bas du boîtier.
- */
-const SOCKET_OFFSET = { x: 0.05, y: -0.46, z: 0.1 }
-
-/**
- * Extrémité basse du câble : hors champ, sous le bord de l'écran.
+ * Orientation du walkman : face avant tournée vers la caméra.
  *
- * Alignée sur l'abscisse du walkman, sinon le câble traverserait la scène en
- * diagonale au lieu de pendre sous l'appareil.
+ * La rotation d'un demi-tour sur Y est nécessaire — le modèle présente sa face
+ * arrière par défaut. C'est de face qu'on lit la fenêtre cassette, les boutons
+ * et le logo Sony.
  */
-const CABLE_END: readonly [number, number, number] = [WALKMAN_POSITION[0] - 0.3, -6, 0]
+const WALKMAN_ROTATION: readonly [number, number, number] = [0.08, Math.PI - 0.15, 0]
+
+/** Départ du câble, au bas du walkman. */
+const CABLE_START: readonly [number, number, number] = [
+  WALKMAN_POSITION[0] - 0.35,
+  WALKMAN_POSITION[1] - 0.95,
+  0.25,
+]
 
 /**
  * Scène 3D couvrant toute la page.
  *
- * Le canvas est plein écran pour que le câble descende derrière le contenu,
- * mais il n'intercepte aucun événement : `pointer-events: none`. La scène est
- * purement décorative — la navigation passe par le bouton de bascule, qui lui
- * est focusable au clavier.
+ * Entièrement statique : `frameloop="demand"` demande à Three.js de ne rendre
+ * que lorsqu'il y a une raison de le faire, au lieu de tourner soixante fois
+ * par seconde. Rien ne bougeant ici, la scène est rendue une fois puis laissée
+ * en l'état — coût processeur nul, et résultat identique partout.
+ *
+ * Le canvas n'intercepte aucun événement : il couvre tout le viewport, et le
+ * moindre `pointer-events: auto` bloquerait les liens et le scroll du site.
  */
 export function WalkmanScene({ label, cableColor }: WalkmanSceneProps) {
-  // Position du point de branchement, partagée avec le câble. Une référence
-  // plutôt qu'un state : elle est lue à chaque frame par la boucle de rendu.
-  const socketAnchor = useMemo(() => ({ current: new Vector3(0, 0, 0) }), [])
-
   return (
     <div className="walkman-scene">
       <Canvas
         camera={{ position: [0, 0, 6], fov: 38 }}
-        // Fond transparent : les objets flottent sur la page, la scène n'a pas
-        // de décor propre.
+        frameloop="demand"
+        // Fond transparent : les objets flottent sur la page.
         gl={{ alpha: true, antialias: true }}
         // Plafonné à 2 : au-delà, le coût de rendu double sans gain visible.
         dpr={[1, 2]}
         style={{ background: 'transparent' }}
       >
-        <ambientLight intensity={0.75} />
-        <directionalLight position={[4, 6, 5]} intensity={2.2} />
-        <directionalLight position={[-4, -1, -3]} intensity={0.6} />
+        <ambientLight intensity={0.8} />
+        <directionalLight position={[3, 5, 6]} intensity={2.3} />
+        <directionalLight position={[-4, 0, -2]} intensity={0.5} />
+
+        <RenderOnDemand />
 
         <Suspense fallback={null}>
-          <group position={WALKMAN_POSITION}>
-            <WalkmanModel socketAnchor={socketAnchor} socketOffset={SOCKET_OFFSET} />
+          <group position={WALKMAN_POSITION as unknown as [number, number, number]}>
+            <WalkmanModel rotation={WALKMAN_ROTATION} />
           </group>
 
-          <Cable anchorRef={socketAnchor} endPoint={CABLE_END} color={cableColor} />
+          {/* Ondulations resserrées : plus larges, le câble croiserait le
+              texte du hero au lieu de rester dans la marge droite. */}
+          <Cable start={CABLE_START} sway={0.5} drop={9} color={cableColor} />
 
           {/* L'environnement donne des reflets crédibles au plastique et au métal. */}
           <Environment preset="city" />

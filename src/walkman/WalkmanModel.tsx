@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo } from 'react'
+import { useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import { Box3, Vector3 } from 'three'
-import type { Group } from 'three'
 
 const MODEL_URL = `${import.meta.env.BASE_URL}models/walkman.glb`
 
@@ -14,36 +14,28 @@ const MODEL_URL = `${import.meta.env.BASE_URL}models/walkman.glb`
  * contient.
  *
  * Le casque est écarté : dans ce modèle il est posé à côté du walkman, relié à
- * sa propre fiche par son propre câble, sans être branché sur l'appareil. Le
- * garder donnait un casque flottant sans lien avec la scène.
+ * sa propre fiche par son propre câble, sans être branché sur l'appareil.
  */
 const KEPT_GROUPS = new Set(['walkman', 'tape_1'])
 
-/** Taille cible du walkman dans la scène, en unités. */
-const TARGET_SIZE = 2.3
-
 interface WalkmanModelProps {
-  /**
-   * Reçoit la position du point de branchement en coordonnées de scène, pour
-   * que le câble en parte.
-   */
-  readonly socketAnchor: { current: Vector3 }
-  /**
-   * Point de branchement, en fractions de la taille du walkman depuis son
-   * centre. Le modèle ne comporte pas de prise femelle : on la place nous-mêmes.
-   */
-  readonly socketOffset: { readonly x: number; readonly y: number; readonly z: number }
+  /** Rotation fixe de l'objet, en radians. */
+  readonly rotation: readonly [number, number, number]
+  /** Taille cible du plus grand axe, en unités de scène. */
+  readonly targetSize?: number
 }
 
 /**
  * Le walkman, chargé depuis un GLB compressé (Draco + textures WebP).
  *
- * Le modèle est immobile : sa rotation est fixée une fois pour toutes au
- * chargement. Seul le câble bouge — c'est lui qui donne la vie à la scène.
+ * Immobile : aucune boucle de rendu, aucune animation. Le modèle est normalisé
+ * une fois au chargement, puis ne bouge plus. C'est ce qui rend la scène
+ * prévisible — les tentatives précédentes couplaient rotation et ancrage du
+ * câble, et chaque frame décalait un peu plus l'ensemble.
  */
-export function WalkmanModel({ socketAnchor, socketOffset }: WalkmanModelProps) {
+export function WalkmanModel({ rotation, targetSize = 2.1 }: WalkmanModelProps) {
   const { scene } = useGLTF(MODEL_URL)
-  const groupRef = useRef<Group>(null)
+  const invalidate = useThree((state) => state.invalidate)
 
   // Le GLB est partagé par useGLTF : on le clone pour pouvoir le modifier
   // sans affecter d'autres usages éventuels.
@@ -77,36 +69,20 @@ export function WalkmanModel({ socketAnchor, socketOffset }: WalkmanModelProps) 
      * alors dans le même repère que la position du modèle.
      */
     if (maxAxis > 0) {
-      model.scale.setScalar(TARGET_SIZE / maxAxis)
+      model.scale.setScalar(targetSize / maxAxis)
       model.updateWorldMatrix(true, true)
     }
 
-    const scaledBox = new Box3().setFromObject(model)
-    model.position.sub(scaledBox.getCenter(new Vector3()))
-    model.updateWorldMatrix(true, true)
+    const scaledCenter = new Box3().setFromObject(model).getCenter(new Vector3())
+    model.position.sub(scaledCenter)
 
-    // Le point de branchement est calculé une seule fois : le walkman ne
-    // tournant plus, il ne bouge plus non plus.
-    const finalSize = new Box3().setFromObject(model).getSize(new Vector3())
-    const group = groupRef.current
+    // La scène ne tourne pas en boucle : sans cette demande explicite, la
+    // normalisation ci-dessus ne serait jamais rendue à l'écran.
+    invalidate()
+  }, [model, targetSize, invalidate])
 
-    socketAnchor.current.set(
-      finalSize.x * socketOffset.x,
-      finalSize.y * socketOffset.y,
-      finalSize.z * socketOffset.z,
-    )
-
-    if (group !== null) {
-      group.updateWorldMatrix(true, false)
-      group.localToWorld(socketAnchor.current)
-    }
-  }, [model, socketAnchor, socketOffset])
-
-  // Orientation fixe, de trois quarts : le walkman est posé dans la scène, il
-  // ne tourne pas. La rotation libre entrait en conflit avec l'ancrage du câble
-  // et rendait la scène illisible.
   return (
-    <group ref={groupRef} rotation={[0.12, -0.55, 0]}>
+    <group rotation={rotation as unknown as [number, number, number]}>
       <primitive object={model} />
     </group>
   )

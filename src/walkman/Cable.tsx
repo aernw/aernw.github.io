@@ -1,106 +1,79 @@
-import { useEffect, useMemo, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
-import { CatmullRomCurve3, Mesh, TubeGeometry, Vector3 } from 'three'
+import { useEffect, useMemo } from 'react'
+import { useThree } from '@react-three/fiber'
+import { CatmullRomCurve3, TubeGeometry, Vector3 } from 'three'
 
 /** Rayon du tube, en unités de scène. */
-const TUBE_RADIUS = 0.03
-/** Segments le long de la courbe. Au-delà, le gain visuel ne paie plus le coût. */
-const TUBE_SEGMENTS = 48
-const TUBE_RADIAL_SEGMENTS = 8
-
-/** Points de contrôle de la courbe. Peu nombreux : le tracé doit rester lisible. */
-const CONTROL_POINTS = 7
-
-/** Amplitude du balancement, en unités de scène. */
-const SWAY_X = 0.55
-const SWAY_Z = 0.35
-/** Vitesse du balancement. Lente : le câble pend, il ne s'agite pas. */
-const SWAY_SPEED = 0.45
+const TUBE_RADIUS = 0.032
+/** Segments le long de la courbe : assez pour que les ondulations soient lisses. */
+const TUBE_SEGMENTS = 96
+const TUBE_RADIAL_SEGMENTS = 10
 
 interface CableProps {
-  /** Position du point de branchement sur le walkman. */
-  readonly anchorRef: { current: Vector3 }
-  /** Extrémité basse du câble, fixe — le câble descend hors de l'écran. */
-  readonly endPoint: readonly [number, number, number]
+  /** Point de départ : la prise, sous le walkman. */
+  readonly start: readonly [number, number, number]
+  /** Amplitude horizontale des ondulations, en unités. */
+  readonly sway?: number
+  /** Hauteur totale de la descente, en unités. */
+  readonly drop?: number
   readonly color: string
 }
 
 /**
- * Le câble des écouteurs, en volume.
+ * Le câble des écouteurs, en volume et immobile.
  *
- * Volontairement sans simulation physique : une chaîne de points libre partait
- * en vrille dès que son ancrage bougeait, et rendait la scène illisible. Ici la
- * courbe est déterministe — deux extrémités fixes et un balancement sinusoïdal
- * entre les deux — donc toujours stable et prévisible.
+ * La géométrie est construite une seule fois et jamais recalculée : il n'y a ni
+ * simulation, ni boucle de rendu. Un câble figé mais bien dessiné donne plus de
+ * vie qu'un câble animé mal contrôlé — et surtout, il est identique à chaque
+ * chargement, ce que les versions simulées n'ont jamais été.
  *
- * Le balancement s'atténue vers les extrémités : un câble tendu ne bouge pas à
- * ses points d'attache.
+ * Le mouvement est dans le tracé, pas dans le temps : les ondulations
+ * s'élargissent en descendant, comme un fil qui pend librement.
  */
-export function Cable({ anchorRef, endPoint, color }: CableProps) {
-  const meshRef = useRef<Mesh>(null)
+export function Cable({ start, sway = 0.75, drop = 9, color }: CableProps) {
+  const invalidate = useThree((state) => state.invalidate)
 
-  // Points de contrôle réutilisés à chaque frame : la courbe est reconstruite
-  // en continu, aucune allocation n'est acceptable dans la boucle.
-  const points = useMemo(
-    () => Array.from({ length: CONTROL_POINTS }, () => new Vector3()),
-    [],
-  )
-  const curve = useMemo(() => new CatmullRomCurve3(points), [points])
-  const end = useMemo(() => new Vector3(...endPoint), [endPoint])
-  const elapsed = useRef(0)
-  const reducedMotion = useRef(false)
+  // La couleur suit la face du site. Sans boucle de rendu, le changement doit
+  // être signalé explicitement pour être affiché.
+  useEffect(() => invalidate(), [color, invalidate])
 
-  useEffect(() => {
-    reducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  }, [])
+  const geometry = useMemo(() => {
+    const [x, y, z] = start
 
-  useFrame((_, delta) => {
-    const mesh = meshRef.current
-    if (mesh === null) return
+    /*
+     * Points de contrôle du zigzag. L'alternance des signes crée les
+     * ondulations ; le facteur croissant les élargit vers le bas, ce qui donne
+     * l'impression d'un câble libre plutôt que d'une sinusoïde régulière.
+     */
+    const waves = [
+      { t: 0, offset: 0, depth: 0 },
+      { t: 0.12, offset: 0.35, depth: 0.18 },
+      { t: 0.28, offset: -0.7, depth: -0.12 },
+      { t: 0.45, offset: 0.85, depth: 0.22 },
+      { t: 0.62, offset: -0.6, depth: -0.15 },
+      { t: 0.78, offset: 0.5, depth: 0.1 },
+      { t: 1, offset: -0.25, depth: 0 },
+    ]
 
-    if (!reducedMotion.current) {
-      elapsed.current += delta * SWAY_SPEED
-    }
+    const points = waves.map((wave) => {
+      // Les premières ondulations restent serrées près de la prise, les
+      // suivantes s'ouvrent : un câble ne s'écarte pas brutalement de son point
+      // d'attache.
+      const spread = Math.min(1, wave.t * 2.2)
 
-    const start = anchorRef.current
-    const time = elapsed.current
+      return new Vector3(
+        x + wave.offset * sway * spread,
+        y - wave.t * drop,
+        z + wave.depth * sway * spread,
+      )
+    })
 
-    for (let i = 0; i < CONTROL_POINTS; i += 1) {
-      const t = i / (CONTROL_POINTS - 1)
-      const point = points[i]
-      if (point === undefined) continue
-
-      // Interpolation entre les deux extrémités fixes.
-      point.lerpVectors(start, end, t)
-
-      // Le balancement est nul aux extrémités et maximal au milieu.
-      const amplitude = Math.sin(t * Math.PI)
-
-      point.x += Math.sin(time + t * 2.2) * SWAY_X * amplitude
-      point.z += Math.cos(time * 0.8 + t * 1.7) * SWAY_Z * amplitude
-      // Léger ventre vers le bas : le câble pend sous son propre poids.
-      point.y -= amplitude * 0.35
-    }
-
-    curve.updateArcLengths()
-
-    // La géométrie est reconstruite à chaque frame et l'ancienne libérée :
-    // sans ce dispose, on fuit la mémoire GPU en quelques secondes.
-    const geometry = new TubeGeometry(
-      curve,
-      TUBE_SEGMENTS,
-      TUBE_RADIUS,
-      TUBE_RADIAL_SEGMENTS,
-      false,
-    )
-
-    mesh.geometry.dispose()
-    mesh.geometry = geometry
-  })
+    const curve = new CatmullRomCurve3(points)
+    return new TubeGeometry(curve, TUBE_SEGMENTS, TUBE_RADIUS, TUBE_RADIAL_SEGMENTS, false)
+  }, [start, sway, drop])
 
   return (
-    <mesh ref={meshRef}>
-      <meshStandardMaterial color={color} roughness={0.6} metalness={0.05} />
+    <mesh geometry={geometry}>
+      <meshStandardMaterial color={color} roughness={0.62} metalness={0.05} />
     </mesh>
   )
 }
