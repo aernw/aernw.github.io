@@ -2,6 +2,9 @@
 
 Portfolio d'Erwan Seytor — développeur fullstack et musicien.
 
+> **[ETAT.md](ETAT.md)** — concept, avancement et prochaines étapes. À lire en
+> premier pour reprendre le travail.
+
 Le site a **deux faces**, comme une cassette : la face A (pro) présente les projets,
 le parcours et les compétences ; la face B (artistique) présente la musique, le lab
 et le colophon. La bascule n'est pas mémorisée — elle met simplement à jour `?side=b`
