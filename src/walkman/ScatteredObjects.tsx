@@ -5,17 +5,16 @@ import type { Object3D } from 'three'
 const MODEL_URL = `${import.meta.env.BASE_URL}models/walkman.glb`
 
 /**
- * Objets isolés du modèle, réutilisables seuls.
+ * Pièces du modèle réutilisables isolément.
  *
- * Le GLB livré contient déjà deux cassettes et un casque, chacun sur son propre
- * nœud — c'est ce qui permet de les détacher sans ajouter un seul octet. On ne
- * recharge rien : `useGLTF` sert le même fichier que le walkman, déjà en cache.
- */
-/*
- * Seules les cassettes sont réutilisées. Le casque a été essayé puis écarté :
- * il est modélisé en deux nœuds (coque grise et mousse orange) et, détaché de
- * l'arceau, il ne se lit plus comme un casque — juste une forme noire.
- * Un objet du fond doit être reconnaissable d'un coup d'œil ou ne pas y être.
+ * Le GLB livré porte chaque pièce sur son propre nœud — c'est ce qui permet de
+ * les détacher sans ajouter un seul octet. On ne recharge rien : `useGLTF` sert
+ * le même fichier que le walkman, déjà en cache.
+ *
+ * Seules les cassettes sont retenues. Le casque a été essayé puis écarté : il
+ * est modélisé en deux nœuds (coque grise et mousse orange) et, détaché de son
+ * arceau, il ne se lit plus comme un casque — juste une forme noire. Un objet
+ * de fond doit être reconnaissable d'un coup d'œil, ou ne pas y être.
  */
 const PIECES = {
   cassette: 'Box013_cassette01_0',
@@ -27,9 +26,9 @@ type PieceName = keyof typeof PIECES
 /**
  * Un objet du sketchbook : une pièce du modèle, posée ailleurs dans la page.
  *
- * `depth` est exprimé en unités de scène négatives — plus l'objet est loin,
- * plus il est petit et plus il se fond dans le fond. C'est ce qui l'empêche de
- * concurrencer le walkman du hero.
+ * Le `z` de `position` porte l'éloignement : plus il est négatif, plus l'objet
+ * est petit et fondu dans le fond. C'est lui qui l'empêche de concurrencer le
+ * walkman du hero.
  */
 interface ScatterItem {
   readonly id: string

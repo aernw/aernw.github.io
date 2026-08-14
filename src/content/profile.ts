@@ -8,7 +8,7 @@ export const profile: Profile = {
   availability: 'Ouvert aux projets qui me plaisent',
   summary:
     "Développeur en 4ème année à Epitech. Je viens de la programmation système (C/C++) " +
-    "et je travaille aujourd'hui surtout en TypeScript et Go. Je fais aussi de la musique — " +
+    "et je travaille aujourd'hui surtout en TypeScript . Je fais aussi de la musique — " +
     "les deux se rejoignent plus souvent qu'on ne le croit.",
   links: [
     { label: 'GitHub', href: 'https://github.com/aernw' },
