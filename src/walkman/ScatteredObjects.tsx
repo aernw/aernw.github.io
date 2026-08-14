@@ -142,7 +142,7 @@ const PATTERN: readonly {
     piece: 'cassette',
     x: -3.3,
     z: -2.8,
-    rotation: [1.1, 0.3, 0.15],
+    rotation: [0.3, 0.3, 0.15],
     scale: 1.8,
   },
   {
@@ -172,6 +172,7 @@ const PATTERN: readonly {
  * laisse donc deux écrans vides à la jointure, comme entre chaque objet.
  */
 const PATTERN_SCREENS = 11
+const LAST_PATTERN_SCREEN = Math.max(...PATTERN.map((spot) => spot.screen))
 
 /**
  * Déroule le motif sur toute la hauteur de la page.
@@ -210,10 +211,10 @@ function countScreens(): number {
   const viewport = window.innerHeight
 
   if (viewport === 0) {
-    return 2
+    return Math.max(2, LAST_PATTERN_SCREEN + 1)
   }
 
-  return Math.max(2, Math.ceil(height / viewport))
+  return Math.max(2, Math.ceil(height / viewport), LAST_PATTERN_SCREEN + 1)
 }
 
 /**

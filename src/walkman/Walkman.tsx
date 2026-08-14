@@ -65,13 +65,13 @@ export function Walkman() {
 
   // La scène est décorative : elle décrit ce qu'elle montre, sans annoncer
   // d'interaction, puisque toute la navigation passe par le bouton ci-dessous.
-  const label = `Walkman et cassettes — face ${side.toUpperCase()}`
+  const label = side === 'a' ? 'Ordinateur — face A' : 'Walkman et cassettes — face B'
 
   return (
     <>
       {webglAvailable === true ? (
         <Suspense fallback={null}>
-          <WalkmanScene label={label} />
+          <WalkmanScene label={label} side={side} />
           <ScatterScene />
         </Suspense>
       ) : null}
