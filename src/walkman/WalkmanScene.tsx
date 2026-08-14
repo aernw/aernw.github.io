@@ -2,7 +2,6 @@ import { Suspense, useEffect } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { Environment } from '@react-three/drei'
 import { WalkmanModel } from './WalkmanModel'
-import { Cable } from './Cable'
 import { FramingProbe } from './FramingProbe'
 import './WalkmanScene.css'
 
@@ -36,7 +35,6 @@ function RenderOnDemand() {
 
 interface WalkmanSceneProps {
   readonly label: string
-  readonly cableColor: string
 }
 
 /* ── Réglages du cadrage ───────────────────────────────────────────
@@ -64,13 +62,6 @@ const WALKMAN_ROTATION: readonly [number, number, number] = [0.12, -0.4, 0]
  */
 const WALKMAN_SCALE = 0.95
 
-/** Départ du câble, au bas du walkman. */
-const CABLE_START: readonly [number, number, number] = [
-  WALKMAN_POSITION[0] + 0.3,
-  WALKMAN_POSITION[1] - 1.05,
-  0.2,
-]
-
 /**
  * Scène 3D couvrant toute la page.
  *
@@ -82,7 +73,7 @@ const CABLE_START: readonly [number, number, number] = [
  * Le canvas n'intercepte aucun événement : il couvre tout le viewport, et le
  * moindre `pointer-events: auto` bloquerait les liens et le scroll du site.
  */
-export function WalkmanScene({ label, cableColor }: WalkmanSceneProps) {
+export function WalkmanScene({ label }: WalkmanSceneProps) {
   return (
     <div className="walkman-scene">
       <Canvas
@@ -111,10 +102,6 @@ export function WalkmanScene({ label, cableColor }: WalkmanSceneProps) {
           >
             <WalkmanModel rotation={WALKMAN_ROTATION} />
           </group>
-
-          {/* Ondulations resserrées : plus larges, le câble croiserait le
-              texte du hero au lieu de rester dans la marge droite. */}
-          <Cable start={CABLE_START} sway={0.5} drop={9} color={cableColor} />
 
           {/* L'environnement donne des reflets crédibles au plastique et au métal. */}
           <Environment preset="city" />
