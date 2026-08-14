@@ -16,12 +16,10 @@ export const projects: readonly Project[] = [
     tagline: 'Git pour la production musicale',
     description:
       "Les producteurs de musique n'ont jamais eu de gestion de versions. Le résultat, ce sont " +
-      "des dossiers remplis de projet_final_v2_VRAI_CELUI-LA. StemHub apporte les commits, les " +
-      'branches et la collaboration directement dans le DAW, via un plugin, avec une plateforme ' +
-      "web par-dessus. Le stockage est adressé par contenu, ce qui permet de ne jamais renvoyer " +
-      'deux fois le même échantillon audio.',
+      "des dossiers remplis de projet_final_v2_version_finale. StemHub apporte le versionning, les " +
+      'branches et la résolution de conflits directement dans le DAW, via un plugin, avec une plateforme ' +
+      "web par-dessus.",
     role: 'Contributeur principal — plugin C++, backend et plateforme web, en équipe de 6',
-    metrics: ['252 commits sur ~504', '46 pull requests mergées'],
     stack: ['TypeScript', 'Python', 'C++', 'CMake', 'Docker'],
     links: [
       { label: 'stemhub.fr', href: 'https://stemhub.fr' },
@@ -43,7 +41,6 @@ export const projects: readonly Project[] = [
       'de plugins permettant de charger les bibliothèques graphiques et audio à la volée. ' +
       "Le serveur fait autorité sur l'état du jeu pour garantir un multijoueur équitable.",
     role: 'Contributeur principal, en équipe de 5',
-    metrics: ['284 commits sur ~728', "Jusqu'à 4 joueurs simultanés"],
     stack: ['C++', 'CMake', 'UDP/TCP', 'ECS', 'LZ4'],
     links: [{ label: 'GitHub', href: 'https://github.com/aernw/r-type' }],
     year: '2025',

@@ -22,6 +22,14 @@ import {
 } from '../content'
 import './SideB.css'
 
+interface PlaceholderProps {
+  readonly children: string
+}
+
+function Placeholder({ children }: PlaceholderProps) {
+  return <p className="section__placeholder">{children}</p>
+}
+
 /**
  * Face B — artistique et personnelle.
  *
@@ -30,12 +38,6 @@ import './SideB.css'
  * des TODO dans src/content/music.ts, personal.ts et artistic.ts.
  */
 export function SideB() {
-  const featured = projects.filter((project) => project.sides.includes('b'))
-
-  const hasMusic = musicLinks.length > 0 || releases.length > 0
-  const hasTop = topAlbums.length > 0 || topArtists.length > 0
-  const hasNow = now.items.length > 0
-
   /** Fraîcheur de la section découvertes, calculée depuis l'entrée la plus récente. */
   const latestDiscovery = discoveries.reduce<string | null>(
     (latest, item) => (latest === null || item.discovered > latest ? item.discovered : latest),
@@ -59,125 +61,120 @@ export function SideB() {
         </div>
       </section>
 
-      {hasMusic ? (
-        <Section id="musique" title="Ma musique">
-          {releases.length > 0 ? (
-            <ul className="releases">
-              {releases.map((release) => (
-                <li key={release.id} className="release">
-                  <div className="release__head">
-                    <h3 className="release__title">{release.title}</h3>
-                    <span className="release__year">{release.year}</span>
-                  </div>
-                  <p className="release__kind">{release.kind}</p>
-                  {release.note ? <p className="release__note">{release.note}</p> : null}
-                  <ul className="release__links">
-                    {release.links.map((link) => (
-                      <li key={link.href}>
-                        <a href={link.href} target="_blank" rel="noreferrer noopener">
-                          {link.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ))}
-            </ul>
-          ) : null}
+      <Section id="musique" title="Ma musique">
+        {releases.length > 0 ? (
+          <ul className="releases">
+            {releases.map((release) => (
+              <li key={release.id} className="release">
+                <div className="release__head">
+                  <h3 className="release__title">{release.title}</h3>
+                  <span className="release__year">{release.year}</span>
+                </div>
+                <p className="release__kind">{release.kind}</p>
+                {release.note ? <p className="release__note">{release.note}</p> : null}
+                <ul className="release__links">
+                  {release.links.map((link) => (
+                    <li key={link.href}>
+                      <a href={link.href} target="_blank" rel="noreferrer noopener">
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <Placeholder>Ajoute ici tes plateformes, morceaux ou projets musicaux.</Placeholder>
+        )}
 
-          {musicLinks.length > 0 ? (
-            <ul className="music-links">
-              {musicLinks.map((link) => (
-                <li key={link.href}>
-                  <a href={link.href} target="_blank" rel="noreferrer noopener">
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </Section>
-      ) : null}
+        {musicLinks.length > 0 ? (
+          <ul className="music-links">
+            {musicLinks.map((link) => (
+              <li key={link.href}>
+                <a href={link.href} target="_blank" rel="noreferrer noopener">
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </Section>
 
-      {discoveries.length > 0 ? (
-        <Section
-          id="decouvertes"
-          title="Découvertes"
-          lead="Ce que j'écoute en ce moment et que je veux faire écouter."
-          width="bleed"
-        >
+      <Section
+        id="decouvertes"
+        title="Découvertes"
+        lead="Ce que j'écoute en ce moment et que je veux faire écouter."
+        width="bleed"
+      >
+        {discoveries.length > 0 ? (
           <Rail label="Découvertes musicales">
             <Discoveries items={discoveries} layout="row" />
           </Rail>
-          {latestDiscovery !== null ? (
+        ) : (
+          <Placeholder>Ajoute ici tes découvertes récentes pour remplir la section.</Placeholder>
+        )}
+
+        {latestDiscovery !== null ? (
             <p className="section__footnote section__footnote--inset">
               Dernier ajout en {formatMonth(latestDiscovery)}
             </p>
           ) : null}
-        </Section>
-      ) : null}
+      </Section>
 
-      {hasTop ? (
-        <Section
-          id="top"
-          title="Mon top de tous les temps"
-          lead="Dans l'ordre. Pas de notes — la place suffit."
-          stickyTitle
-        >
-          {topAlbums.length > 0 ? (
-            <>
-              <h3 className="subsection__title">Albums</h3>
-              <TopAlbums items={topAlbums} />
-            </>
-          ) : null}
+      <Section
+        id="top"
+        title="Mon top de tous les temps"
+        lead="Dans l'ordre. Pas de notes — la place suffit."
+        stickyTitle
+      >
+        {topAlbums.length > 0 ? (
+          <>
+            <h3 className="subsection__title">Albums</h3>
+            <TopAlbums items={topAlbums} />
+          </>
+        ) : (
+          <Placeholder>Ajoute quelques albums pour faire apparaître ce classement.</Placeholder>
+        )}
 
-          {topArtists.length > 0 ? (
-            <>
-              <h3 className="subsection__title subsection__title--spaced">Artistes</h3>
-              <TopArtists items={topArtists} />
-            </>
-          ) : null}
-        </Section>
-      ) : null}
+        {topArtists.length > 0 ? (
+          <>
+            <h3 className="subsection__title subsection__title--spaced">Artistes</h3>
+            <TopArtists items={topArtists} />
+          </>
+        ) : null}
+      </Section>
 
-      {vinyls.length > 0 ? (
-        <Section
-          id="vinyles"
-          title="Vinyles"
-          lead="Pas un inventaire — les disques qui comptent."
-          width="bleed"
-        >
+      <Section
+        id="vinyles"
+        title="Vinyles"
+        lead="Pas un inventaire — les disques qui comptent."
+        width="bleed"
+      >
+        {vinyls.length > 0 ? (
           <Rail label="Collection de vinyles">
             <VinylGrid items={vinyls} layout="row" />
           </Rail>
-        </Section>
-      ) : null}
+        ) : (
+          <Placeholder>Ajoute quelques pochettes de vinyles pour afficher cette rangée.</Placeholder>
+        )}
+      </Section>
 
-      {media.length > 0 ? (
-        <Section id="lectures" title="Ce que je lis et regarde">
+      <Section id="lectures" title="Ce que je lis et regarde">
+        {media.length > 0 ? (
           <MediaList items={media} />
-        </Section>
-      ) : null}
+        ) : (
+          <Placeholder>Ajoute ici les livres, films ou séries qui comptent en ce moment.</Placeholder>
+        )}
+      </Section>
 
-      {lessons.length > 0 ? (
-        <Section id="appris" title="Ce que j'ai appris" width="full">
+      <Section id="appris" title="Ce que j'ai appris" width="full">
+        {lessons.length > 0 ? (
           <LessonList items={lessons} />
-        </Section>
-      ) : null}
-
-      {featured.length > 0 ? (
-        <Section
-          id="pont"
-          title="Là où les deux se rejoignent"
-          lead="Un projet où le code et la musique sont le même travail."
-        >
-          <div className="projects-grid">
-            {featured.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-          </div>
-        </Section>
-      ) : null}
+        ) : (
+          <Placeholder>Ajoute ici quelques leçons ou constats que tu veux garder.</Placeholder>
+        )}
+      </Section>
 
       <Section
         id="lab"
@@ -205,18 +202,22 @@ export function SideB() {
         </ul>
       </Section>
 
-      {hasNow ? (
-        <Section id="now" title="En ce moment">
-          <ul className="now">
-            {now.items.map((item) => (
-              <li key={item} className="now__item">
-                {item}
-              </li>
-            ))}
-          </ul>
-          {now.updated ? <p className="now__updated">Mis à jour {now.updated}</p> : null}
-        </Section>
-      ) : null}
+      <Section id="now" title="En ce moment">
+        {now.items.length > 0 ? (
+          <>
+            <ul className="now">
+              {now.items.map((item) => (
+                <li key={item} className="now__item">
+                  {item}
+                </li>
+              ))}
+            </ul>
+            {now.updated ? <p className="now__updated">Mis à jour {now.updated}</p> : null}
+          </>
+        ) : (
+          <Placeholder>Ajoute ici ce sur quoi tu travailles en ce moment.</Placeholder>
+        )}
+      </Section>
 
       <Section id="colophon" title="Colophon">
         <dl className="colophon">

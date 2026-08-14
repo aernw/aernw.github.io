@@ -58,7 +58,9 @@ function Faces() {
         {/* Dans le flux de la page, et non fixé au viewport : la scène est
             ancrée en haut et défile avec le hero, qu'elle habille. */}
         <Walkman />
-        {renderedSide === 'a' ? <SideA /> : <SideB />}
+        <div className="page__content">
+          {renderedSide === 'a' ? <SideA /> : <SideB />}
+        </div>
       </main>
 
       <footer className="footer">

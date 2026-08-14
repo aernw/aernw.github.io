@@ -63,6 +63,14 @@
   color: var(--ink-muted);
 }
 
+.section__placeholder {
+  max-width: var(--measure);
+  padding: var(--space-3);
+  color: var(--ink-faint);
+  background: var(--surface);
+  border-radius: var(--radius-card);
+}
+
 .release__links,
 .music-links {
   display: flex;

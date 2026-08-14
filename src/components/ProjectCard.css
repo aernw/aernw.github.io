@@ -1,50 +1,37 @@
 /*
- * Carte de projet — composant flottant.
+ * Carte de projet — version plus minimale.
  *
- * Pas de bordure : la carte se détache du fond par une surface légèrement
- * différente et un rayon généreux. C'est le seul endroit du site où un
- * élément a une surface propre, et c'est assumé (les projets sont le cœur).
+ * Le projet se lit comme une entrée éditoriale : peu de surface, peu d'effet,
+ * une hiérarchie nette et un accent discret plutôt qu'une vraie “card”.
  */
 
 .project {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-4);
-  background: var(--surface);
-  border-radius: var(--radius-card);
-  overflow: hidden;
+  gap: var(--space-3);
+  padding: clamp(var(--space-3), 3.5vw, var(--space-5)) 0;
+  border-top: 1px solid color-mix(in srgb, var(--ink-faint) 24%, transparent);
   transition:
     transform var(--duration) var(--ease),
-    box-shadow var(--duration) var(--ease),
-    background-color var(--duration-slow) var(--ease);
+    border-color var(--duration-slow) var(--ease);
 }
 
-/* Le contenu passe au-dessus du visuel décoratif. */
-.project > *:not(.project-visual) {
-  position: relative;
-  z-index: 1;
+.project:first-of-type {
+  border-top-color: transparent;
 }
 
-/* Quand la carte porte un visuel, le texte lui réserve sa place à droite
-   plutôt que de passer dessous. */
-@media (min-width: 60rem) {
-  .project:has(.project-visual) > *:not(.project-visual) {
-    max-width: calc(100% - min(32%, 16rem));
-  }
-}
-
-/* Halo de la teinte du projet, révélé au survol. Discret et cantonné à un coin :
-   la couleur du projet ne doit jamais devenir un fond plein. */
+/* Accent de couleur très léger, uniquement au survol. */
 .project::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    120% 90% at 88% 0%,
-    color-mix(in srgb, var(--project-accent, transparent) 22%, transparent) 0%,
-    transparent 65%
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--project-accent, var(--ink-faint)) 55%, transparent),
+    transparent
   );
   opacity: 0;
   transition: opacity var(--duration) var(--ease);
@@ -52,12 +39,11 @@
 }
 
 .project:hover::before {
-  opacity: 1;
+  opacity: 0.9;
 }
 
 .project:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-float);
+  transform: translateY(-1px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -69,13 +55,49 @@
 /* Le projet phare occupe toute la largeur et respire davantage. */
 .project--feature {
   grid-column: 1 / -1;
-  padding: clamp(var(--space-4), 5vw, var(--space-6));
-  gap: var(--space-3);
+  padding: clamp(var(--space-4), 5vw, var(--space-6)) 0;
 }
 
 .project--compact {
-  padding: var(--space-3);
-  gap: var(--space-1);
+  gap: var(--space-2);
+}
+
+.project__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(7rem, 11rem);
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.project__content {
+  min-width: 0;
+}
+
+.project__visual {
+  align-self: start;
+  justify-self: end;
+  width: 100%;
+  opacity: 0.88;
+}
+
+.project__visual .project-visual {
+  width: 100%;
+}
+
+.project__visual img {
+  filter: saturate(0.92) contrast(0.96);
+}
+
+@media (max-width: 59.999rem) {
+  .project__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .project__visual {
+    max-width: 12rem;
+    justify-self: start;
+    opacity: 0.8;
+  }
 }
 
 .project__head {
@@ -83,6 +105,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-2);
+  margin-bottom: var(--space-1);
 }
 
 .project__name {
@@ -95,10 +118,10 @@
 .project__name::before {
   content: '';
   display: inline-block;
-  width: 0.44em;
-  height: 0.44em;
-  margin-right: 0.5em;
-  vertical-align: 0.08em;
+  width: 0.38em;
+  height: 0.38em;
+  margin-right: 0.42em;
+  vertical-align: 0.09em;
   border-radius: 50%;
   background: var(--project-accent, var(--ink-faint));
 }
@@ -154,11 +177,11 @@
 }
 
 .project__stack-item {
-  padding: 0.25rem 0.7rem;
+  padding: 0.24rem 0.65rem;
   font-size: var(--text-micro);
   font-family: var(--font-mono);
   color: var(--ink-muted);
-  background: var(--ground);
+  background: color-mix(in srgb, var(--surface) 68%, transparent);
   border-radius: var(--radius-pill);
   transition:
     background-color var(--duration-slow) var(--ease),
@@ -179,6 +202,7 @@
 
 .project__link {
   font-size: var(--text-small);
+  color: var(--ink-muted);
 }
 
 .project__link:hover {
