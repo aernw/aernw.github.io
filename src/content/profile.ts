@@ -4,16 +4,16 @@ export const profile: Profile = {
   name: 'Erwan Seytor',
   title: 'Développeur fullstack',
   location: 'Paris, France',
-  email: 'seytorerwan@gmail.com',
-  availability: 'Ouvert aux projets qui me plaisent',
+  email: 'erwan.seytor@epitech.eu',
+  availability: 'Heureux de participer à de nouveaux projets !',
   summary:
-    "Développeur en 4ème année à Epitech. Je viens de la programmation système (C/C++) " +
-    "et je travaille aujourd'hui surtout en TypeScript et Go. Je fais aussi de la musique — " +
+    "Développeur en 4ème année à Epitech. Je viens de la programmation système (C/C++)" +
+    "Je suis passioné par créer des logiciels qui optimisent mon temps. Je fais aussi de la musique — " +
     "les deux se rejoignent plus souvent qu'on ne le croit.",
   links: [
     { label: 'GitHub', href: 'https://github.com/aernw' },
     { label: 'LinkedIn', href: 'https://linkedin.com/in/erwan-seytor' },
-    { label: 'Email', href: 'mailto:seytorerwan@gmail.com' },
+    { label: 'Email', href: 'mailto:erwan.seytor@epitech.eu' },
   ],
 }
 

@@ -1,17 +1,27 @@
 /*
  * Scène 3D plein écran, purement décorative.
  *
- * Le canvas couvre tout le viewport pour que le câble descende derrière le
- * contenu. Il n'intercepte donc jamais les événements : sans cela, il bloquerait
- * chaque clic sur les liens du site et chaque geste de scroll. Toute la
- * navigation passe par le bouton de bascule, qui est focusable au clavier.
+ * Le canvas couvre tout le viewport pour que les objets de fond puissent se
+ * poser derrière le contenu. Il n'intercepte jamais les événements : sans cela,
+ * il bloquerait chaque clic sur les liens du site et chaque geste de scroll.
+ * Toute la navigation passe par le bouton de bascule, focusable au clavier.
  */
 
 /*
  * La scène est ancrée en haut de page et défile avec elle, plutôt que d'être
  * fixée au viewport : le walkman appartient au hero et doit disparaître avec
- * lui au scroll. Sa hauteur dépasse l'écran pour que le câble ait la place de
- * descendre derrière les premières sections.
+ * lui au scroll.
+ *
+ * ⚠️ Sa hauteur borne la zone où les objets de fond peuvent exister — au-delà,
+ * il n'y a plus de canvas — mais elle NE PEUT PAS être augmentée librement :
+ * la caméra a un fov vertical fixe, donc étirer le canvas en hauteur rétrécit
+ * la largeur visible en unités de scène. Essayé à 260vh : la demi-largeur
+ * visible tombait de 1,62 à 1,06 et le walkman du hero débordait à 140 % de la
+ * largeur (mesuré à la sonde, `dansLeCadre: false`).
+ *
+ * 170vh est donc un réglage solidaire du cadrage du hero. Pour descendre les
+ * objets plus bas, il faudrait une seconde scène indépendante, pas une
+ * première scène plus grande.
  */
 .walkman-scene {
   position: absolute;

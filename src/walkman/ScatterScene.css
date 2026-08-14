@@ -1,0 +1,28 @@
+/*
+ * Scène des objets de fond, sur toute la hauteur de la page.
+ *
+ * Contrairement à la scène du hero, qui est dans le flux et défile avec lui,
+ * celle-ci est FIXÉE au viewport. Deux raisons :
+ *
+ * 1. Un canvas de la hauteur réelle de la page (plus de 6000 px) ferait rendre
+ *    à chaque frame une surface que personne ne regarde. Fixé, il ne fait
+ *    jamais plus d'un écran.
+ * 2. Sa hauteur reste donc constante, ce qui garde le ratio du canvas stable :
+ *    c'est précisément la variation de ratio qui avait fait déborder le walkman
+ *    quand on avait tenté d'agrandir la première scène.
+ *
+ * Le défilement des objets est obtenu en déplaçant la caméra, pas le canvas.
+ */
+.scatter-scene {
+  position: fixed;
+  inset: 0;
+  /* Derrière le contenu, comme la scène du hero. */
+  z-index: 0;
+  pointer-events: none;
+}
+
+.scatter-scene canvas {
+  /* Aucune dimension forcée : React Three Fiber pose la sienne en inline. */
+  display: block;
+  pointer-events: none;
+}

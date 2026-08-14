@@ -74,12 +74,17 @@
   letter-spacing: var(--tracking-title);
   color: var(--ink);
   text-wrap: pretty;
+  /* Variante dense : les cassettes du sketchbook passent derrière ce texte
+     comme le walkman passe derrière le nom, mais elles sont bien plus sombres
+     que lui — le halo du hero ne suffirait pas à détacher les lettres. */
+  text-shadow: var(--halo-text-dense);
 }
 
 .intro__availability {
   margin-top: var(--space-3);
   font-size: var(--text-body-lg);
   color: var(--accent);
+  text-shadow: var(--halo-text-dense);
 }
 
 /* ── Projets ──────────────────────────────────────────────────────

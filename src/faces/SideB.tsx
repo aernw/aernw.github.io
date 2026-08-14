@@ -221,7 +221,9 @@ export function SideB() {
       <Section id="colophon" title="Colophon">
         <dl className="colophon">
           {colophon.map((entry) => (
-            <div key={entry.label} className="colophon__row">
+            // La valeur, pas le libellé : plusieurs entrées partagent le même
+            // libellé (trois modèles 3D, tous à créditer séparément).
+            <div key={entry.value} className="colophon__row">
               <dt className="colophon__label">{entry.label}</dt>
               <dd className="colophon__value">
                 {entry.href === undefined ? (
