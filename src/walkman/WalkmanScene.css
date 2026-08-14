@@ -1,10 +1,10 @@
 /*
- * Scène 3D plein écran.
+ * Scène 3D plein écran, purement décorative.
  *
  * Le canvas couvre tout le viewport pour que le câble descende derrière le
- * contenu. Il est donc impératif qu'il n'intercepte ni les clics ni le scroll :
- * `pointer-events: none` par défaut, et Three.js réactive la détection sur les
- * objets eux-mêmes via ses propres gestionnaires.
+ * contenu. Il n'intercepte donc jamais les événements : sans cela, il bloquerait
+ * chaque clic sur les liens du site et chaque geste de scroll. Toute la
+ * navigation passe par le bouton de bascule, qui est focusable au clavier.
  */
 
 .walkman-scene {
@@ -20,30 +20,9 @@
 .walkman-scene canvas {
   /*
    * Aucune règle de dimension ici : React Three Fiber pose lui-même la taille
-   * du canvas en style inline, et un `width: 100% !important` l'empêchait de
-   * redimensionner le tampon de rendu — le canvas restait à sa taille par
-   * défaut de 300×150, étirée en CSS, avec un ratio de caméra faux.
+   * du canvas en style inline, et la forcer en CSS l'empêcherait de
+   * redimensionner son tampon de rendu.
    */
   display: block;
-  /*
-   * Le canvas reste transparent aux événements : il couvre tout le viewport, et
-   * `pointer-events: auto` intercepterait chaque clic sur les liens et chaque
-   * geste de scroll. La détection des objets 3D est faite par un écouteur posé
-   * sur la fenêtre, qui n'active le canvas que lorsque le curseur survole
-   * réellement le walkman ou son câble.
-   */
   pointer-events: none;
-  /* `pan-y` laisse passer le défilement vertical au doigt. */
-  touch-action: pan-y;
-}
-
-/* Activé par le composant lorsqu'un objet est réellement sous le curseur. */
-.walkman-scene--hot canvas {
-  pointer-events: auto;
-  cursor: grab;
-}
-
-.walkman-scene--interacting canvas {
-  pointer-events: auto;
-  cursor: grabbing;
 }
