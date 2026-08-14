@@ -12,14 +12,27 @@ interface WalkmanSceneProps {
 }
 
 /**
- * Point de branchement du câble, en fractions de la taille du walkman depuis
- * son centre. Le modèle ne comporte pas de prise femelle : on la place ici, en
- * bas à droite du boîtier.
+ * Position du walkman dans la scène.
+ *
+ * Suffisamment à droite pour ne pas recouvrir le titre, qui part du bord gauche
+ * et occupe environ les deux tiers de la largeur.
  */
-const SOCKET_OFFSET = { x: 0.3, y: -0.44, z: 0.12 }
+const WALKMAN_POSITION: readonly [number, number, number] = [4.6, 1.4, 0]
 
-/** Extrémité basse du câble : hors champ, sous le bord de l'écran. */
-const CABLE_END: readonly [number, number, number] = [0.4, -5.5, 0]
+/**
+ * Point de branchement du câble, en fractions de la taille du walkman depuis
+ * son centre. Le modèle ne comporte pas de prise femelle : on la place ici, au
+ * bas du boîtier.
+ */
+const SOCKET_OFFSET = { x: 0.05, y: -0.46, z: 0.1 }
+
+/**
+ * Extrémité basse du câble : hors champ, sous le bord de l'écran.
+ *
+ * Alignée sur l'abscisse du walkman, sinon le câble traverserait la scène en
+ * diagonale au lieu de pendre sous l'appareil.
+ */
+const CABLE_END: readonly [number, number, number] = [WALKMAN_POSITION[0] - 0.3, -6, 0]
 
 /**
  * Scène 3D couvrant toute la page.
@@ -50,13 +63,7 @@ export function WalkmanScene({ label, cableColor }: WalkmanSceneProps) {
         <directionalLight position={[-4, -1, -3]} intensity={0.6} />
 
         <Suspense fallback={null}>
-          {/*
-            Décalé vers la droite et vers le haut : le walkman occupe le vide du
-            hero sans recouvrir le titre, qui part du bord gauche.
-            Si le cadrage ne convient pas, c'est cette valeur qu'il faut ajuster
-            (x vers la droite, y vers le haut).
-          */}
-          <group position={[3.4, 1.4, 0]}>
+          <group position={WALKMAN_POSITION}>
             <WalkmanModel socketAnchor={socketAnchor} socketOffset={SOCKET_OFFSET} />
           </group>
 
