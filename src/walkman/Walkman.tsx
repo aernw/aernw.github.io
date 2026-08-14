@@ -8,6 +8,12 @@ const WalkmanScene = lazy(() =>
   import('./WalkmanScene').then((module) => ({ default: module.WalkmanScene })),
 )
 
+// Les objets de fond du reste de la page, dans leur propre scène : celle du
+// hero ne peut pas s'agrandir sans que son cadrage se dérègle.
+const ScatterScene = lazy(() =>
+  import('./ScatterScene').then((module) => ({ default: module.ScatterScene })),
+)
+
 const IDLE_HINT_MS = 9000
 
 /** WebGL peut être absent ou désactivé : mieux vaut le savoir avant de monter la scène. */
@@ -66,6 +72,7 @@ export function Walkman() {
       {webglAvailable === true ? (
         <Suspense fallback={null}>
           <WalkmanScene label={label} />
+          <ScatterScene />
         </Suspense>
       ) : null}
 
