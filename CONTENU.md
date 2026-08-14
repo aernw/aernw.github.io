@@ -18,6 +18,39 @@ Tu peux donc laisser des listes vides sans casser la mise en page.
 | `profile.ts` | Identité, expériences, formation, compétences |
 | `lab.ts` | Expériences et petits outils |
 
+## Organisation des images locales
+
+Les images de couverture vivent dans le dossier `public/covers/` et sont classées par type de contenu :
+
+- `public/covers/discoveries/` → découvertes musicales
+- `public/covers/albums/` → top albums
+- `public/covers/vinyls/` → vinyles
+
+Exemple de structure :
+
+```text
+public/
+  covers/
+    discoveries/
+      fennes.svg
+      saaz.svg
+    albums/
+      autechre.svg
+      burial.svg
+    vinyls/
+      ambient-selection.svg
+```
+
+Ensuite, dans les données, on pointe vers le chemin public :
+
+```ts
+cover: '/covers/discoveries/fennes.svg'
+cover: '/covers/albums/autechre.svg'
+cover: '/covers/vinyls/ambient-selection.svg'
+```
+
+Cette méthode est préférable aux URLs externes parce qu’elle est stable, versionnée dans le dépôt et intégrée automatiquement par Vite au build.
+
 ## Ajouter une découverte musicale
 
 Dans `music.ts`, ajoute une entrée **en haut** de `discoveries` (les plus récentes d'abord) :
@@ -30,7 +63,7 @@ Dans `music.ts`, ajoute une entrée **en haut** de `discoveries` (les plus réce
   year: '2025',
   note: "Ce qui t'a marqué. Deux phrases suffisent — c'est la partie qu'on lit.",
   discovered: '2026-08',
-  cover: 'https://i.scdn.co/image/…',
+  cover: '/covers/discoveries/artiste-titre.svg',
   href: 'https://open.spotify.com/album/…',
 },
 ```
@@ -39,7 +72,8 @@ Dans `music.ts`, ajoute une entrée **en haut** de `discoveries` (les plus réce
 - `discovered` est au format `AAAA-MM`. Il sert à afficher « Dernier ajout en août 2026 »
   en bas de section — **c'est volontaire** : si la section vieillit, ça se voit, pour toi
   comme pour le visiteur.
-- `cover` et `href` sont facultatifs.
+- `cover` est optionnel ; si tu n’as pas d’image, le composant affiche automatiquement les initiales.
+- `href` est facultatif.
 
 ## Ajouter un album au top
 
@@ -53,7 +87,7 @@ entrée est le n° 1. Pour changer un rang, déplace la ligne.
   title: "Titre de l'album",
   year: '1997',
   note: 'Une ligne : pourquoi celui-ci.',
-  cover: 'https://…',
+  cover: '/covers/albums/artiste-titre.svg',
 },
 ```
 
@@ -66,7 +100,14 @@ Dans `music.ts`, `vinyls`. `pressing` est facultatif — à utiliser quand l'éd
 un intérêt (réédition, vinyle coloré, coffret).
 
 ```ts
-{ id: 'artiste-titre', artist: '…', title: '…', year: '1985', pressing: 'Réédition 2021' },
+{
+  id: 'artiste-titre',
+  artist: '…',
+  title: '…',
+  year: '1985',
+  pressing: 'Réédition 2021',
+  cover: '/covers/vinyls/artiste-titre.svg',
+},
 ```
 
 ## Ajouter une lecture ou un film
@@ -90,13 +131,12 @@ de toi. Ce qui fonctionne, c'est ce qui t'a coûté quelque chose, rattaché à 
 
 ## À propos des pochettes
 
-Les images viennent d'URLs externes (Spotify, Discogs, Bandcamp).
+Les images sont maintenant stockées localement dans `public/covers/`.
 
-- **Elles doivent être en `https://`** — une URL en `http://` sera bloquée par le navigateur.
-- Si une image casse un jour, elle est **automatiquement remplacée par les initiales de
-  l'artiste**. La grille garde sa forme, rien ne se casse.
-- Pour récupérer une URL Spotify : ouvre l'album dans le navigateur, clic droit sur la
-  pochette, « Copier l'adresse de l'image ».
+- Elles doivent être placées dans le bon dossier : `discoveries`, `albums` ou `vinyls`.
+- Le chemin dans les données doit commencer par `/covers/...`.
+- Si une image n’existe pas ou casse, le composant la remplace automatiquement par les initiales de l’artiste.
+- Cela évite les liens cassés et rend le site fiable sur le long terme.
 
 ## Publier tes changements
 

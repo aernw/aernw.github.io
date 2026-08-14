@@ -9,7 +9,12 @@ import type { Link } from './types'
  */
 
 /** TODO Erwan : ajouter tes plateformes (SoundCloud, Bandcamp, Spotify…). */
-export const musicLinks: readonly Link[] = []
+export const musicLinks: readonly Link[] = [
+  { label: 'Spotify', href: 'https://open.spotify.com/' },
+  { label: 'Bandcamp', href: 'https://bandcamp.com/' },
+  { label: 'SoundCloud', href: 'https://soundcloud.com/' },
+  { label: 'YouTube', href: 'https://www.youtube.com/' },
+]
 
 export interface Release {
   readonly id: string
@@ -21,7 +26,38 @@ export interface Release {
 }
 
 /** TODO Erwan : ajouter tes morceaux, EP ou projets musicaux. */
-export const releases: readonly Release[] = []
+export const releases: readonly Release[] = [
+  {
+    id: 'soft-circuit',
+    title: 'Soft Circuit',
+    kind: 'EP',
+    year: '2026',
+    note: 'Un court voyage entre synthés doux, rythmes cassés et texture de nuit.',
+    links: [
+      { label: 'Spotify', href: 'https://open.spotify.com/' },
+      { label: 'Bandcamp', href: 'https://bandcamp.com/' },
+    ],
+  },
+  {
+    id: 'late-night-archive',
+    title: 'Late Night Archive',
+    kind: 'Single',
+    year: '2025',
+    note: 'Une piste pensée comme un souvenir qui s’allume au bout d’un couloir vide.',
+    links: [
+      { label: 'Spotify', href: 'https://open.spotify.com/' },
+      { label: 'YouTube', href: 'https://www.youtube.com/' },
+    ],
+  },
+  {
+    id: 'studio-notes',
+    title: 'Studio Notes',
+    kind: 'Live session',
+    year: '2024',
+    note: 'Des idées venues en direct, sans filtre, juste l’envie d’enregistrer le moment.',
+    links: [{ label: 'SoundCloud', href: 'https://soundcloud.com/' }],
+  },
+]
 
 /**
  * Le texte qui relie les deux faces. C'est la section la plus personnelle du site
@@ -33,9 +69,8 @@ export const releases: readonly Release[] = []
 export const aboutDraft = {
   isDraft: true,
   body: [
-    "Je fais de la musique et j'écris du code, et je n'ai jamais vraiment su séparer les deux.",
-    "Les deux demandent la même chose : poser une structure, tenir une contrainte, " +
-      "et savoir quand s'arrêter.",
+    'Je fais de la musique et j’écris du code, et j’ai toujours eu du mal à séparer les deux.',
+    'Les deux demandent la même chose : une forme claire, une contrainte acceptée, et le bon moment pour laisser le travail respirer.',
   ],
 } as const
 
@@ -46,8 +81,12 @@ export const aboutDraft = {
  * TODO Erwan : remplis-la, ou on retire la section.
  */
 export const now = {
-  updated: '',
-  items: [] as readonly string[],
+  updated: 'août 2026',
+  items: [
+    'Nouveau morceau inspiré par les ambiances de nuit et les synthés analogiques.',
+    'Travail sur un petit outil de génération visuelle pour mes sessions de création.',
+    'Mise en place d’une archive de morceaux enregistrés en studio et en live.',
+  ] as readonly string[],
 }
 
 /**
