@@ -2,7 +2,6 @@ import { Suspense, useEffect } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { Environment } from '@react-three/drei'
 import { WalkmanModel } from './WalkmanModel'
-import { ScatteredObjects } from './ScatteredObjects'
 import { FramingProbe } from './FramingProbe'
 import './WalkmanScene.css'
 
@@ -106,10 +105,6 @@ export function WalkmanScene({ label }: WalkmanSceneProps) {
           >
             <WalkmanModel rotation={WALKMAN_ROTATION} />
           </group>
-
-          {/* Hors du groupe du walkman : ces objets ont leur propre repère et ne
-              doivent hériter ni de son cadrage, ni de son échelle. */}
-          <ScatteredObjects />
 
           {/* L'environnement donne des reflets crédibles au plastique et au métal. */}
           <Environment preset="city" />
