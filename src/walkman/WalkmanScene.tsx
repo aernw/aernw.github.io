@@ -1,14 +1,17 @@
-import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Environment } from '@react-three/drei'
+import { Vector3 } from 'three'
 import { WalkmanModel } from './WalkmanModel'
+import { Cable } from './Cable'
+import { HoverProbe } from './HoverProbe'
 import './WalkmanScene.css'
 
 interface WalkmanSceneProps {
-  readonly onJackPosition?: (point: { x: number; y: number }) => void
   /** Appelé au clic sans glisser : le walkman sert aussi de bouton de bascule. */
   readonly onActivate?: () => void
   readonly label: string
+  readonly cableColor: string
 }
 
 /** Au-delà de ce déplacement, le geste est un glisser et non un clic. */
@@ -16,21 +19,24 @@ const DRAG_THRESHOLD_PX = 6
 const ROTATION_SPEED = 0.008
 
 /**
- * Scène 3D du walkman.
+ * Scène 3D couvrant toute la page.
  *
- * La manipulation est volontairement limitée à l'objet : on n'attache les
- * écouteurs de déplacement qu'après un appui sur le canvas, et on n'appelle
- * jamais preventDefault sur le toucher. Le scroll de la page passe donc partout,
- * y compris sur la scène — un objet 3D plein écran qui capte le geste est le
- * défaut le plus courant de ce type d'intégration.
+ * Le canvas est plein écran pour que le câble puisse descendre derrière le
+ * contenu, mais il est transparent aux événements : `pointer-events: none` sur
+ * le conteneur, réactivé uniquement sur les objets. Sans cela, un canvas de
+ * cette taille intercepterait tous les clics sur les liens et le scroll de la
+ * page — c'est le défaut le plus courant des scènes 3D plein écran.
  */
-export function WalkmanScene({ onJackPosition, onActivate, label }: WalkmanSceneProps) {
-  // Orientation de départ : légèrement de trois quarts, face à la caméra.
+export function WalkmanScene({ onActivate, label, cableColor }: WalkmanSceneProps) {
   const dragRotation = useRef({ x: 0.15, y: -0.6 })
   const pointerStart = useRef<{ x: number; y: number } | null>(null)
   const dragged = useRef(false)
   const [interacting, setInteracting] = useState(false)
+  const [hovering, setHovering] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
+
+  // Position de la prise jack en coordonnées de scène, partagée avec le câble.
+  const jackAnchor = useMemo(() => ({ current: new Vector3(0, 0, 0) }), [])
 
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -78,18 +84,20 @@ export function WalkmanScene({ onJackPosition, onActivate, label }: WalkmanScene
     setInteracting(false)
   }, [onActivate])
 
+  const classes = [
+    'walkman-scene',
+    hovering ? 'walkman-scene--hot' : '',
+    interacting ? 'walkman-scene--interacting' : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   return (
-    <div
-      className={`walkman-scene${interacting ? ' walkman-scene--interacting' : ''}`}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerLeave={handlePointerUp}
-    >
+    <div className={classes}>
       <Canvas
-        camera={{ position: [0, 0, 5], fov: 38 }}
-        // Fond transparent : le walkman flotte sur la page, il n'a pas de scène
-        // propre. C'est ce qu'une iframe Sketchfab ne permettait pas.
+        camera={{ position: [0, 0, 6], fov: 38 }}
+        // Fond transparent : les objets flottent sur la page, la scène n'a pas
+        // de décor propre.
         gl={{ alpha: true, antialias: true }}
         // Plafonné à 2 : au-delà, le coût de rendu double sans gain visible.
         dpr={[1, 2]}
@@ -100,11 +108,25 @@ export function WalkmanScene({ onJackPosition, onActivate, label }: WalkmanScene
         <directionalLight position={[-4, -1, -3]} intensity={0.6} />
 
         <Suspense fallback={null}>
-          <WalkmanModel
-            {...(onJackPosition === undefined ? {} : { onJackPosition })}
-            dragRotation={dragRotation}
-            autoRotate={!interacting && !reducedMotion}
-          />
+          {/* Décalé à droite et vers le haut : le walkman occupe le vide du
+              hero sans recouvrir le titre, qui part du bord gauche. */}
+          <group
+            position={[2.1, 1.1, 0]}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+          >
+            <WalkmanModel
+              jackAnchor={jackAnchor}
+              dragRotation={dragRotation}
+              autoRotate={!interacting && !reducedMotion}
+            />
+          </group>
+
+          <Cable anchorRef={jackAnchor} color={cableColor} />
+
+          <HoverProbe onHoverChange={setHovering} />
+
           {/* L'environnement donne des reflets crédibles au plastique et au métal. */}
           <Environment preset="city" />
         </Suspense>

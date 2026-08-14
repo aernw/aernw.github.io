@@ -8,47 +8,45 @@ const WalkmanScene = lazy(() =>
   import('./WalkmanScene').then((module) => ({ default: module.WalkmanScene })),
 )
 
-/** Au-delà de ce scroll, le walkman quitte le hero pour se caler en flottant. */
-const DOCK_THRESHOLD_PX = 420
 const IDLE_HINT_MS = 9000
-
-interface WalkmanProps {
-  readonly onJackPosition?: (point: { x: number; y: number }) => void
-}
 
 /** WebGL peut être absent ou désactivé : mieux vaut le savoir avant de monter la scène. */
 function detectWebGL(): boolean {
   try {
     const canvas = document.createElement('canvas')
-    return (
-      canvas.getContext('webgl2') !== null ||
-      canvas.getContext('webgl') !== null
-    )
+    return canvas.getContext('webgl2') !== null || canvas.getContext('webgl') !== null
   } catch {
     return false
   }
 }
 
+/** Couleur du câble, lue depuis les tokens : elle change avec la face. */
+function readCableColor(): string {
+  if (typeof window === 'undefined') return '#1d1d1f'
+  const value = getComputedStyle(document.documentElement).getPropertyValue('--thread').trim()
+  return value.length > 0 ? value : '#1d1d1f'
+}
+
 /**
- * Le walkman : objet central du site et commande de bascule entre les faces.
+ * Le walkman et son câble : objet central du site et commande de bascule.
  *
- * Un seul objet en deux états — grand dans le hero, réduit et flottant après
- * défilement. Sans WebGL, un repli textuel garde la fonction de navigation.
+ * La scène occupe tout le viewport pour que le câble puisse descendre derrière
+ * le contenu. Sans WebGL, un bouton prend le relais et garde la navigation.
  */
-export function Walkman({ onJackPosition }: WalkmanProps) {
+export function Walkman() {
   const { side, other, flip } = useSide()
-  const [docked, setDocked] = useState(false)
   const [hinting, setHinting] = useState(false)
   const [webglAvailable, setWebglAvailable] = useState<boolean | null>(null)
+  const [cableColor, setCableColor] = useState('#1d1d1f')
 
   useEffect(() => setWebglAvailable(detectWebGL()), [])
 
+  // La couleur du câble suit la face. Le délai laisse la transition CSS des
+  // tokens s'appliquer avant la lecture.
   useEffect(() => {
-    const onScroll = () => setDocked(window.scrollY > DOCK_THRESHOLD_PX)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    const timer = window.setTimeout(() => setCableColor(readCableColor()), 60)
+    return () => window.clearTimeout(timer)
+  }, [side])
 
   // Le choix de face n'étant pas mémorisé, le walkman est le seul signal
   // qu'une autre moitié du site existe : il se rappelle après inactivité.
@@ -73,45 +71,36 @@ export function Walkman({ onJackPosition }: WalkmanProps) {
     }
   }, [side])
 
-  const label = `Face ${side.toUpperCase()} — cliquer pour passer sur la face ${other.toUpperCase()}, glisser pour faire tourner`
-
   const handleActivate = useCallback(() => flip(), [flip])
 
-  const classes = [
-    'walkman',
-    docked ? 'walkman--docked' : 'walkman--hero',
-    hinting ? 'walkman--hinting' : '',
-  ]
-    .filter(Boolean)
-    .join(' ')
+  const label =
+    `Face ${side.toUpperCase()} — cliquer sur le walkman pour passer sur la face ` +
+    `${other.toUpperCase()}, glisser pour le faire tourner ou déplacer le câble`
 
   return (
-    <div className={classes}>
+    <>
       {webglAvailable === true ? (
-        <Suspense fallback={<div className="walkman__placeholder" aria-hidden="true" />}>
-          <WalkmanScene
-            {...(onJackPosition === undefined ? {} : { onJackPosition })}
-            onActivate={handleActivate}
-            label={label}
-          />
+        <Suspense fallback={null}>
+          <WalkmanScene onActivate={handleActivate} label={label} cableColor={cableColor} />
         </Suspense>
       ) : null}
 
       {/*
-        Bouton toujours présent : il porte la fonction de navigation au clavier,
-        et devient l'unique commande visible si WebGL est indisponible.
+        Bouton toujours présent : il porte la navigation au clavier — un canvas
+        n'est pas focusable — et devient l'unique commande sans WebGL.
       */}
       <button
         type="button"
-        className={`walkman__toggle${webglAvailable === false ? ' walkman__toggle--fallback' : ''}`}
+        className={`walkman-toggle${hinting ? ' walkman-toggle--hinting' : ''}`}
         onClick={flip}
         aria-pressed={side === 'b'}
+        title={`Passer sur la face ${other.toUpperCase()}`}
       >
-        <span aria-hidden="true">{other.toUpperCase()}</span>
-        <span className="visually-hidden">
-          Passer sur la face {other.toUpperCase()}
+        <span className="walkman-toggle__face" aria-hidden="true">
+          {other.toUpperCase()}
         </span>
+        <span className="walkman-toggle__label">Face {other.toUpperCase()}</span>
       </button>
-    </div>
+    </>
   )
 }
