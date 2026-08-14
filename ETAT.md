@@ -141,6 +141,19 @@ La 3D est en `lazy()` : le texte s'affiche avant elle.
 
 ## 4. Ce qui reste à faire
 
+> **Plan arrêté le 14/08/2026 avec Erwan.** Pas de deadline : le chantier 3D
+> passe devant le contenu. L'ordre est celui des priorités ci-dessous, avec une
+> réserve — l'animation du couvercle (P2) ne commence qu'une fois le fil
+> conducteur (P1) stable, pour ne pas empiler deux sources d'instabilité.
+>
+> **Décision sur le fil : il sera statique.** Pas de réaction au scroll, afin de
+> préserver `frameloop="demand"` et le coût processeur nul. On pourra l'animer
+> ensuite, une fois la géométrie juste.
+>
+> **`FramingProbe` est conservé** — contrairement à ce qu'indiquait la P4.
+> Il est derrière `import.meta.env.DEV` et vérifié absent du bundle de
+> production ; il resservira pour régler le fil.
+
 ### Priorité 1 — Câble et casque (le sujet en cours)
 
 Le modèle contient walkman, casque, câble et fiche, **tous nommés séparément** —
@@ -192,13 +205,23 @@ en milieu de mouvement.
 Les sections concernées ne s'affichent pas tant que leur contenu est vide. Voir
 [CONTENU.md](CONTENU.md) pour la marche à suivre, avec exemples copiables.
 
-⚠️ La section « Ma musique » vide à côté d'une section « Découvertes » remplie
-enverrait un message involontaire — à remplir en priorité.
+**Décision (14/08/2026)** : Erwan remplira lui-même, plus tard. Les placeholders
+sont assumés, ce n'est pas un chantier ouvert.
+
+À ce jour **toutes** les listes de la face B sont vides, `discoveries` comprise :
+la face se replie proprement sur hero + Lab + Colophon. Il n'y a donc aucun
+déséquilibre entre sections — l'ancienne alerte sur « Ma musique vide à côté de
+Découvertes remplie » était fondée sur une lecture erronée et a été retirée.
+
+⚠️ En revanche, `aboutDraft.isDraft` n'est lu par **aucun** composant : le
+brouillon s'affiche en ligne comme un texte normal. Choix assumé au merge de la
+PR #4, mais c'est le premier texte à réécrire.
 
 ### Priorité 4 — Divers
 
 - **CV en PDF** téléchargeable : prévu au plan, jamais ajouté
-- Nettoyer `FramingProbe.tsx` (sonde de développement) une fois le cadrage figé
+- ~~Nettoyer `FramingProbe.tsx`~~ — **conservé volontairement**, voir l'encadré
+  en tête de section
 - Mobile : jamais travaillé, seulement vérifié qu'il ne déborde pas
 - Le README d'AREA crédite `@aernw1` — lien mort, à signaler à l'équipe
 
@@ -206,10 +229,15 @@ enverrait un message involontaire — à remplir en priorité.
 
 ## 5. État Git
 
-Branche courante : **`feat/walkman-3d`**, 15 commits d'avance sur `main`.
+Branche courante : **`feat/walkman-3d`**, à jour avec `main`.
 
-Les PR #1 (visuels) et #2 (cassette 2D) sont mergées. Le travail 3D actuel n'a
-pas encore de PR.
+Les PR #1 (visuels), #2 (cassette 2D), #3 et #4 sont mergées. **Tout le travail
+3D est en ligne** : le site déployé sert le walkman en fond de hero.
+
+⚠️ Le workflow ne se déclenche que sur `push` vers `main` — une PR n'affiche donc
+aucun check. La vérification de typage tourne *après* le merge, pendant le
+déploiement. Il faut valider `npx tsc --noEmit && npm run build` en local avant
+de merger.
 
 Branches conservées mais obsolètes : `feat/cassette-fil` (approche 2D
 abandonnée), `feat/portfolio-v1`, `feat/layout-libre`, `feat/face-b-content`,
