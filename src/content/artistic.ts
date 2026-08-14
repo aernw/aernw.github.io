@@ -78,4 +78,14 @@ export const colophon: readonly {
     value: 'Focusrite Scarlett Solo 4th Gen par Ivan_WSK (CC BY 4.0)',
     href: 'https://sketchfab.com/3d-models/focusrite-scarlett-solo-4th-gen-9cdbec90442a4fd1a6aa7fd4b1be136a',
   },
+  {
+    label: 'Modèle 3D',
+    value: 'AirPods Max par Mr.Philin (CC BY 4.0)',
+    href: 'https://sketchfab.com/3d-models/airpods-max-05181e126a6341668ca95f2d98324d30',
+  },
+  {
+    label: 'Modèle 3D',
+    value: 'Écouteurs filaires par Ethereal Grace (CC BY 4.0)',
+    href: 'https://sketchfab.com/EtherealGrace',
+  },
 ]

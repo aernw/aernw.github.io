@@ -16,6 +16,8 @@ const MODELS = {
   walkman: `${base}models/walkman.glb`,
   speakers: `${base}models/speakers.glb`,
   focusrite: `${base}models/focusrite.glb`,
+  airpods: `${base}models/airpods.glb`,
+  earphones: `${base}models/earphones.glb`,
 } as const
 
 /**
@@ -39,6 +41,8 @@ const PIECES = {
   // comme une enceinte — même piège que le casque du walkman.
   enceintes: { model: 'speakers', node: null },
   carteSon: { model: 'focusrite', node: 'Scarlett_Scarlett_MTL_0' },
+  airpods: { model: 'airpods', node: null },
+  ecouteurs: { model: 'earphones', node: null },
 } as const satisfies Record<string, { model: keyof typeof MODELS; node: string | null }>
 
 type PieceName = keyof typeof PIECES
@@ -158,10 +162,28 @@ const PATTERN: readonly {
     rotation: [-0.5, -0.25, 0.2],
     scale: 1.35,
   },
+  {
+    screen: 6,
+    at: 0.45,
+    piece: 'airpods',
+    x: -3.3,
+    z: -3.5,
+    rotation: [0.3, 0.8, 0.2],
+    scale: 2.6,
+  },
+  {
+    screen: 7,
+    at: 0.65,
+    piece: 'ecouteurs',
+    x: 3.5,
+    z: -3.8,
+    rotation: [0.2, -0.5, 0.4],
+    scale: 1.3,
+  },
 ]
 
 /** Longueur du motif, en écrans de défilement. */
-const PATTERN_SCREENS = 6
+const PATTERN_SCREENS = 8
 
 /**
  * Déroule le motif sur toute la hauteur de la page.
@@ -219,14 +241,24 @@ export function ScatteredObjects() {
   const walkman = useGLTF(MODELS.walkman)
   const speakers = useGLTF(MODELS.speakers)
   const focusrite = useGLTF(MODELS.focusrite)
+  const airpods = useGLTF(MODELS.airpods)
+  const earphones = useGLTF(MODELS.earphones)
 
   const scenes = useMemo(
     () => ({
       walkman: walkman.scene,
       speakers: speakers.scene,
       focusrite: focusrite.scene,
+      airpods: airpods.scene,
+      earphones: earphones.scene,
     }),
-    [walkman.scene, speakers.scene, focusrite.scene],
+    [
+      walkman.scene,
+      speakers.scene,
+      focusrite.scene,
+      airpods.scene,
+      earphones.scene,
+    ],
   )
 
   const [screens, setScreens] = useState(countScreens)
@@ -303,3 +335,5 @@ export function ScatteredObjects() {
 // par `WalkmanModel`, et `useGLTF` sert le même cache.
 useGLTF.preload(MODELS.speakers)
 useGLTF.preload(MODELS.focusrite)
+useGLTF.preload(MODELS.airpods)
+useGLTF.preload(MODELS.earphones)
