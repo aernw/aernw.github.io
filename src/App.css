@@ -1,6 +1,9 @@
 .page {
   /* Le bouton flottant ne doit jamais recouvrir la fin du contenu. */
   padding-bottom: var(--space-6);
+  /* Au-dessus du fil, qui vit en z-index 0. */
+  position: relative;
+  z-index: 1;
   transition:
     opacity 0.26s var(--ease),
     transform 0.26s var(--ease);
