@@ -15,6 +15,18 @@ export interface Link {
   readonly href: string
 }
 
+/**
+ * Visuel d'un projet.
+ * - `sprites` : images détourées qui flottent, pour les projets ayant leurs
+ *   propres assets (R-Type et ses vaisseaux).
+ * - `image`   : une capture d'écran classique.
+ * - `none`    : la couleur d'accent porte seule l'identité du projet.
+ */
+export type ProjectVisual =
+  | { readonly kind: 'sprites'; readonly sources: readonly string[] }
+  | { readonly kind: 'image'; readonly src: string; readonly alt: string }
+  | { readonly kind: 'none' }
+
 export interface Project {
   readonly id: string
   readonly name: string
@@ -31,6 +43,13 @@ export interface Project {
   readonly year: string
   readonly emphasis: ProjectEmphasis
   readonly sides: readonly Side[]
+  /**
+   * Teinte propre au projet, reprise de son identité réelle quand elle existe.
+   * Utilisée par petites touches (halo, filet, survol) — jamais en fond plein,
+   * pour ne pas casser la continuité de surface du site.
+   */
+  readonly accent?: string
+  readonly visual?: ProjectVisual
 }
 
 export interface Experience {

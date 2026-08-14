@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Reveal } from './Reveal'
 import './Section.css'
 
 /**
@@ -52,14 +53,16 @@ export function Section({
       className={`section section--${width}${stickyTitle ? ' section--sticky' : ''}`}
       aria-labelledby={headingId}
     >
-      <header className="section__header">
+      <Reveal as="header" className="section__header">
         <h2 id={headingId} className={hideTitle ? 'visually-hidden' : 'section__title'}>
           {title}
         </h2>
         {lead ? <p className="section__lead">{lead}</p> : null}
-      </header>
+      </Reveal>
 
-      <div className="section__body">{children}</div>
+      <Reveal className="section__body" delay={90}>
+        {children}
+      </Reveal>
     </section>
   )
 }
