@@ -112,17 +112,23 @@ const PATTERN: readonly {
   // L'envergure des modèles n'est pas la même — les enceintes mesurent ~3,9
   // unités, la carte son 14,3 — d'où des échelles très différentes pour une
   // taille comparable à l'écran.
+  // ⚠️ Les enceintes commencent à l'écran 1, pas 0 : à l'écran 0 elles se
+  // posent derrière le hero et concurrencent le walkman.
+  //
+  // Le +π sur Y les retourne face à la caméra. Le modèle est orienté vers -Z
+  // (les cônes s'étendent de z=-2,2 à z=+0,84, donc leur masse est derrière) :
+  // sans cette demi-rotation, on ne voit que le dos des caissons.
   {
-    screen: 0,
-    at: 0.6,
+    screen: 1,
+    at: 0.85,
     piece: 'enceintes',
-    x: -3.4,
+    x: -3.9,
     z: -4,
-    rotation: [0.1, 0.7, 0.1],
-    scale: 1.05,
+    rotation: [0.1, 0.90 + Math.PI, 0.1],
+    scale: 0.95,
   },
   {
-    screen: 2,
+    screen: 3,
     at: 0.35,
     piece: 'carteSon',
     x: 3.4,
@@ -159,8 +165,13 @@ const PATTERN: readonly {
   },
 ]
 
-/** Longueur du motif, en écrans de défilement. */
-const PATTERN_SCREENS = 10
+/**
+ * Longueur du motif, en écrans de défilement.
+ *
+ * Le dernier objet est à l'écran 8 et le premier à l'écran 1 : un cycle de 11
+ * laisse donc deux écrans vides à la jointure, comme entre chaque objet.
+ */
+const PATTERN_SCREENS = 11
 
 /**
  * Déroule le motif sur toute la hauteur de la page.
