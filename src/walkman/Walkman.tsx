@@ -20,13 +20,6 @@ function detectWebGL(): boolean {
   }
 }
 
-/** Couleur du câble, lue depuis les tokens : elle change avec la face. */
-function readCableColor(): string {
-  if (typeof window === 'undefined') return '#1d1d1f'
-  const value = getComputedStyle(document.documentElement).getPropertyValue('--thread').trim()
-  return value.length > 0 ? value : '#1d1d1f'
-}
-
 /**
  * Le walkman et son câble : objet central du site et commande de bascule.
  *
@@ -37,16 +30,8 @@ export function Walkman() {
   const { side, other, flip } = useSide()
   const [hinting, setHinting] = useState(false)
   const [webglAvailable, setWebglAvailable] = useState<boolean | null>(null)
-  const [cableColor, setCableColor] = useState('#1d1d1f')
 
   useEffect(() => setWebglAvailable(detectWebGL()), [])
-
-  // La couleur du câble suit la face. Le délai laisse la transition CSS des
-  // tokens s'appliquer avant la lecture.
-  useEffect(() => {
-    const timer = window.setTimeout(() => setCableColor(readCableColor()), 60)
-    return () => window.clearTimeout(timer)
-  }, [side])
 
   // Le choix de face n'étant pas mémorisé, le walkman est le seul signal
   // qu'une autre moitié du site existe : il se rappelle après inactivité.
@@ -79,7 +64,7 @@ export function Walkman() {
     <>
       {webglAvailable === true ? (
         <Suspense fallback={null}>
-          <WalkmanScene label={label} cableColor={cableColor} />
+          <WalkmanScene label={label} />
         </Suspense>
       ) : null}
 

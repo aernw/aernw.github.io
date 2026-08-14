@@ -65,7 +65,7 @@ export const colophon: readonly {
   { label: 'Hébergé sur', value: 'GitHub Pages' },
   {
     label: 'Modèle 3D',
-    value: 'Sony walkman tps-l2 par enKi (CC Attribution)',
-    href: 'https://sketchfab.com/3d-models/sony-walkman-tps-l2-3d072a29fd6342cd8af9ebb6664100e2',
+    value: 'Low poly Sony Walkman WM-22 par ima_ethan (CC Attribution)',
+    href: 'https://sketchfab.com/3d-models/low-poly-sony-walkman-wm-22-6462c2c1ed444922b6d45c4f13695ffd',
   },
 ]

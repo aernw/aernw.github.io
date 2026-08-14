@@ -2,7 +2,7 @@ import { Suspense, useEffect } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { Environment } from '@react-three/drei'
 import { WalkmanModel } from './WalkmanModel'
-import { Cable } from './Cable'
+import { FramingProbe } from './FramingProbe'
 import './WalkmanScene.css'
 
 /**
@@ -35,32 +35,32 @@ function RenderOnDemand() {
 
 interface WalkmanSceneProps {
   readonly label: string
-  readonly cableColor: string
 }
 
 /* ── Réglages du cadrage ───────────────────────────────────────────
  * Toutes les valeurs qui décident de l'allure de la scène sont ici.
  * À z=6 avec un fov de 38°, la demi-largeur visible fait environ 5,2 unités.
+ * Le modèle livré mesure 3,1 unités sur son plus grand axe et est centré.
  */
-
-/** Position du walkman : à droite, pour laisser le titre respirer. */
-const WALKMAN_POSITION: readonly [number, number, number] = [3.4, 1.3, 0]
 
 /**
- * Orientation du walkman : face avant tournée vers la caméra.
+ * Position du walkman : au centre, devant le nom.
  *
- * La rotation d'un demi-tour sur Y est nécessaire — le modèle présente sa face
- * arrière par défaut. C'est de face qu'on lit la fenêtre cassette, les boutons
- * et le logo Sony.
+ * Le chevauchement avec le titre est voulu — c'est lui qui donne la profondeur.
+ * Légèrement au-dessus du centre pour mordre sur le nom sans le noyer.
  */
-const WALKMAN_ROTATION: readonly [number, number, number] = [0.08, Math.PI - 0.15, 0]
+const WALKMAN_POSITION: readonly [number, number, number] = [0, 0.1, 0]
 
-/** Départ du câble, au bas du walkman. */
-const CABLE_START: readonly [number, number, number] = [
-  WALKMAN_POSITION[0] - 0.35,
-  WALKMAN_POSITION[1] - 0.95,
-  0.25,
-]
+/** Orientation du walkman, légèrement de trois quarts. */
+const WALKMAN_ROTATION: readonly [number, number, number] = [0.12, -0.4, 0]
+
+/**
+ * Échelle du walkman.
+ *
+ * Généreuse : l'objet passant derrière le texte, il peut occuper largement
+ * l'écran sans jamais gêner la lecture.
+ */
+const WALKMAN_SCALE = 0.95
 
 /**
  * Scène 3D couvrant toute la page.
@@ -73,7 +73,7 @@ const CABLE_START: readonly [number, number, number] = [
  * Le canvas n'intercepte aucun événement : il couvre tout le viewport, et le
  * moindre `pointer-events: auto` bloquerait les liens et le scroll du site.
  */
-export function WalkmanScene({ label, cableColor }: WalkmanSceneProps) {
+export function WalkmanScene({ label }: WalkmanSceneProps) {
   return (
     <div className="walkman-scene">
       <Canvas
@@ -90,15 +90,18 @@ export function WalkmanScene({ label, cableColor }: WalkmanSceneProps) {
         <directionalLight position={[-4, 0, -2]} intensity={0.5} />
 
         <RenderOnDemand />
+        {/* Sonde de cadrage, active seulement en développement : elle mesure
+            l'emprise réelle du modèle à l'écran, là où une capture ne dit pas
+            si un défaut vient du code ou du navigateur. */}
+        {import.meta.env.DEV ? <FramingProbe /> : null}
 
         <Suspense fallback={null}>
-          <group position={WALKMAN_POSITION as unknown as [number, number, number]}>
+          <group
+            position={WALKMAN_POSITION as unknown as [number, number, number]}
+            scale={WALKMAN_SCALE}
+          >
             <WalkmanModel rotation={WALKMAN_ROTATION} />
           </group>
-
-          {/* Ondulations resserrées : plus larges, le câble croiserait le
-              texte du hero au lieu de rester dans la marge droite. */}
-          <Cable start={CABLE_START} sway={0.5} drop={9} color={cableColor} />
 
           {/* L'environnement donne des reflets crédibles au plastique et au métal. */}
           <Environment preset="city" />

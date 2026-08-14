@@ -55,6 +55,9 @@ function Faces() {
       </a>
 
       <main id="contenu" className={`page${flipping ? ' page--flipping' : ''}`}>
+        {/* Dans le flux de la page, et non fixé au viewport : la scène est
+            ancrée en haut et défile avec le hero, qu'elle habille. */}
+        <Walkman />
         {renderedSide === 'a' ? <SideA /> : <SideB />}
       </main>
 
@@ -63,8 +66,6 @@ function Faces() {
           © {new Date().getFullYear()} {profile.name}
         </p>
       </footer>
-
-      <Walkman />
     </>
   )
 }
