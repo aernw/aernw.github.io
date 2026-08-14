@@ -150,6 +150,8 @@
 
 .project__description {
   max-width: var(--measure);
+  font-size: var(--text-body-reading);
+  line-height: var(--leading-body);
   color: var(--ink-muted);
 }
 

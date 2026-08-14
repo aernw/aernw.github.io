@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState } from 'react'
+import { Suspense, lazy, useCallback, useEffect, useState } from 'react'
 import { useSide } from '../side/SideContext'
 import './Walkman.css'
 
@@ -27,18 +27,25 @@ function detectWebGL(): boolean {
 }
 
 /**
- * Le walkman : objet central du site et commande de bascule.
+/** Le walkman : objet central du site et commande de bascule.
  *
  * La scène occupe tout le viewport pour que les cassettes de fond puissent se
- * poser derrière le contenu. Sans WebGL, un bouton prend le relais et garde la
+ * poser derrière le contenu. Le modèle principal est cliquable pour basculer
+ * entre les faces ; sans WebGL, un bouton prend le relais et garde la
  * navigation.
  */
 export function Walkman() {
   const { side, other, flip } = useSide()
   const [hinting, setHinting] = useState(false)
   const [webglAvailable, setWebglAvailable] = useState<boolean | null>(null)
+  const [pulseTick, setPulseTick] = useState(0)
 
   useEffect(() => setWebglAvailable(detectWebGL()), [])
+
+  const handleFlip = useCallback(() => {
+    setPulseTick((current) => current + 1)
+    flip()
+  }, [flip])
 
   // Le choix de face n'étant pas mémorisé, le walkman est le seul signal
   // qu'une autre moitié du site existe : il se rappelle après inactivité.
@@ -63,15 +70,15 @@ export function Walkman() {
     }
   }, [side])
 
-  // La scène est décorative : elle décrit ce qu'elle montre, sans annoncer
-  // d'interaction, puisque toute la navigation passe par le bouton ci-dessous.
+  // La scène reste visuelle avant tout, mais le modèle principal porte aussi
+  // le geste de bascule ; le bouton reste le repli accessible au clavier.
   const label = side === 'a' ? 'Ordinateur — face A' : 'Walkman et cassettes — face B'
 
   return (
     <>
       {webglAvailable === true ? (
         <Suspense fallback={null}>
-          <WalkmanScene label={label} side={side} />
+          <WalkmanScene label={label} side={side} onFlip={handleFlip} pulseTick={pulseTick} />
           <ScatterScene />
         </Suspense>
       ) : null}
@@ -83,7 +90,7 @@ export function Walkman() {
       <button
         type="button"
         className={`walkman-toggle${hinting ? ' walkman-toggle--hinting' : ''}`}
-        onClick={flip}
+        onClick={handleFlip}
         aria-pressed={side === 'b'}
         title={`Passer sur la face ${other.toUpperCase()}`}
       >

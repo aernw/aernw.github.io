@@ -8,7 +8,7 @@ export const profile: Profile = {
   availability: 'Heureux de participer à de nouveaux projets !',
   summary:
     "Développeur en 4ème année à Epitech. Je viens de la programmation système (C/C++)." +
-    " J'ai pour passe-temps de créer des logiciels qui optimisent mon temps et celui des autres. Je suis aussi un passioné de musique — " +
+    " J'ai pour passe-temps de créer des logiciels qui optimisent mon temps et celui des autres. Je suis aussi un passioné de musique : " +
     "les deux se rejoignent plus souvent qu'on ne le croit.",
   links: [
     { label: 'GitHub', href: 'https://github.com/aernw' },
