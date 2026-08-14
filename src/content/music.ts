@@ -5,8 +5,9 @@
  * Voir le guide « Tenir le site à jour » dans le README pour la marche à suivre.
  *
  * Les pochettes sont stockées localement dans `public/covers/` et réparties par
- * type de contenu : découvertes, albums et vinyles. Le build Vite les copie
- * automatiquement, donc on évite les URLs externes et les images qui disparaissent.
+ * type de contenu : découvertes, albums, artistes et vinyles. Le build Vite les
+ * copie automatiquement, donc on évite les URLs externes et les images qui
+ * disparaissent.
  */
 
 export interface Discovery {
@@ -79,40 +80,80 @@ export interface FavouriteAlbum {
  * Pas de notes en étoiles : sur un top all-time, tout serait à cinq étoiles et
  * la note n'apprendrait rien. La position seule porte le jugement.
  *
- * TODO Erwan : remplis ce classement.
+ * Classement établi d'après les écoutes cumulées (stats.fm, toute la période).
+ * Le champ `note` est volontairement vide : à remplir à la main, une ligne par
+ * disque, quand l'envie vient.
  */
 export const topAlbums: readonly FavouriteAlbum[] = [
   {
-    id: 'autechre-incunabula',
-    artist: 'Autechre',
-    title: 'Incunabula',
-    year: '1993',
-    note: 'Le disque qui a fait entrer la machine dans la mélodie sans jamais la trahir.',
-    cover: '/covers/albums/autechre.svg',
+    id: 'bladee-333',
+    artist: 'Bladee',
+    title: '333',
+    year: '2020',
+    cover: '/covers/albums/bladee-333.webp',
   },
   {
-    id: 'burial-untrue',
-    artist: 'Burial',
-    title: 'Untrue',
-    year: '2007',
-    note: 'Tout est là : la nuit, le brouillard, les ruptures de rythme et l’émotion sans explication.',
-    cover: '/covers/albums/burial.svg',
+    id: 'retro-x-heroes',
+    artist: 'Retro X',
+    title: 'Heroes',
+    year: '2018',
+    cover: '/covers/albums/retro-x-heroes.webp',
   },
   {
-    id: 'radiohead-ok-computer',
-    artist: 'Radiohead',
-    title: 'OK Computer',
-    year: '1997',
-    note: 'Un album de tension et de détails, qui semble toujours regarder ailleurs avant d’entrer dans la pièce.',
-    cover: '/covers/albums/radiohead.svg',
+    id: 'retro-x-24',
+    artist: 'Retro X',
+    title: '24',
+    year: '2019',
+    cover: '/covers/albums/retro-x-24.webp',
   },
   {
-    id: 'boards-of-canada-geogaddi',
-    artist: 'Boards of Canada',
-    title: 'Geogaddi',
-    year: '2002',
-    note: 'Le monde le plus intime et le plus étrange : une carte mentale tactile et lumineuse.',
-    cover: '/covers/albums/geogaddi.svg',
+    id: 'ecco2k-e',
+    artist: 'Ecco2k',
+    title: 'E',
+    year: '2019',
+    cover: '/covers/albums/ecco2k-e.webp',
+  },
+  {
+    id: 'bladee-the-fool',
+    artist: 'Bladee',
+    title: 'The Fool',
+    year: '2021',
+    cover: '/covers/albums/bladee-the-fool.webp',
+  },
+  {
+    id: 'bladee-icedancer',
+    artist: 'Bladee',
+    title: 'Icedancer',
+    year: '2018',
+    cover: '/covers/albums/bladee-icedancer.webp',
+  },
+  {
+    id: 'bladee-red-light',
+    artist: 'Bladee',
+    title: 'Red Light',
+    year: '2018',
+    cover: '/covers/albums/bladee-red-light.webp',
+  },
+  {
+    id: 'yuri-online-mh-yurimh',
+    artist: 'Yuri Online, MH',
+    title: 'YuriMh',
+    year: '2021',
+    cover: '/covers/albums/yuri-online-mh-yurimh.webp',
+  },
+  {
+    id: 'lancey-foux-friend-or-foux',
+    artist: 'Lancey Foux',
+    title: 'FRIEND OR FOUX',
+    year: '2019',
+    cover: '/covers/albums/lancey-foux-friend-or-foux.webp',
+  },
+  {
+    id: 'bladee-thaiboy-digital-ecco2k-trash-island',
+    artist: 'Bladee, Thaiboy Digital, Ecco2k',
+    title: 'Trash Island',
+    year: '2019',
+    cover: '/covers/albums/bladee-thaiboy-digital-ecco2k-trash-island.webp',
   },
 ]
 
@@ -121,14 +162,26 @@ export interface FavouriteArtist {
   readonly name: string
   readonly note?: string
   readonly href?: string
+  /** Portrait carré : affiché en rond, pour le distinguer d'une pochette. */
+  readonly cover?: string
 }
 
-/** TODO Erwan : ton top artistes, dans l'ordre. */
+/**
+ * Top artistes, dans l'ordre des écoutes cumulées (stats.fm, toute la période).
+ *
+ * Comme pour les albums, `note` est laissé vide et se remplit à la main.
+ */
 export const topArtists: readonly FavouriteArtist[] = [
-  { id: 'autechre', name: 'Autechre', note: 'L’intelligence du rythme poussée jusqu’à la sensation.', href: 'https://www.autechre.com/' },
-  { id: 'burial', name: 'Burial', note: 'Les claquements de nuit, les morceaux qui donnent le vertige sans le montrer.', href: 'https://burial.bandcamp.com/' },
-  { id: 'boards-of-canada', name: 'Boards of Canada', note: 'Un univers de mémoire, de texture et de paysages lointains.', href: 'https://www.boardsofcanada.com/' },
-  { id: 'aphex-twin', name: 'Aphex Twin', note: 'Un génie du détail toujours un peu trop loin pour être saisi.', href: 'https://aphextwin.com/' },
+  { id: 'bladee', name: 'Bladee', cover: '/covers/artists/bladee.webp' },
+  { id: 'retro-x', name: 'Retro X', cover: '/covers/artists/retro-x.webp' },
+  { id: 'ecco2k', name: 'Ecco2k', cover: '/covers/artists/ecco2k.webp' },
+  { id: 'yung-lean', name: 'Yung Lean', cover: '/covers/artists/yung-lean.webp' },
+  { id: 'wasting-shit', name: 'wasting shit', cover: '/covers/artists/wasting-shit.webp' },
+  { id: 'yuri-online', name: 'Yuri Online', cover: '/covers/artists/yuri-online.webp' },
+  { id: 'thaiboy-digital', name: 'Thaiboy Digital', cover: '/covers/artists/thaiboy-digital.webp' },
+  { id: 'ptite-soeur', name: 'Ptite Soeur', cover: '/covers/artists/ptite-soeur.webp' },
+  { id: 'lancey-foux', name: 'Lancey Foux', cover: '/covers/artists/lancey-foux.webp' },
+  { id: 'kid-cudi', name: 'Kid Cudi', cover: '/covers/artists/kid-cudi.webp' },
 ]
 
 export interface Vinyl {

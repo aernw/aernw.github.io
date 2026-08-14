@@ -58,6 +58,14 @@ export function TopArtists({ items }: TopArtistsProps) {
           <span className="top-artist__rank" aria-hidden="true">
             {index + 1}
           </span>
+
+          <Cover
+            src={item.cover}
+            title={item.name}
+            subtitle={item.name}
+            alt={`Portrait de ${item.name}`}
+          />
+
           <div>
             <h3 className="top-artist__name">
               <span className="visually-hidden">N° {index + 1} — </span>

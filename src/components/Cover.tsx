@@ -6,6 +6,11 @@ interface CoverProps {
   /** Sert à générer les initiales du repli et le texte alternatif. */
   readonly title: string
   readonly subtitle: string
+  /**
+   * Remplace le texte alternatif par défaut. Utile hors pochette d'album —
+   * un portrait d'artiste n'est pas « la pochette de X par X ».
+   */
+  readonly alt?: string | undefined
 }
 
 /** Deux lettres tirées du nom, pour le repli quand il n'y a pas de pochette. */
@@ -23,7 +28,7 @@ function initials(value: string): string {
  * Plutôt qu'un carré vide, on retombe sur les initiales de l'artiste : la grille
  * garde sa forme et le contenu reste lisible.
  */
-export function Cover({ src, title, subtitle }: CoverProps) {
+export function Cover({ src, title, subtitle, alt }: CoverProps) {
   const [failed, setFailed] = useState(false)
   const showImage = typeof src === 'string' && src.length > 0 && !failed
 
@@ -39,7 +44,7 @@ export function Cover({ src, title, subtitle }: CoverProps) {
     <img
       className="cover"
       src={src}
-      alt={`Pochette de ${title} par ${subtitle}`}
+      alt={alt ?? `Pochette de ${title} par ${subtitle}`}
       loading="lazy"
       decoding="async"
       referrerPolicy="no-referrer"
