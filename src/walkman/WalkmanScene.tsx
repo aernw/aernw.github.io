@@ -2,6 +2,7 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 import { Canvas } from '@react-three/fiber'
 import { Environment } from '@react-three/drei'
 import { Vector3 } from 'three'
+import type { Object3D } from 'three'
 import { WalkmanModel } from './WalkmanModel'
 import { Cable } from './Cable'
 import { HoverProbe } from './HoverProbe'
@@ -35,8 +36,12 @@ export function WalkmanScene({ onActivate, label, cableColor }: WalkmanSceneProp
   const [hovering, setHovering] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
 
-  // Position de la prise jack en coordonnées de scène, partagée avec le câble.
+  // Position du point de branchement, partagée avec le câble.
   const jackAnchor = useMemo(() => ({ current: new Vector3(0, 0, 0) }), [])
+
+  // Le casque est extrait du modèle puis confié au câble, qui le porte à son
+  // extrémité. Un state est justifié ici : l'extraction n'a lieu qu'une fois.
+  const [headphone, setHeadphone] = useState<Object3D | null>(null)
 
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -124,12 +129,13 @@ export function WalkmanScene({ onActivate, label, cableColor }: WalkmanSceneProp
           >
             <WalkmanModel
               jackAnchor={jackAnchor}
+              onHeadphoneReady={setHeadphone}
               dragRotation={dragRotation}
               autoRotate={!interacting && !reducedMotion}
             />
           </group>
 
-          <Cable anchorRef={jackAnchor} color={cableColor} />
+          <Cable anchorRef={jackAnchor} headphone={headphone} color={cableColor} />
 
           <HoverProbe onHoverChange={setHovering} />
 
