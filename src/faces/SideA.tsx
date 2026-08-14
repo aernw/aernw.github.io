@@ -14,6 +14,10 @@ export function SideA() {
 
   return (
     <>
+      {/*
+        Hero réduit au nom et au métier, centré et plein écran : le walkman se
+        pose par-dessus, et le texte long descend sous la ligne de flottaison.
+      */}
       <section className="hero" aria-labelledby="hero-title">
         <div className="hero__inner">
           <p className="hero__eyebrow">{profile.location}</p>
@@ -21,10 +25,13 @@ export function SideA() {
             {profile.name}
           </h1>
           <p className="hero__subtitle">{profile.title}</p>
-          <p className="hero__summary">{profile.summary}</p>
-          <p className="hero__availability">{profile.availability}</p>
         </div>
       </section>
+
+      <Section id="intro" title="À propos" hideTitle width="text">
+        <p className="intro__summary">{profile.summary}</p>
+        <p className="intro__availability">{profile.availability}</p>
+      </Section>
 
       <Section
         id="projets"
