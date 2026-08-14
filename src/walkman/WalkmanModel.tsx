@@ -7,9 +7,8 @@ import type { Group, Object3D } from 'three'
 const MODEL_URL = `${import.meta.env.BASE_URL}models/walkman.glb`
 
 /**
- * Pièces du câble d'origine, masquées au chargement.
- * Le fil du site est simulé et doit partir de la prise jack : garder le câble
- * modélisé donnerait deux fils partant du même endroit.
+ * Câble d'origine du modèle, masqué : il est remplacé par le câble simulé.
+ * Le casque et sa fiche, eux, sont conservés et déplacés au bout du câble.
  */
 const HIDDEN_PARTS = ['wire_1', 'wire_2']
 
@@ -18,21 +17,33 @@ const HIDDEN_PARTS = ['wire_1', 'wire_2']
  *
  * Le GLB est une mise en scène complète : dix cassettes éparpillées jusqu'à
  * sept unités du centre, ce qui rendait la boîte englobante — et donc l'échelle
- * — inexploitable. On ne garde que l'appareil, la cassette qu'il contient et
- * le casque.
+ * — inexploitable. On ne garde que l'appareil et la cassette qu'il contient ;
+ * le casque est extrait à part, pour être porté par le câble.
  */
 const KEPT_GROUPS = new Set(['walkman', 'tape_1', 'head_phone'])
 
-/** Nom du nœud de la prise jack dans le modèle. */
-const JACK_NODE = 'jack'
+/**
+ * Point de branchement du câble sur le boîtier, en fractions de la boîte
+ * englobante du walkman (x, y, z depuis son centre).
+ *
+ * Le modèle ne comporte aucune prise femelle : `jack` désigne la fiche mâle au
+ * bout du casque, pas une prise sur l'appareil. On définit donc nous-mêmes
+ * l'endroit d'où sort le câble — en bas à droite du boîtier.
+ */
+const SOCKET_OFFSET = { x: 0.34, y: -0.42, z: 0.1 }
 
 interface WalkmanModelProps {
   /**
-   * Reçoit la position de la prise jack en coordonnées de scène, pour que le
-   * câble s'y accroche. On reste en 3D : projeter en pixels puis revenir en
+   * Reçoit la position du point de branchement en coordonnées de scène, pour
+   * que le câble en parte. On reste en 3D : projeter en pixels puis revenir en
    * unités de scène ferait perdre la profondeur.
    */
   readonly jackAnchor: { current: Vector3 }
+  /**
+   * Reçoit l'ensemble casque une fois extrait du modèle, pour que le câble le
+   * porte à son extrémité.
+   */
+  readonly onHeadphoneReady?: (headphone: Object3D) => void
   readonly dragRotation: { current: { x: number; y: number } }
   readonly autoRotate: boolean
 }
@@ -43,10 +54,15 @@ interface WalkmanModelProps {
  * Le modèle est recentré et mis à l'échelle au chargement : un GLB issu de
  * Sketchfab arrive rarement à l'origine et rarement à une taille exploitable.
  */
-export function WalkmanModel({ jackAnchor, dragRotation, autoRotate }: WalkmanModelProps) {
+export function WalkmanModel({
+  jackAnchor,
+  onHeadphoneReady,
+  dragRotation,
+  autoRotate,
+}: WalkmanModelProps) {
   const { scene } = useGLTF(MODEL_URL)
   const groupRef = useRef<Group>(null)
-  const jackRef = useRef<Object3D | null>(null)
+  const socketOffset = useRef(new Vector3())
 
   // Le GLB est partagé par useGLTF : on le clone pour pouvoir le modifier
   // sans affecter d'autres usages éventuels.
@@ -61,18 +77,29 @@ export function WalkmanModel({ jackAnchor, dragRotation, autoRotate }: WalkmanMo
       }
     }
 
-    // Masquer le câble d'origine et retrouver la prise jack.
-    model.traverse((child) => {
-      const name = child.name.toLowerCase()
+    /*
+     * Le casque est extrait du modèle.
+     *
+     * Dans ce GLB, `jack`, `wire_1`, `wire_2` et les écouteurs sont tous
+     * enfants de `head_phone` : c'est un ensemble casque-câble-fiche complet,
+     * posé à côté du walkman et non branché dessus. Le laisser en place collait
+     * le casque à l'appareil et faisait flotter la fiche.
+     *
+     * On le sort donc du groupe pour que le câble simulé le porte à son
+     * extrémité, et on masque son câble d'origine, remplacé par la simulation.
+     */
+    const headphone = model.getObjectByName('head_phone')
+    if (headphone !== undefined) {
+      headphone.traverse((child) => {
+        if (HIDDEN_PARTS.some((part) => child.name.toLowerCase().startsWith(part))) {
+          child.visible = false
+        }
+      })
 
-      if (HIDDEN_PARTS.some((part) => name.startsWith(part))) {
-        child.visible = false
-      }
-
-      if (jackRef.current === null && name === JACK_NODE) {
-        jackRef.current = child
-      }
-    })
+      // Retiré avant la mesure : sa position d'origine, à sept unités du
+      // walkman, fausserait la boîte englobante et donc l'échelle.
+      headphone.removeFromParent()
+    }
 
     // Repartir d'une transformation neutre : l'effet peut se rejouer, et
     // cumuler deux normalisations éloignerait le modèle un peu plus à chaque fois.
@@ -109,22 +136,37 @@ export function WalkmanModel({ jackAnchor, dragRotation, autoRotate }: WalkmanMo
       model.position.sub(center)
     }
 
-    // Publication immédiate : requestAnimationFrame — et donc useFrame — est
-    // suspendu tant que l'onglet est en arrière-plan, et le fil resterait
-    // détaché jusqu'au retour de l'utilisateur.
     model.updateWorldMatrix(true, true)
-    publishJackPosition()
 
-    // Diagnostic temporaire — à retirer une fois le cadrage validé.
-    const check = new Box3().setFromObject(model)
-    const fmt = (v: Vector3) => v.toArray().map((n) => +n.toFixed(2)).join(', ')
-    console.warn(
-      `[walkman] centre=(${fmt(check.getCenter(new Vector3()))}) ` +
-        `taille=(${fmt(check.getSize(new Vector3()))}) ` +
-        `jack=(${fmt(jackAnchor.current)})`,
+    // Point de branchement, exprimé dans le repère du groupe qui tourne : il
+    // suit donc la rotation du walkman, comme le ferait une vraie prise.
+    const finalBox = new Box3().setFromObject(model)
+    const finalSize = finalBox.getSize(new Vector3())
+    socketOffset.current.set(
+      finalSize.x * SOCKET_OFFSET.x,
+      finalSize.y * SOCKET_OFFSET.y,
+      finalSize.z * SOCKET_OFFSET.z,
     )
 
-  }, [model])
+    // Le casque est mis à la même échelle que le walkman, puis confié au câble.
+    if (headphone !== undefined && onHeadphoneReady !== undefined) {
+      headphone.scale.copy(model.scale)
+      onHeadphoneReady(headphone)
+    }
+
+    // Publication immédiate : requestAnimationFrame — et donc useFrame — est
+    // suspendu tant que l'onglet est en arrière-plan, et le câble resterait
+    // détaché jusqu'au retour de l'utilisateur.
+    publishJackPosition()
+
+    // Diagnostic temporaire — à retirer une fois le branchement validé.
+    const fmt = (v: Vector3) => v.toArray().map((n) => +n.toFixed(2)).join(', ')
+    console.warn(
+      `[walkman] taille=(${fmt(finalSize)}) ` +
+        `prise=(${fmt(jackAnchor.current)}) ` +
+        `casque=${headphone === undefined ? 'INTROUVABLE' : 'extrait'}`,
+    )
+  }, [model, onHeadphoneReady])
 
   useFrame((_, delta) => {
     const group = groupRef.current
@@ -142,17 +184,18 @@ export function WalkmanModel({ jackAnchor, dragRotation, autoRotate }: WalkmanMo
   })
 
   /**
-   * Publie la position de la prise jack en coordonnées de scène.
+   * Publie la position du point de branchement en coordonnées de scène.
    *
-   * Le walkman tourne : la prise décrit un arc, et le câble doit rester
-   * accroché dessus. On reste en 3D — le câble vit dans la même scène, aucune
-   * conversion en pixels n'est nécessaire.
+   * L'offset est exprimé dans le repère du groupe qui tourne, puis converti en
+   * coordonnées monde : le point suit donc la rotation du walkman, comme le
+   * ferait une vraie prise sur le boîtier.
    */
   function publishJackPosition(): void {
-    const jack = jackRef.current
-    if (jack === null) return
+    const group = groupRef.current
+    if (group === null) return
 
-    jack.getWorldPosition(jackAnchor.current)
+    jackAnchor.current.copy(socketOffset.current)
+    group.localToWorld(jackAnchor.current)
   }
 
   return (

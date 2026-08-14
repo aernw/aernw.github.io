@@ -1,7 +1,16 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import type { ThreeEvent } from '@react-three/fiber'
-import { CatmullRomCurve3, Mesh, Plane, Raycaster, TubeGeometry, Vector2, Vector3 } from 'three'
+import {
+  CatmullRomCurve3,
+  Mesh,
+  Object3D,
+  Plane,
+  Raycaster,
+  TubeGeometry,
+  Vector2,
+  Vector3,
+} from 'three'
 import {
   CABLE_CONFIG,
   anchorCable,
@@ -20,9 +29,17 @@ const TUBE_RADIAL_SEGMENTS = 8
 /** Distance maximale pour attraper le câble. */
 const GRAB_RADIUS = 0.45
 
+/** Axe de référence pour orienter le casque le long du câble. */
+const UP = new Vector3(0, 1, 0)
+
 interface CableProps {
-  /** Position de la prise jack, en coordonnées de scène. */
+  /** Position du point de branchement sur le walkman, en coordonnées de scène. */
   readonly anchorRef: { current: Vector3 }
+  /**
+   * Ensemble casque extrait du modèle. Il est porté par l'extrémité libre du
+   * câble et orienté selon sa direction, comme un vrai casque au bout d'un fil.
+   */
+  readonly headphone: Object3D | null
   readonly color: string
 }
 
@@ -37,7 +54,7 @@ interface CableProps {
  * épinglé et suit le déplacement, la physique s'occupe du reste. Le premier
  * point est exclu de la saisie — il appartient à la prise.
  */
-export function Cable({ anchorRef, color }: CableProps) {
+export function Cable({ anchorRef, headphone, color }: CableProps) {
   const meshRef = useRef<Mesh>(null)
   const { camera, size } = useThree()
 
@@ -61,6 +78,7 @@ export function Cable({ anchorRef, color }: CableProps) {
   const dragPlane = useMemo(() => new Plane(), [])
   const dragTarget = useMemo(() => new Vector3(), [])
   const planeNormal = useMemo(() => new Vector3(), [])
+  const direction = useMemo(() => new Vector3(), [])
 
   /** Projette la position écran du curseur sur le plan de travail du câble. */
   const projectPointer = (clientX: number, clientY: number, out: Vector3): boolean => {
@@ -169,16 +187,48 @@ export function Cable({ anchorRef, color }: CableProps) {
 
     mesh.geometry.dispose()
     mesh.geometry = geometry
+
+    placeHeadphone()
   })
 
+  /**
+   * Place le casque au bout du câble et l'oriente selon la direction du fil.
+   *
+   * Sans cette orientation, la fiche pointerait toujours dans le même sens et
+   * le fil semblerait sortir de son milieu plutôt que de son extrémité.
+   */
+  function placeHeadphone(): void {
+    if (headphone === null) return
+
+    const last = points[points.length - 1]
+    const previous = points[points.length - 4] ?? points[points.length - 2]
+    if (last === undefined || previous === undefined) return
+
+    headphone.position.copy(last.position)
+
+    // Aligner l'axe Y du casque sur la direction du câble : le modèle sort de
+    // Maya, où cet axe est l'axe long de la fiche.
+    direction.subVectors(last.position, previous.position)
+    if (direction.lengthSq() < 1e-8) return
+
+    direction.normalize()
+    headphone.quaternion.setFromUnitVectors(UP, direction)
+  }
+
   return (
-    <mesh
-      ref={meshRef}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={release}
-    >
-      <meshStandardMaterial color={color} roughness={0.55} metalness={0.1} />
-    </mesh>
+    <>
+      <mesh
+        ref={meshRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={release}
+      >
+        <meshStandardMaterial color={color} roughness={0.55} metalness={0.1} />
+      </mesh>
+
+      {/* Le casque, extrait du modèle, est monté ici pour être porté par le
+          bout du câble plutôt que de rester collé au walkman. */}
+      {headphone === null ? null : <primitive object={headphone} />}
+    </>
   )
 }
