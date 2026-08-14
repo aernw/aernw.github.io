@@ -101,17 +101,23 @@ export function WalkmanScene({ onActivate, label, cableColor }: WalkmanSceneProp
         gl={{ alpha: true, antialias: true }}
         // Plafonné à 2 : au-delà, le coût de rendu double sans gain visible.
         dpr={[1, 2]}
-        style={{ background: 'transparent' }}
+        // Dimensions données explicitement : la mesure automatique du parent
+        // laissait le canvas à sa taille par défaut de 300×150.
+        style={{ background: 'transparent', width: '100vw', height: '100vh' }}
       >
         <ambientLight intensity={0.7} />
         <directionalLight position={[4, 6, 5]} intensity={2.2} />
         <directionalLight position={[-4, -1, -3]} intensity={0.6} />
 
         <Suspense fallback={null}>
-          {/* Décalé à droite et vers le haut : le walkman occupe le vide du
-              hero sans recouvrir le titre, qui part du bord gauche. */}
+          {/*
+            Deux groupes imbriqués, et non un seul : la rotation est appliquée à
+            l'intérieur, la position à l'extérieur. Sur un groupe unique, la
+            rotation ferait décrire au walkman un arc autour de l'origine de la
+            scène, et l'objet sortirait du cadre.
+          */}
           <group
-            position={[2.1, 1.1, 0]}
+            position={[1.9, 0.7, 0]}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}

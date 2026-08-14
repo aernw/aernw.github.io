@@ -9,15 +9,22 @@
 
 .walkman-scene {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   z-index: 30;
   pointer-events: none;
 }
 
 .walkman-scene canvas {
+  /*
+   * Aucune règle de dimension ici : React Three Fiber pose lui-même la taille
+   * du canvas en style inline, et un `width: 100% !important` l'empêchait de
+   * redimensionner le tampon de rendu — le canvas restait à sa taille par
+   * défaut de 300×150, étirée en CSS, avec un ratio de caméra faux.
+   */
   display: block;
-  width: 100% !important;
-  height: 100% !important;
   /*
    * Le canvas reste transparent aux événements : il couvre tout le viewport, et
    * `pointer-events: auto` intercepterait chaque clic sur les liens et chaque
