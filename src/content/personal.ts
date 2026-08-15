@@ -120,35 +120,29 @@ export const media: readonly MediaItem[] = [
 
 export interface Lesson {
   readonly id: string
-  /** Court et net. Une phrase qui tient debout seule. */
   readonly statement: string
-  /** D'où ça vient : un projet, une erreur, un moment précis. */
   readonly context?: string
 }
 
-/**
- * Ce que tu as appris.
- *
- * Le piège de cette section est la platitude : « il faut tester son code » ne
- * dit rien de toi. Ce qui marche, c'est ce qui t'a coûté quelque chose et qui
- * s'appuie sur un moment précis.
- *
- * TODO Erwan : écris les tiennes.
- */
 export const lessons: readonly Lesson[] = [
   {
     id: 'lesson-1',
-    statement: 'La bonne idée ne vient pas quand on la cherche : elle vient quand on a cessé d’en faire un problème.',
-    context: 'Après des semaines à forcer un prototype qui n’avait pas de vraie forme, j’ai laissé tomber le plan carré et j’ai suivi la logique du projet.',
+    statement: 'Il est nécessaire passer tout le temps nécessaire sur l’architecture avant de coder : les futurs développeurs te remercieront.',
+    context: 'Un projet construit sur des fondations fragiles et des coins d’ombres finira par demander beaucoup plus de temps pour être maintenu et de nouvelles features auront du mal à s’y intégrer si elles n’ont pas été anticipées dès le départ.',
   },
   {
     id: 'lesson-2',
-    statement: 'La clarté des interfaces vient souvent de la suppression, pas de l’ajout.',
-    context: 'Sur un site d’archive, j’ai appris que l’interface la plus forte était celle qui retirait le bruit au lieu de l’expliquer.',
+    statement: '"Laisse le code plus propre que tu l’as trouvé."',
+    context: '10 pour 1 : voici le ratio lecture/écriture de code des développeurs. Qu’il s’agisse d’un simple nom de variable, de simplifier une fonction ou d’un refactor : chaque amélioration sera très appréciée par les prochains développeurs qui passeront après toi.',
   },
   {
     id: 'lesson-3',
-    statement: 'Une bonne composition ne sert pas à remplir l’espace : elle sert à lui donner une direction.',
-    context: 'En musique comme en code, la vraie difficulté est souvent de décider quoi laisser de côté.',
+    statement: 'Un bon interface se construit en se mettant dans la peau d’un utilisateur flemmard.',
+    context: 'Pour qu’un interface soit utile à celui qui l’utilise, il doit être pensé pour que les actions quotidiennes soient les plus simples et rapides possibles : limiter le nombre de clics, de pages, de champs à remplir à la main, ...',
   },
+  {
+    id: 'lesson-4',
+    statement: '',
+    context: '',
+  }
 ]

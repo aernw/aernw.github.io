@@ -134,7 +134,7 @@ const PATTERN: readonly {
     x: 3.4,
     z: -2.5,
     rotation: [0.5, -0.6, -0.25],
-    scale: 0.5,
+    scale: 1.3,
   },
   {
     screen: 4,
@@ -143,7 +143,7 @@ const PATTERN: readonly {
     x: -3.3,
     z: -2.8,
     rotation: [0.3, 0.3, 0.15],
-    scale: 1.8,
+    scale: 4,
   },
   {
     screen: 6,
@@ -160,8 +160,8 @@ const PATTERN: readonly {
     piece: 'ecouteurs',
     x: -3.4,
     z: -3,
-    rotation: [0.2, 0.5, 0.4],
-    scale: 2.3,
+    rotation: [1.5, 0.5, 0.4],
+    scale: 1.5,
   },
 ]
 
