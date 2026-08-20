@@ -127,7 +127,7 @@ export interface Lesson {
 export const lessons: readonly Lesson[] = [
   {
     id: 'lesson-1',
-    statement: 'Il est nécessaire passer tout le temps nécessaire sur l’architecture avant de coder : les futurs développeurs te remercieront.',
+    statement: 'Il est important de passer tout le temps nécessaire sur l’architecture avant de coder : les futurs développeurs te remercieront.',
     context: 'Un projet construit sur des fondations fragiles et des coins d’ombres finira par demander beaucoup plus de temps pour être maintenu et de nouvelles features auront du mal à s’y intégrer si elles n’ont pas été anticipées dès le départ.',
   },
   {
@@ -142,7 +142,7 @@ export const lessons: readonly Lesson[] = [
   },
   {
     id: 'lesson-4',
-    statement: '',
-    context: '',
+    statement: 'N’aie pas peur de donner ton avis et tes recommendations, peu importe ta position dans l’entreprise.',
+    context: 'Toutes les personnes ont une sensibilité différente et peuvent avoir des idées ou des remarques intéressantes et utiles. Même si tu es junior, ton avis peut être précieux et aider à améliorer le produit ou le projet.',
   }
 ]

@@ -61,6 +61,49 @@ export function SideB() {
       </Section>
 
       <Section
+        id="lab"
+        title="Lab"
+        lead="Des outils et des expériences faits par curiosité, pas pour être finis."
+        stickyTitle
+      >
+        <ul className="lab">
+          {labItems.map((item) => (
+            <li key={item.id} className="lab__item">
+              <h3 className="lab__name">{item.name}</h3>
+              <p className="lab__description">{item.description}</p>
+              <p className="lab__stack">{item.stack.join(' · ')}</p>
+              <ul className="lab__links">
+                {item.links.map((link) => (
+                  <li key={link.href}>
+                    <a href={link.href} target="_blank" rel="noreferrer noopener">
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </Section>
+
+      <Section id="appris" title="Ce que j'ai appris" width="full">
+        {lessons.length > 0 ? (
+          <LessonList items={lessons} />
+        ) : (
+          <Placeholder>Ajoute ici quelques leçons ou constats que tu veux garder.</Placeholder>
+        )}
+      </Section>
+
+
+      <Section id="lectures" title="Ce que je lis et regarde">
+        {media.length > 0 ? (
+          <MediaList items={media} />
+        ) : (
+          <Placeholder>Ajoute ici les livres, films ou séries qui comptent en ce moment.</Placeholder>
+        )}
+      </Section>
+
+      <Section
         id="decouvertes"
         title="Découvertes"
         lead="Ce que j'écoute en ce moment et que je veux faire découvrir."
@@ -118,70 +161,9 @@ export function SideB() {
         )}
       </Section>
 
-      <Section id="lectures" title="Ce que je lis et regarde">
-        {media.length > 0 ? (
-          <MediaList items={media} />
-        ) : (
-          <Placeholder>Ajoute ici les livres, films ou séries qui comptent en ce moment.</Placeholder>
-        )}
-      </Section>
-
-      <Section id="appris" title="Ce que j'ai appris" width="full">
-        {lessons.length > 0 ? (
-          <LessonList items={lessons} />
-        ) : (
-          <Placeholder>Ajoute ici quelques leçons ou constats que tu veux garder.</Placeholder>
-        )}
-      </Section>
-
-      <Section
-        id="lab"
-        title="Lab"
-        lead="Des outils et des expériences faits par curiosité, pas pour être finis."
-        stickyTitle
-      >
-        <ul className="lab">
-          {labItems.map((item) => (
-            <li key={item.id} className="lab__item">
-              <h3 className="lab__name">{item.name}</h3>
-              <p className="lab__description">{item.description}</p>
-              <p className="lab__stack">{item.stack.join(' · ')}</p>
-              <ul className="lab__links">
-                {item.links.map((link) => (
-                  <li key={link.href}>
-                    <a href={link.href} target="_blank" rel="noreferrer noopener">
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
-      </Section>
-
-      <Section id="now" title="En ce moment">
-        {now.items.length > 0 ? (
-          <>
-            <ul className="now">
-              {now.items.map((item) => (
-                <li key={item} className="now__item">
-                  {item}
-                </li>
-              ))}
-            </ul>
-            {now.updated ? <p className="now__updated">Mis à jour {now.updated}</p> : null}
-          </>
-        ) : (
-          <Placeholder>Ajoute ici ce sur quoi tu travailles en ce moment.</Placeholder>
-        )}
-      </Section>
-
       <Section id="colophon" title="Colophon">
         <dl className="colophon">
           {colophon.map((entry) => (
-            // La valeur, pas le libellé : plusieurs entrées partagent le même
-            // libellé (trois modèles 3D, tous à créditer séparément).
             <div key={entry.value} className="colophon__row">
               <dt className="colophon__label">{entry.label}</dt>
               <dd className="colophon__value">
