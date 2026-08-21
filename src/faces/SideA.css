@@ -30,6 +30,7 @@
      par-dessus l'objet. */
   position: relative;
   z-index: 1;
+  text-shadow: var(--halo-text);
 }
 
 @media (max-width: 48rem) {
@@ -47,7 +48,6 @@
 
 .hero__title {
   margin-top: var(--space-3);
-  /* Débordement typographique assumé : le nom occupe la largeur qu'il mérite. */
   font-size: clamp(3rem, 13vw, 12rem);
   letter-spacing: var(--tracking-display);
   line-height: 0.9;
@@ -62,20 +62,12 @@
   color: var(--ink-muted);
 }
 
-/* ── Intro ────────────────────────────────────────────────────────
- * Le texte long vit sous la ligne de flottaison : il se découvre au scroll,
- * une fois le nom et l'objet passés.
- */
-
 .intro__summary {
   font-size: var(--text-title);
   line-height: 1.3;
   letter-spacing: var(--tracking-title);
   color: var(--ink);
   text-wrap: pretty;
-  /* Variante dense : les cassettes du sketchbook passent derrière ce texte
-     comme le walkman passe derrière le nom, mais elles sont bien plus sombres
-     que lui — le halo du hero ne suffirait pas à détacher les lettres. */
   text-shadow: var(--halo-text-dense);
 }
 
@@ -98,12 +90,10 @@
 }
 
 @media (min-width: 60rem) {
-  /* Le projet phare occupe toute la largeur disponible. */
   .projects-flow > .project--feature {
     width: 100%;
   }
 
-  /* Les projets standards alternent : décalés à droite, puis à gauche. */
   .projects-flow > .project--standard {
     width: min(62%, 46rem);
   }

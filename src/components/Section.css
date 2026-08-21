@@ -9,6 +9,12 @@
 .section {
   padding-block: var(--space-section);
   padding-inline: var(--page-gutter);
+  /* Un halo beaucoup plus fort pour détacher tout le texte de la section (titre, sous-titre, contenu)
+     des objets 3D complexes, en plus du halo dense. */
+  text-shadow: 
+    0 0 1px var(--ground),
+    0 0 2px var(--ground),
+    var(--halo-text);
 }
 
 /* Respiration irrégulière : une section sur deux respire davantage, pour éviter
