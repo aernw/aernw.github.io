@@ -15,7 +15,7 @@
   text-wrap: pretty;
   /* Les cassettes de la scène 3D passent derrière ce texte : même halo dense
      que sur la face A, le halo du hero ne détacherait pas les lettres. */
-  text-shadow: var(--halo-text-dense);
+  text-shadow: var(--halo-text);
 }
 
 .hero--b .hero__eyebrow {
