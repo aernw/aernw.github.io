@@ -10,7 +10,6 @@ import {
   labItems,
   lessons,
   media,
-  now,
   profile,
   topAlbums,
   topArtists,
