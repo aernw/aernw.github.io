@@ -13,11 +13,11 @@ export const projects: readonly Project[] = [
   {
     id: 'stemhub',
     name: 'StemHub',
-    tagline: 'Git pour la production musicale',
+    tagline: 'Contrôle de version pour la production musicale',
     description:
-      "Les producteurs de musique n'ont jamais eu de gestion de versions. Le résultat, ce sont " +
-      "des dossiers remplis de projet_final_v2_version_finale. StemHub apporte le versionning, les " +
-      'branches et la résolution de conflits directement dans le DAW, via un plugin, avec une plateforme ' +
+      "Les producteurs de musique n'ont jamais eu de contrôle de versions. Le résultat, ce sont " +
+      "des dossiers locaux remplis de fichiers, d'exports, de versions différentes. StemHub apporte le versionning, " +
+      'la résolution de conflits, l\'import de projets, et le suivi des différentes versions directement dans le DAW, via un plugin, avec une plateforme ' +
       "web par-dessus.",
     role: 'Contributeur principal — plugin C++, backend et plateforme web, en équipe de 6',
     stack: ['TypeScript', 'Python', 'C++', 'CMake', 'Docker'],
@@ -28,7 +28,6 @@ export const projects: readonly Project[] = [
     year: '2026',
     emphasis: 'feature',
     sides: ['a', 'b'],
-    // Violet repris du design system de StemHub (docs/DESIGN_SYSTEM.md).
     accent: '#9c57df',
   },
   {
@@ -47,11 +46,13 @@ export const projects: readonly Project[] = [
     emphasis: 'standard',
     sides: ['a'],
     accent: '#3ecfa0',
-    // Vrais sprites du jeu, récupérés depuis assets/spaceships du dépôt.
+    // Boucle capturée en jeu (partie à 4), recadrée et compressée pour le web.
     visual: {
-      kind: 'sprites',
-      sources: ['projects/rtype-nave2.png', 'projects/rtype-enemy-purple-boss.png'],
+      kind: 'video',
+      sources: { mp4: 'projects/rtype-gameplay.mp4', webm: 'projects/rtype-gameplay.webm' },
+      poster: 'projects/rtype-gameplay-poster.jpg',
     },
+    visualPlacement: 'left',
   },
   {
     id: 'area',

@@ -74,7 +74,10 @@
 }
 
 .project__visual {
-  align-self: start;
+  /* Sert de repère de positionnement au visuel : sans lui, les sprites
+     (position: absolute) remontent jusqu'à .project et débordent sur le texte. */
+  position: relative;
+  align-self: stretch;
   justify-self: end;
   width: 100%;
   opacity: 0.88;
@@ -84,8 +87,34 @@
   width: 100%;
 }
 
-.project__visual img {
+.project__visual img,
+.project__visual video {
   filter: saturate(0.92) contrast(0.96);
+}
+
+/* Certains projets préfèrent leur visuel à gauche du texte (ex : R-Type). */
+.project--visual-left .project__layout {
+  grid-template-columns: minmax(7rem, 11rem) minmax(0, 1fr);
+}
+
+.project--visual-left .project__content {
+  order: 2;
+}
+
+.project--visual-left .project__visual {
+  order: 1;
+  justify-self: start;
+}
+
+.project--visual-left .project-visual {
+  right: auto;
+  left: 0;
+}
+
+/* Le fondu s'inverse : le visuel doit se dissoudre vers le texte, à sa droite. */
+.project--visual-left .project-visual--image img,
+.project--visual-left .project-visual--video video {
+  mask-image: linear-gradient(to right, black 55%, transparent 100%);
 }
 
 @media (max-width: 59.999rem) {

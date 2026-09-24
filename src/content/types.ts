@@ -20,11 +20,18 @@ export interface Link {
  * - `sprites` : images détourées qui flottent, pour les projets ayant leurs
  *   propres assets (R-Type et ses vaisseaux).
  * - `image`   : une capture d'écran classique.
+ * - `video`   : une boucle de gameplay silencieuse (mp4 + webm), avec une
+ *   image de repli pour le premier rendu et pour `prefers-reduced-motion`.
  * - `none`    : la couleur d'accent porte seule l'identité du projet.
  */
 export type ProjectVisual =
   | { readonly kind: 'sprites'; readonly sources: readonly string[] }
   | { readonly kind: 'image'; readonly src: string; readonly alt: string }
+  | {
+      readonly kind: 'video'
+      readonly sources: { readonly mp4: string; readonly webm: string }
+      readonly poster: string
+    }
   | { readonly kind: 'none' }
 
 export interface Project {
@@ -50,6 +57,8 @@ export interface Project {
    */
   readonly accent?: string
   readonly visual?: ProjectVisual
+  /** Côté de la carte où le visuel apparaît. `right` par défaut. */
+  readonly visualPlacement?: 'left' | 'right'
 }
 
 export interface Experience {
