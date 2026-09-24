@@ -23,6 +23,19 @@ export function ProjectVisual({ visual }: ProjectVisualProps) {
     )
   }
 
+  if (visual.kind === 'video') {
+    // Boucle courte et contenue : contrairement à la dérive des sprites ou aux
+    // transitions de Reveal, on la joue même sous prefers-reduced-motion.
+    return (
+      <div className="project-visual project-visual--video" aria-hidden="true">
+        <video poster={visual.poster} autoPlay loop muted playsInline preload="metadata">
+          <source src={visual.sources.webm} type="video/webm" />
+          <source src={visual.sources.mp4} type="video/mp4" />
+        </video>
+      </div>
+    )
+  }
+
   return (
     <div className="project-visual project-visual--sprites" aria-hidden="true">
       {visual.sources.map((src, index) => (

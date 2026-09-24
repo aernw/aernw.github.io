@@ -85,28 +85,31 @@
   /*
    * Halo posé derrière le texte du hero, qui passe devant l'objet 3D.
    *
-   * Deux couches : une proche et dense qui détache les lettres du décor, une
-   * large et diffuse qui éclaircit le fond derrière le mot. Le halo reprend la
-   * couleur du fond plutôt qu'un noir d'ombre portée — il s'agit de séparer,
-   * pas d'ajouter un relief que le reste du site n'a pas.
+   * Un contour net (quatre décalages à moins d'1px, opaques) qui détache
+   * vraiment les lettres, plus un flou léger pour adoucir le bord. Volontairement
+   * discret : un flou large lit comme une brume sale sur un fond qui varie
+   * (l'interface audio rouge, par exemple), pas comme une séparation propre.
+   * Le halo reprend la couleur du fond plutôt qu'un noir d'ombre portée — il
+   * s'agit de séparer, pas d'ajouter un relief que le reste du site n'a pas.
    */
   --halo-text:
-    -0.45px 0 0 rgba(245, 245, 247, 0.96), 0.45px 0 0 rgba(245, 245, 247, 0.96),
-    0 -0.45px 0 rgba(245, 245, 247, 0.96), 0 0.45px 0 rgba(245, 245, 247, 0.96),
-    0 0 5px rgba(245, 245, 247, 0.45);
+    -0.5px 0 0 rgba(245, 245, 247, 1), 0.5px 0 0 rgba(245, 245, 247, 1),
+    0 -0.5px 0 rgba(245, 245, 247, 1), 0 0.5px 0 rgba(245, 245, 247, 1),
+    0 0 2px rgba(245, 245, 247, 0.35);
 
   /*
-   * Variante dense, pour le texte qui croise les cassettes du sketchbook.
+   * Variante dense, pour le texte qui croise les cassettes du sketchbook ou
+   * d'autres objets complexes (l'interface audio de la section Projets).
    *
    * Le halo du hero suffit contre le walkman, qui est clair et rouge. Les
    * cassettes sont presque noires : sous un texte noir, il faut un noyau opaque
-   * qui remplisse réellement les contre-formes des lettres, pas seulement une
-   * lueur diffuse.
+   * qui remplisse réellement les contre-formes des lettres — un flou un peu
+   * plus marqué que le halo de base, mais toujours net, jamais nébuleux.
    */
   --halo-text-dense:
-    -0.45px 0 0 rgba(245, 245, 247, 1), 0.45px 0 0 rgba(245, 245, 247, 1),
-    0 -0.45px 0 rgba(245, 245, 247, 1), 0 0.45px 0 rgba(245, 245, 247, 1),
-    0 0 4px rgba(245, 245, 247, 0.88), 0 0 12px rgba(245, 245, 247, 0.3);
+    -0.5px 0 0 rgba(245, 245, 247, 1), 0.5px 0 0 rgba(245, 245, 247, 1),
+    0 -0.5px 0 rgba(245, 245, 247, 1), 0 0.5px 0 rgba(245, 245, 247, 1),
+    0 0 3px rgba(245, 245, 247, 0.6);
 
   /* ── Motion : courte et utilitaire, sans rebond ────────────────── */
   --ease: cubic-bezier(0.4, 0, 0.6, 1);
@@ -132,14 +135,14 @@
 
   /* Le halo suit le fond, qui est sombre ici : il assombrit au lieu d'éclaircir. */
   --halo-text:
-    -0.45px 0 0 rgba(14, 13, 11, 0.98), 0.45px 0 0 rgba(14, 13, 11, 0.98),
-    0 -0.45px 0 rgba(14, 13, 11, 0.98), 0 0.45px 0 rgba(14, 13, 11, 0.98),
-    0 0 5px rgba(14, 13, 11, 0.42);
+    -0.5px 0 0 rgba(14, 13, 11, 1), 0.5px 0 0 rgba(14, 13, 11, 1),
+    0 -0.5px 0 rgba(14, 13, 11, 1), 0 0.5px 0 rgba(14, 13, 11, 1),
+    0 0 2px rgba(14, 13, 11, 0.32);
 
   --halo-text-dense:
-    -0.45px 0 0 rgba(14, 13, 11, 1), 0.45px 0 0 rgba(14, 13, 11, 1),
-    0 -0.45px 0 rgba(14, 13, 11, 1), 0 0.45px 0 rgba(14, 13, 11, 1),
-    0 0 4px rgba(14, 13, 11, 0.9), 0 0 12px rgba(14, 13, 11, 0.34);
+    -0.5px 0 0 rgba(14, 13, 11, 1), 0.5px 0 0 rgba(14, 13, 11, 1),
+    0 -0.5px 0 rgba(14, 13, 11, 1), 0 0.5px 0 rgba(14, 13, 11, 1),
+    0 0 3px rgba(14, 13, 11, 0.55);
 }
 
 /* Le respect de prefers-reduced-motion est un argument technique visible. */

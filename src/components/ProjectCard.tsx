@@ -22,9 +22,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
   const isCompact = emphasis === 'compact'
   const style: AccentStyle =
     project.accent === undefined ? {} : { '--project-accent': project.accent }
+  const visualLeftClass = project.visualPlacement === 'left' ? ' project--visual-left' : ''
 
   return (
-    <article className={`project project--${emphasis}`} style={style}>
+    <article className={`project project--${emphasis}${visualLeftClass}`} style={style}>
       <div className="project__layout">
         <div className="project__content">
           <div className="project__head">
