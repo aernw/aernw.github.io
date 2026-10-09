@@ -18,7 +18,7 @@ type AccentStyle = CSSProperties & { readonly '--project-accent'?: string }
  * un projet « compact » se réduit à l'essentiel.
  */
 export function ProjectCard({ project }: ProjectCardProps) {
-  const { name, tagline, description, role, metrics, stack, links, year, emphasis } = project
+  const { name, tagline, description, role, metrics, stack, links, year, emphasis, logo } = project
   const isCompact = emphasis === 'compact'
   const style: AccentStyle =
     project.accent === undefined ? {} : { '--project-accent': project.accent }
@@ -29,7 +29,13 @@ export function ProjectCard({ project }: ProjectCardProps) {
       <div className="project__layout">
         <div className="project__content">
           <div className="project__head">
-            <h3 className="project__name">{name}</h3>
+            <h3 className={`project__name${logo === undefined ? '' : ' project__name--logo'}`}>
+              {/* Décoratif : le nom du projet suit juste après. */}
+              {logo === undefined ? null : (
+                <img className="project__logo" src={logo} alt="" decoding="async" />
+              )}
+              {name}
+            </h3>
             <span className="project__year">{year}</span>
           </div>
 

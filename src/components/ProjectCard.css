@@ -155,6 +155,28 @@
   background: var(--project-accent, var(--ink-faint));
 }
 
+/* Un projet qui a son logo l'affiche à la place de la pastille. */
+.project__name--logo {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.project__name--logo::before {
+  content: none;
+}
+
+/* La ligne de base du titre devient le bas du logo : on centre l'année à la place. */
+.project__head:has(> .project__name--logo) {
+  align-items: center;
+}
+
+.project__logo {
+  flex-shrink: 0;
+  width: 1.5em;
+  height: 1.5em;
+}
+
 .project--feature .project__name {
   font-size: var(--text-title);
 }

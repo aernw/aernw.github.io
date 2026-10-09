@@ -29,6 +29,7 @@ export const projects: readonly Project[] = [
     emphasis: 'feature',
     sides: ['a', 'b'],
     accent: '#9c57df',
+    logo: 'projects/stemhub-logo.svg',
   },
   {
     id: 'music-masters',
@@ -46,6 +47,7 @@ export const projects: readonly Project[] = [
     emphasis: 'standard',
     sides: ['a'],
     accent: '#ff3ea5',
+    logo: 'projects/music-masters-logo.webp',
     // Cartes exportées du Figma du jeu : une Live drop face cachée, derrière une Diamant.
     visual: {
       kind: 'sprites',
