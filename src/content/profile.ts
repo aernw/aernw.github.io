@@ -19,6 +19,23 @@ export const profile: Profile = {
 
 export const experiences: readonly Experience[] = [
   {
+    id: 'featuring',
+    role: 'Développeur fullstack',
+    company: 'Featuring',
+    location: 'Paris',
+    period: "09/2026 — aujourd'hui",
+    summary:
+      "Seul développeur d'une startup qui met en relation artistes et studios d'enregistrement. " +
+      "Reprise de l'application mobile et de l'API livrées par une agence, puis conception de la plateforme web des studios.",
+    highlights: [
+      'Plateforme web conçue sur Figma puis développée : espace studio (planning, réservations, équipe, finances) et réservation côté artiste, en ligne sur featuring.pro',
+      'Réservation et paiement de bout en bout avec Stripe : validation par le studio, Apple Pay et Google Pay, remboursements, reversements Stripe Connect',
+      "Application iOS et Android : séparation des parcours artiste et studio, corrections, builds TestFlight",
+      'Déploiement Docker sur VPS OVH via GitHub Actions, avec environnements dev et production',
+    ],
+    stack: ['Next.js', 'React Native', 'Expo', 'NestJS', 'MySQL', 'Stripe', 'Docker', 'GitHub Actions'],
+  },
+  {
     id: 'travelme',
     role: 'Développeur fullstack',
     company: 'Travel Me',
@@ -85,7 +102,7 @@ export const skillGroups: readonly SkillGroup[] = [
   {
     id: 'tools',
     label: 'Outils & environnements',
-    items: ['Node.js', 'Git', 'CMake', 'Docker', 'GitHub Actions', 'AWS', 'OVH', 'Google Cloud', 'Bash', 'Make', 'n8n', 'Vercel', 'Firebase', 'PostgreSQL'],
+    items: ['Node.js', 'Git', 'CMake', 'Docker', 'GitHub Actions', 'AWS', 'OVH', 'Google Cloud', 'Bash', 'Make', 'n8n', 'Vercel', 'Firebase', 'PostgreSQL', 'Stripe'],
   },
   {
     id: 'languages-spoken',

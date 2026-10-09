@@ -28,28 +28,34 @@
 /* ── Sprites ─────────────────────────────────────────────────────
  * Ils flottent lentement, en décalage l'un de l'autre. L'amplitude reste
  * faible : c'est une présence, pas une animation qui réclame l'attention.
+ *
+ * Réglés pour deux cartes à jouer tenues en main : la première, derrière,
+ * penche à gauche ; la seconde, devant, penche à droite. `rotate` est séparé
+ * de `transform` pour que la dérive ne l'écrase pas.
  */
 
 .project-sprite {
   position: absolute;
   height: auto;
-  opacity: 0.85;
+  opacity: 0.9;
   filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.25));
 }
 
 .project-sprite--1 {
-  width: 46%;
-  top: 22%;
-  right: 14%;
-  animation: sprite-drift 7s var(--ease) infinite;
+  width: 58%;
+  top: 14%;
+  right: 34%;
+  rotate: -8deg;
+  opacity: 0.75;
+  animation: sprite-drift 9s var(--ease) infinite reverse;
 }
 
 .project-sprite--2 {
-  width: 38%;
-  top: 52%;
-  right: 48%;
-  opacity: 0.55;
-  animation: sprite-drift 9s var(--ease) infinite reverse;
+  width: 64%;
+  top: 30%;
+  right: 6%;
+  rotate: 6deg;
+  animation: sprite-drift 7s var(--ease) infinite;
 }
 
 @keyframes sprite-drift {
