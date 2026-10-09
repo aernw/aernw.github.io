@@ -46,8 +46,7 @@ export function ProjectVisual({ visual }: ProjectVisualProps) {
           loading="lazy"
           decoding="async"
           className={`project-sprite project-sprite--${index + 1}`}
-          // Les sprites du jeu sont en pixel-art : ils doivent le rester.
-          style={{ imageRendering: 'pixelated' }}
+          style={visual.pixelated ? { imageRendering: 'pixelated' } : undefined}
         />
       ))}
     </div>

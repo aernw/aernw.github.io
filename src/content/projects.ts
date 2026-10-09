@@ -31,6 +31,28 @@ export const projects: readonly Project[] = [
     accent: '#9c57df',
   },
   {
+    id: 'music-masters',
+    name: 'Music Masters',
+    tagline: 'Les cartes Pokémon, version albums de musique',
+    description:
+      'Ouvrir des boosters, compléter sa collection, échanger, enchérir sur un marché tenu par les joueurs ' +
+      "et s'affronter en quiz musicaux. La rareté d'une carte vient du vrai parcours de l'album dans les " +
+      'classements français, américains et britanniques, recalculée chaque semaine. Les nouvelles sorties ' +
+      'arrivent automatiquement en édition limitée.',
+    role: 'Projet personnel, conçu et développé seul — de la maquette Figma au déploiement',
+    stack: ['Next.js', 'TypeScript', 'FastAPI', 'Python', 'PostgreSQL', 'Redis', 'Stripe', 'Docker'],
+    links: [{ label: 'music-masters.trade', href: 'https://music-masters.trade' }],
+    year: '2026',
+    emphasis: 'standard',
+    sides: ['a'],
+    accent: '#ff3ea5',
+    // Cartes exportées du Figma du jeu : une Live drop face cachée, derrière une Diamant.
+    visual: {
+      kind: 'sprites',
+      sources: ['projects/mm-card-facedown.webp', 'projects/mm-card-diamond.webp'],
+    },
+  },
+  {
     id: 'r-type',
     name: 'R-Type',
     tagline: 'Un moteur de jeu multijoueur écrit de zéro en C++',
