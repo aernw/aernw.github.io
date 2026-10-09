@@ -61,6 +61,8 @@ export interface Project {
    * pour ne pas casser la continuité de surface du site.
    */
   readonly accent?: string
+  /** Icône d'app carrée du projet, affichée devant le nom à la place de la pastille d'accent. */
+  readonly logo?: string
   readonly visual?: ProjectVisual
   /** Côté de la carte où le visuel apparaît. `right` par défaut. */
   readonly visualPlacement?: 'left' | 'right'
