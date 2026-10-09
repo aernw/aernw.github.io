@@ -118,14 +118,31 @@
 
 .timeline__head {
   display: flex;
-  align-items: baseline;
+  /* Centré plutôt qu'aligné sur la ligne de base : le titre commence par un logo. */
+  align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: var(--space-1);
 }
 
 .timeline__role {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
   font-size: var(--text-heading);
+}
+
+/* Tuile blanche commune : des logos de formes très différentes (marque,
+   logotype large, emblème rond) gardent ainsi la même empreinte. */
+.timeline__logo {
+  flex-shrink: 0;
+  width: 1.7em;
+  height: 1.7em;
+  padding: 0.12em;
+  object-fit: contain;
+  background: #ffffff;
+  border-radius: 22%;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink-faint) 30%, transparent);
 }
 
 .timeline__period {

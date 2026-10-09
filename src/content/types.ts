@@ -72,6 +72,8 @@ export interface Experience {
   readonly id: string
   readonly role: string
   readonly company: string
+  /** Logo de l'entreprise, affiché dans une tuile blanche devant l'intitulé du poste. */
+  readonly logo?: string
   readonly location: string
   readonly period: string
   readonly summary: string

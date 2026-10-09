@@ -22,6 +22,7 @@ export const experiences: readonly Experience[] = [
     id: 'featuring',
     role: 'Développeur fullstack',
     company: 'Featuring',
+    logo: 'experiences/featuring-logo.svg',
     location: 'Paris',
     period: "09/2026 — aujourd'hui",
     summary:
@@ -39,6 +40,7 @@ export const experiences: readonly Experience[] = [
     id: 'travelme',
     role: 'Développeur fullstack',
     company: 'Travel Me',
+    logo: 'experiences/travelme-logo.webp',
     location: 'Paris',
     period: '09/2025 — 07/2026',
     summary:
@@ -55,6 +57,8 @@ export const experiences: readonly Experience[] = [
     id: 'dilt',
     role: 'Chef de projet IA',
     company: 'DILT — Préfecture de Police',
+    // DILT n'a pas de logo propre : c'est l'emblème « PP » de la Préfecture de Police.
+    logo: 'experiences/dilt-logo.webp',
     location: 'Paris',
     period: '07/2024 — 12/2024',
     summary:
