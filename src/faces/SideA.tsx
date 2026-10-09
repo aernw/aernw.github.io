@@ -52,6 +52,10 @@ export function SideA() {
             <li key={experience.id} className="timeline__item">
               <div className="timeline__head">
                 <h3 className="timeline__role">
+                  {/* Décoratif : le nom de l'entreprise suit dans le titre. */}
+                  {experience.logo === undefined ? null : (
+                    <img className="timeline__logo" src={experience.logo} alt="" decoding="async" />
+                  )}
                   {experience.role} — {experience.company}
                 </h3>
                 <span className="timeline__period">{experience.period}</span>
