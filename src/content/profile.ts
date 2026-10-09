@@ -75,18 +75,22 @@ export const education: readonly Education[] = [
   {
     id: 'epitech',
     school: 'Epitech Paris',
+    logo: 'education/epitech-logo.webp',
     detail: 'Expert en Ingénierie Logicielle — BAC+5, RNCP niveau 7',
     period: '2023 — 2028',
   },
   {
     id: 'efrei',
     school: 'Efrei Paris',
+    // Le dôme du Panthéon seul : le logotype complet est trop large pour la tuile.
+    logo: 'education/efrei-logo.webp',
     detail: 'Classe préparatoire, section internationale (cours en anglais)',
     period: '2022 — 2023',
   },
   {
     id: 'sainte-marie',
     school: "Lycée Sainte-Marie d'Antony",
+    logo: 'education/sainte-marie-logo.webp',
     detail: 'Baccalauréat général — Maths, Physique-Chimie, NSI',
     period: '2019 — 2022',
   },
