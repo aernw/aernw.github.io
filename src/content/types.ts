@@ -84,6 +84,8 @@ export interface Experience {
 export interface Education {
   readonly id: string
   readonly school: string
+  /** Logo de l'école, affiché dans une tuile blanche à gauche du nom. */
+  readonly logo?: string
   readonly detail: string
   readonly period: string
 }

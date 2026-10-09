@@ -54,7 +54,12 @@ export function SideA() {
                 <h3 className="timeline__role">
                   {/* Décoratif : le nom de l'entreprise suit dans le titre. */}
                   {experience.logo === undefined ? null : (
-                    <img className="timeline__logo" src={experience.logo} alt="" decoding="async" />
+                    <img
+                      className="logo-tile timeline__logo"
+                      src={experience.logo}
+                      alt=""
+                      decoding="async"
+                    />
                   )}
                   {experience.role} — {experience.company}
                 </h3>
@@ -75,7 +80,14 @@ export function SideA() {
 
         <ol className="education">
           {education.map((entry) => (
-            <li key={entry.id} className="education__item">
+            <li
+              key={entry.id}
+              className={`education__item${entry.logo === undefined ? '' : ' education__item--logo'}`}
+            >
+              {/* Décoratif : le nom de l'école suit. */}
+              {entry.logo === undefined ? null : (
+                <img className="logo-tile education__logo" src={entry.logo} alt="" decoding="async" />
+              )}
               <span className="education__school">{entry.school}</span>
               <span className="education__detail">{entry.detail}</span>
               <span className="education__period">{entry.period}</span>

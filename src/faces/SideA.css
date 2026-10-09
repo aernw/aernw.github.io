@@ -132,17 +132,20 @@
   font-size: var(--text-heading);
 }
 
-/* Tuile blanche commune : des logos de formes très différentes (marque,
-   logotype large, emblème rond) gardent ainsi la même empreinte. */
-.timeline__logo {
+/* Tuile blanche commune au parcours et aux études : des logos de formes très
+   différentes (marque, logotype large, emblème rond) gardent la même empreinte. */
+.logo-tile {
   flex-shrink: 0;
-  width: 1.7em;
-  height: 1.7em;
   padding: 0.12em;
   object-fit: contain;
   background: #ffffff;
   border-radius: 22%;
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink-faint) 30%, transparent);
+}
+
+.timeline__logo {
+  width: 1.7em;
+  height: 1.7em;
 }
 
 .timeline__period {
@@ -206,8 +209,30 @@
   align-items: baseline;
 }
 
+/* Avec un logo : il occupe une colonne à gauche, sur la hauteur du nom et du détail. */
+.education__item--logo {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.education__logo {
+  grid-row: 1 / span 2;
+  grid-column: 1;
+  align-self: center;
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
 .education__school {
   font-weight: 600;
+}
+
+.education__item--logo .education__school,
+.education__item--logo .education__detail {
+  grid-column: 2;
+}
+
+.education__item--logo .education__period {
+  grid-column: 3;
 }
 
 .education__detail {
