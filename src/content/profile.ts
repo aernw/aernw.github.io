@@ -27,14 +27,17 @@ export const experiences: readonly Experience[] = [
     period: "09/2026 — aujourd'hui",
     summary:
       "Seul développeur d'une startup qui met en relation artistes et studios d'enregistrement. " +
-      "Reprise de l'application mobile et de l'API livrées par une agence, puis conception de la plateforme web des studios.",
+      "Reprise de l'application mobile et de l'API livrées par une agence, refonte complète de l'application, " +
+      'puis conception de la plateforme web des studios et de son assistante IA, Lyra.',
     highlights: [
+      "Refonte de toute l'interface de l'application iOS et Android : nouveau design system, parcours artiste et studio séparés, mode sombre, builds TestFlight",
+      "Lyra, assistante IA de réservation : un agent Mistral à outils qui comprend la demande d'un artiste, cherche dans le vrai catalogue, lit les plannings et prépare la réservation, sans jamais inventer de studio ni de prix",
       'Plateforme web conçue sur Figma puis développée : espace studio (planning, réservations, équipe, finances) et réservation côté artiste, en ligne sur featuring.pro',
       'Réservation et paiement de bout en bout avec Stripe : validation par le studio, Apple Pay et Google Pay, remboursements, reversements Stripe Connect',
-      "Application iOS et Android : séparation des parcours artiste et studio, corrections, builds TestFlight",
+      "Correctifs d'un audit de sécurité de l'API : aucune donnée sensible renvoyée, validation de chaque requête, CORS restreint, webhooks Stripe traités une seule fois",
       'Déploiement Docker sur VPS OVH via GitHub Actions, avec environnements dev et production',
     ],
-    stack: ['Next.js', 'React Native', 'Expo', 'NestJS', 'MySQL', 'Stripe', 'Docker', 'GitHub Actions'],
+    stack: ['Next.js', 'React Native', 'Expo', 'NestJS', 'MySQL', 'Stripe', 'Mistral AI', 'Docker', 'GitHub Actions'],
   },
   {
     id: 'travelme',
