@@ -78,36 +78,6 @@
   text-shadow: var(--halo-text-dense);
 }
 
-/* ── Projets ──────────────────────────────────────────────────────
- * Pas de grille régulière : les cartes ont des largeurs et des décalages
- * variables. C'est l'irrégularité qui évite l'effet catalogue.
- */
-
-.projects-flow {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-}
-
-@media (min-width: 60rem) {
-  .projects-flow > .project--feature {
-    width: 100%;
-  }
-
-  .projects-flow > .project--standard {
-    width: min(62%, 46rem);
-  }
-
-  .projects-flow > .project--standard:nth-of-type(even) {
-    align-self: flex-end;
-  }
-
-  .projects-flow > .project--compact {
-    width: min(44%, 32rem);
-    margin-left: 12%;
-  }
-}
-
 /* ── Parcours ─────────────────────────────────────────────────── */
 
 .timeline {

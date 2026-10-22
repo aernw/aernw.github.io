@@ -1,0 +1,152 @@
+/*
+ * Notes de pochette.
+ *
+ * Le panneau occupe toute la largeur du bac, sous la rangée de la pochette
+ * ouverte. Fermé, il ne garde que l'espace entre deux rangées : c'est lui qui
+ * les espace, d'où l'absence d'écart vertical dans la grille. Ouvert, il se
+ * déploie depuis cet espace et pousse la suite de la page.
+ *
+ * Ni fond, ni ombre, ni cadre : comme le reste du site, les notes sont du texte
+ * posé sur la surface. La pochette soulevée au-dessus suffit à dire à quel
+ * projet elles appartiennent.
+ */
+
+.notes {
+  grid-column: 1 / -1;
+  overflow: hidden;
+  /* Hauteur fermée par défaut ; le script la remplace par celle du contenu. */
+  height: var(--crate-row-gap);
+  transition: height var(--duration-slow) var(--ease-out);
+}
+
+.notes__inner {
+  position: relative;
+  /* En bas, l'espace avant la rangée suivante. */
+  padding: var(--space-4) 0 var(--crate-row-gap);
+  opacity: 0;
+  transition: opacity var(--duration) var(--ease);
+}
+
+.notes--open .notes__inner {
+  opacity: 1;
+  transition-duration: var(--duration-slow);
+}
+
+/* Remonté à chaque pochette ouverte : il rejoue son apparition, même quand le
+   panneau, lui, reste déployé. */
+.notes__content {
+  animation: notes-in var(--duration-slow) var(--ease-out) both;
+}
+
+@keyframes notes-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notes__content {
+    animation: none;
+  }
+}
+
+.notes__name {
+  /* La place du bouton de fermeture. */
+  padding-right: 3rem;
+  font-size: var(--text-title);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-title);
+}
+
+.notes__name--logo {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.notes__logo {
+  flex-shrink: 0;
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.notes__tagline {
+  margin-top: var(--space-1);
+  max-width: var(--measure);
+  font-size: var(--text-heading);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-title);
+  color: var(--ink-muted);
+}
+
+.notes__body {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+@media (min-width: 56rem) {
+  .notes__body {
+    grid-template-columns: minmax(0, 1.6fr) minmax(15rem, 1fr);
+    gap: var(--space-5);
+  }
+}
+
+.notes__description {
+  max-width: var(--measure);
+  font-size: var(--text-body-reading);
+  line-height: var(--leading-body);
+  color: var(--ink-muted);
+}
+
+.notes__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  font-size: var(--text-small);
+}
+
+.notes__credits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.notes__credits dt {
+  font-size: var(--text-micro);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color: var(--ink-faint);
+}
+
+.notes__credits dd {
+  margin-top: 0.35rem;
+  font-size: var(--text-small);
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Même traitement que la stack du parcours. */
+.notes__stack {
+  font-family: var(--font-mono);
+  color: var(--ink-muted);
+}
+
+.notes__close {
+  position: absolute;
+  top: var(--space-4);
+  right: 0;
+  padding: 0 0.25rem;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--ink-faint);
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.notes__close:hover {
+  color: var(--ink);
+}
