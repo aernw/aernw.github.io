@@ -1,7 +1,8 @@
 import type { Project } from './types'
 
 /**
- * Projets principaux, dans l'ordre d'affichage.
+ * Projets principaux, dans l'ordre d'affichage : chacun a sa pochette dans le
+ * bac, rangée dans cet ordre.
  *
  * StemHub ouvre la liste : c'est le seul projet où le développement et la musique
  * ne font qu'un, et celui où la contribution est la plus lourde. Il apparaît sur
@@ -26,10 +27,11 @@ export const projects: readonly Project[] = [
       { label: 'GitHub', href: 'https://github.com/stemhub-org/Stemhub' },
     ],
     year: '2026',
-    emphasis: 'feature',
     sides: ['a', 'b'],
     accent: '#9c57df',
     logo: 'projects/stemhub-logo.svg',
+    // Le logo en pleine pochette : le même dessin, sur un carré sans coins arrondis.
+    cover: 'projects/stemhub-cover.svg',
   },
   {
     id: 'music-masters',
@@ -44,15 +46,11 @@ export const projects: readonly Project[] = [
     stack: ['Next.js', 'TypeScript', 'FastAPI', 'Python', 'PostgreSQL', 'Redis', 'Stripe', 'Docker'],
     links: [{ label: 'music-masters.trade', href: 'https://music-masters.trade' }],
     year: '2026',
-    emphasis: 'standard',
     sides: ['a'],
     accent: '#ff3ea5',
     logo: 'projects/music-masters-logo.webp',
-    // Cartes exportées du Figma du jeu : une Live drop face cachée, derrière une Diamant.
-    visual: {
-      kind: 'sprites',
-      sources: ['projects/mm-card-facedown.webp', 'projects/mm-card-diamond.webp'],
-    },
+    // L'icône du site (music-masters.trade/icon.svg), carrée pour remplir la pochette.
+    cover: 'projects/music-masters-cover.svg',
   },
   {
     id: 'r-type',
@@ -67,16 +65,11 @@ export const projects: readonly Project[] = [
     stack: ['C++', 'CMake', 'UDP/TCP', 'ECS', 'LZ4'],
     links: [{ label: 'GitHub', href: 'https://github.com/aernw/r-type' }],
     year: '2025',
-    emphasis: 'standard',
     sides: ['a'],
     accent: '#3ecfa0',
-    // Boucle capturée en jeu (partie à 4), recadrée et compressée pour le web.
-    visual: {
-      kind: 'video',
-      sources: { mp4: 'projects/rtype-gameplay.mp4', webm: 'projects/rtype-gameplay.webm' },
-      poster: 'projects/rtype-gameplay-poster.jpg',
-    },
-    visualPlacement: 'left',
+    // Le jeu n'a pas de logo : son emblème est le vaisseau du joueur, repris du
+    // dépôt (assets/spaceships/player_blue.png), sur le violet de ses niveaux.
+    cover: 'projects/rtype-cover.webp',
   },
   {
     id: 'area',
@@ -92,9 +85,12 @@ export const projects: readonly Project[] = [
     stack: ['Go', 'gRPC', 'React', 'TypeScript', 'Flutter', 'Docker'],
     links: [{ label: 'GitHub', href: 'https://github.com/aernw/Area' }],
     year: '2026',
-    emphasis: 'standard',
     sides: ['a'],
     accent: '#4b8bf5',
+    // Logo repris du dépôt (frontend/web/src/assets/logo), vectorisé pour rester
+    // net en grand : bleu nuit dans les notes, blanc sur bleu nuit en pochette.
+    logo: 'projects/area-logo.svg',
+    cover: 'projects/area-cover.svg',
   },
   {
     id: 'onepoint',
@@ -108,8 +104,11 @@ export const projects: readonly Project[] = [
     stack: ['TypeScript', 'IA'],
     links: [{ label: 'GitHub', href: 'https://github.com/aernw/sylvAI' }],
     year: '2025',
-    emphasis: 'compact',
     sides: ['a'],
     accent: '#5fb87a',
+    // Logos de Onepoint, organisateur du hackathon, repris de groupeonepoint.com :
+    // le monogramme dans les notes, le logo complet sur la pochette.
+    logo: 'projects/onepoint-logo.webp',
+    cover: 'projects/onepoint-cover.webp',
   },
 ]

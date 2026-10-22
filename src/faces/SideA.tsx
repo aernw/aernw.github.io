@@ -1,5 +1,5 @@
 import { Section } from '../components/Section'
-import { ProjectCard } from '../components/ProjectCard'
+import { ProjectCrate } from '../components/ProjectCrate'
 import { education, experiences, profile, projects, skillGroups } from '../content'
 import './SideA.css'
 
@@ -39,11 +39,7 @@ export function SideA() {
         lead="Ce que j'ai construit, avec mon rôle sur chacun."
         width="full"
       >
-        <div className="projects-flow">
-          {visible.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </div>
+        <ProjectCrate projects={visible} />
       </Section>
 
       <Section id="parcours" title="Parcours" stickyTitle>
