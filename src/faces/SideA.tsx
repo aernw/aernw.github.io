@@ -55,6 +55,11 @@ export function SideA() {
                       src={experience.logo}
                       alt=""
                       decoding="async"
+                      style={
+                        experience.logoBackground === undefined
+                          ? undefined
+                          : { background: experience.logoBackground }
+                      }
                     />
                   )}
                   {experience.role} — {experience.company}

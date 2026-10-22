@@ -22,7 +22,9 @@ export const experiences: readonly Experience[] = [
     id: 'featuring',
     role: 'Développeur fullstack',
     company: 'Featuring',
+    // La marque blanche sur Night de la charte, comme l'icône de l'app.
     logo: 'experiences/featuring-logo.svg',
+    logoBackground: '#0D1112',
     location: 'Paris',
     period: "09/2026 — aujourd'hui",
     summary:

@@ -49,6 +49,11 @@ export interface Experience {
   readonly company: string
   /** Logo de l'entreprise, affiché dans une tuile blanche devant l'intitulé du poste. */
   readonly logo?: string
+  /**
+   * Fond de la tuile, pour un logo dessiné sur un aplat : sa couleur prolonge
+   * l'aplat jusqu'aux bords, sans liseré blanc. Blanc par défaut.
+   */
+  readonly logoBackground?: string
   readonly location: string
   readonly period: string
   readonly summary: string
