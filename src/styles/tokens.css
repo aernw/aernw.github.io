@@ -113,6 +113,9 @@
 
   /* ── Motion : courte et utilitaire, sans rebond ────────────────── */
   --ease: cubic-bezier(0.4, 0, 0.6, 1);
+  /* Décélération franche, toujours sans rebond : pour ce qui se soulève ou se
+     déploie (les pochettes, leurs notes). Le geste part vite et se pose. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-fast: 0.22s;
   --duration: 0.32s;
   --duration-slow: 0.6s;

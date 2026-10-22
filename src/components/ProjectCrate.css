@@ -1,0 +1,41 @@
+/*
+ * Le bac à disques.
+ *
+ * Une grille de pochettes de même taille : l'irrégularité que le reste du
+ * site cherche dans la mise en page, le bac la trouve dans les pochettes
+ * elles-mêmes, toutes différentes.
+ *
+ * Aucun écart vertical : entre deux rangées, c'est le panneau de notes fermé
+ * qui fait l'espace (voir ProjectNotes.css).
+ */
+
+.crate {
+  --crate-gap: clamp(1rem, 2vw, 2rem);
+  --crate-row-gap: clamp(2rem, 4vw, 3.5rem);
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--crate-gap);
+  align-items: start;
+}
+
+/* Le nombre de colonnes suit la largeur, et le bac le relit pour savoir où
+   déployer les notes : aucune valeur n'est à reporter côté script. */
+@media (min-width: 40rem) {
+  .crate {
+    grid-template-columns: repeat(auto-fill, minmax(clamp(10rem, 16vw, 19rem), 1fr));
+  }
+}
+
+/* Une pochette ouverte : les autres pâlissent, sans disparaître. Par la
+   couleur et non par la transparence, qui laisserait voir à travers elles les
+   objets 3D du fond. */
+.crate--open .crate__item:not(.crate__item--open) .sleeve__cover {
+  filter: saturate(0.2) brightness(1.06);
+}
+
+@media (hover: hover) {
+  .crate--open .crate__item:not(.crate__item--open):hover .sleeve__cover {
+    filter: none;
+  }
+}

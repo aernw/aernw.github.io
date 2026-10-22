@@ -28,7 +28,7 @@ npm run build
 | `src/content/` | Toutes les données du site (projets, profil, lab). Aucun texte n'est codé en dur dans les composants. |
 | `src/side/` | Contexte React de la face active et synchronisation de l'URL. |
 | `src/faces/` | Composition des deux faces. |
-| `src/components/` | Composants partagés (section, carte de projet, bascule). |
+| `src/components/` | Composants partagés (section, pochettes et notes de projet, bascule). |
 | `src/styles/` | Tokens de design et styles de base. |
 
 ## À compléter

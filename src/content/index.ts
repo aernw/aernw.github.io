@@ -5,8 +5,6 @@ export type {
   Link,
   Profile,
   Project,
-  ProjectEmphasis,
-  ProjectVisual,
   Side,
   SkillGroup,
 } from './types'

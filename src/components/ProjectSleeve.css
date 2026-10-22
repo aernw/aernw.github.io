@@ -1,0 +1,270 @@
+/*
+ * Pochettes de projets.
+ *
+ * Chaque projet est une pochette carrée, rangée dans le bac : son emblème sur
+ * un aplat. Tout le reste — l'étiquette sous la pochette, ses notes — reste
+ * sur la surface du site.
+ *
+ * Au survol, la pochette se soulève et flotte. Trois mouvements s'additionnent,
+ * chacun sur sa propriété pour ne pas s'écraser :
+ * - `transform` : le soulèvement et l'inclinaison qui suit le pointeur ;
+ * - `translate` : une oscillation lente, tant que dure le survol ;
+ * - le dessin, à l'intérieur, glisse un peu plus que le carton (parallaxe).
+ */
+
+/* Phase de l'oscillation (0 → 1 → 0) et son amplitude. Déclarées pour être
+   interpolables : à la fin du survol, l'amplitude retombe en douceur au lieu
+   que la pochette saute à sa place depuis le haut de sa course. */
+@property --sleeve-bob {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --sleeve-float {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes sleeve-bob {
+  50% {
+    --sleeve-bob: 1;
+  }
+}
+
+/* ── Case du bac ──────────────────────────────────────────────── */
+
+.crate__item {
+  /* Position du pointeur sur la pochette, de -1 à 1. Posée par le script. */
+  --tilt-x: 0;
+  --tilt-y: 0;
+  position: relative;
+  min-width: 0;
+}
+
+/* Le titre de niveau 3 n'est là que pour la structure : il ne doit rien
+   imposer à la pochette qu'il contient. */
+.crate__heading {
+  font: inherit;
+  letter-spacing: inherit;
+  text-wrap: wrap;
+}
+
+.sleeve {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+/* La zone cliquable couvre toute la case, accroche comprise. */
+.sleeve::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+/* Le contour de focus suit la pochette plutôt que le bouton entier. */
+.sleeve:focus-visible {
+  outline: none;
+}
+
+.sleeve:focus-visible .sleeve__cover {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.sleeve__stage {
+  display: block;
+  perspective: 900px;
+}
+
+/* ── La pochette ──────────────────────────────────────────────── */
+
+.sleeve__cover {
+  --lift: 0px;
+  --zoom: 1;
+  --tilt-strength: 1;
+  --tint: var(--project-accent, var(--ink-faint));
+
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 10px;
+  /* Les tailles du dessin sont exprimées en largeur de pochette (cqi) : il
+     garde ses proportions de la grille de bureau à la rangée du téléphone. */
+  container-type: inline-size;
+  /* Le halo typographique de la section n'a pas sa place sur une image. */
+  text-shadow: none;
+
+  /* L'aplat de repli, sous une pochette absente ou pas encore chargée. */
+  background: var(--tint);
+
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 8px 16px -10px rgba(0, 0, 0, 0.3),
+    0 0 0 0 transparent;
+
+  transform: translateY(var(--lift))
+    rotateX(calc(var(--tilt-y) * -7deg * var(--tilt-strength)))
+    rotateY(calc(var(--tilt-x) * 9deg * var(--tilt-strength)))
+    scale(var(--zoom));
+  translate: 0 calc(var(--sleeve-bob) * var(--sleeve-float));
+  animation: sleeve-bob 3.6s ease-in-out infinite paused;
+
+  /* Le retard de l'inclinaison sur le pointeur est voulu : c'est lui qui
+     donne l'impression d'un objet qui flotte plutôt que d'un objet fixé. */
+  transition:
+    transform calc(var(--duration) * 1.4) var(--ease-out),
+    box-shadow var(--duration-slow) var(--ease-out),
+    filter var(--duration-slow) var(--ease),
+    --sleeve-float var(--duration-slow) var(--ease-out);
+}
+
+/* Soulevée : au survol, au focus clavier, et tant que ses notes sont ouvertes.
+   L'ombre prend la teinte de la pochette, comme une lumière qui passe à travers. */
+.sleeve:focus-visible .sleeve__cover,
+.sleeve[aria-expanded='true'] .sleeve__cover {
+  --lift: -10px;
+  --zoom: 1.03;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 26px 40px -22px rgba(0, 0, 0, 0.5),
+    0 30px 60px -24px color-mix(in srgb, var(--tint) 75%, transparent);
+}
+
+@media (hover: hover) {
+  .crate__item:hover .sleeve__cover {
+    --lift: -12px;
+    --zoom: 1.04;
+    --sleeve-float: -6px;
+    animation-play-state: running;
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.08),
+      0 30px 44px -22px rgba(0, 0, 0, 0.5),
+      0 34px 64px -24px color-mix(in srgb, var(--tint) 80%, transparent);
+  }
+}
+
+/* ── Le dessin ────────────────────────────────────────────────── */
+
+/* Il glisse vers le pointeur un peu plus que le carton ne s'incline. */
+.sleeve__art {
+  position: absolute;
+  inset: 0;
+  display: block;
+  transform: translate3d(
+    calc(var(--tilt-x) * 2.2cqi * var(--tilt-strength)),
+    calc(var(--tilt-y) * 2.2cqi * var(--tilt-strength)),
+    0
+  );
+  transition: transform calc(var(--duration) * 1.4) var(--ease-out);
+}
+
+/* Pleine pochette : agrandie juste assez pour que la parallaxe n'en montre
+   jamais le bord. */
+.sleeve__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  scale: 1.1;
+}
+
+/* Pochette de repli : le logo, au centre de la teinte. */
+.sleeve__logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 46%;
+  height: auto;
+  translate: -50% -50%;
+}
+
+/* Pochette de repli sans logo : le nom, sur la teinte. */
+.sleeve__type {
+  position: absolute;
+  inset: auto 8cqi 7cqi;
+  font-size: 12cqi;
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  text-wrap: balance;
+}
+
+/* ── Habillage commun ─────────────────────────────────────────── */
+
+/* Le grain du papier, la tranche à gauche (le côté qui s'ouvre) et un filet
+   intérieur : ce qui fait lire un carton imprimé plutôt qu'un aplat d'écran. */
+.sleeve__grain {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0) 3%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  opacity: 0.32;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+/* Le reflet du plastique : une tache de lumière sous le pointeur, invisible
+   tant que la pochette est posée. */
+.sleeve__sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at calc(50% + var(--tilt-x) * 45%) calc(50% + var(--tilt-y) * 45%),
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0) 60%
+  );
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .crate__item:hover .sleeve__sheen {
+    opacity: 1;
+  }
+
+}
+
+/* ── Étiquette ────────────────────────────────────────────────── */
+
+.sleeve__name {
+  display: block;
+  margin-top: 0.9rem;
+  font-size: var(--text-body);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: var(--tracking-body);
+  color: var(--ink);
+}
+
+.crate__tagline {
+  margin-top: 0.15rem;
+  font-size: var(--text-small);
+  line-height: 1.4;
+  color: var(--ink-muted);
+  /* Deux lignes au plus : la phrase entière est dans les notes. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+/* Sans animation demandée : la pochette se soulève toujours pour signaler
+   le survol, mais ne flotte, ne s'incline ni ne glisse. */
+@media (prefers-reduced-motion: reduce) {
+  .sleeve__cover {
+    --tilt-strength: 0;
+    animation: none;
+  }
+}
