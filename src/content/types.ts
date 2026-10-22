@@ -7,37 +7,10 @@
 
 export type Side = 'a' | 'b'
 
-/** Niveau de mise en avant d'un projet dans la grille. */
-export type ProjectEmphasis = 'feature' | 'standard' | 'compact'
-
 export interface Link {
   readonly label: string
   readonly href: string
 }
-
-/**
- * Visuel d'un projet.
- * - `sprites` : images détourées qui flottent, pour les projets ayant leurs
- *   propres assets (les cartes de Music Masters). `pixelated` garde le
- *   pixel-art net à l'agrandissement.
- * - `image`   : une capture d'écran classique.
- * - `video`   : une boucle de gameplay silencieuse (mp4 + webm), avec une
- *   image de repli pour le premier rendu et pour `prefers-reduced-motion`.
- * - `none`    : la couleur d'accent porte seule l'identité du projet.
- */
-export type ProjectVisual =
-  | {
-      readonly kind: 'sprites'
-      readonly sources: readonly string[]
-      readonly pixelated?: boolean
-    }
-  | { readonly kind: 'image'; readonly src: string; readonly alt: string }
-  | {
-      readonly kind: 'video'
-      readonly sources: { readonly mp4: string; readonly webm: string }
-      readonly poster: string
-    }
-  | { readonly kind: 'none' }
 
 export interface Project {
   readonly id: string
@@ -53,19 +26,21 @@ export interface Project {
   readonly stack: readonly string[]
   readonly links: readonly Link[]
   readonly year: string
-  readonly emphasis: ProjectEmphasis
   readonly sides: readonly Side[]
   /**
    * Teinte propre au projet, reprise de son identité réelle quand elle existe.
-   * Utilisée par petites touches (halo, filet, survol) — jamais en fond plein,
-   * pour ne pas casser la continuité de surface du site.
+   * Elle teinte l'ombre de la pochette soulevée, et le fond de la pochette de
+   * repli — jamais un fond de la page, pour ne pas casser la continuité de
+   * surface du site.
    */
   readonly accent?: string
-  /** Icône d'app carrée du projet, affichée devant le nom à la place de la pastille d'accent. */
+  /** Icône carrée du projet, devant son nom dans les notes. */
   readonly logo?: string
-  readonly visual?: ProjectVisual
-  /** Côté de la carte où le visuel apparaît. `right` par défaut. */
-  readonly visualPlacement?: 'left' | 'right'
+  /**
+   * Pochette du projet, carrée : son emblème sur un aplat. Sans elle, la
+   * pochette se replie sur le logo, ou à défaut le nom, posé sur la teinte.
+   */
+  readonly cover?: string
 }
 
 export interface Experience {
