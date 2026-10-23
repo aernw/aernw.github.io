@@ -95,11 +95,6 @@
   color: var(--ink-faint);
 }
 
-/* Dans une section en pleine largeur, la note doit retrouver la marge de page. */
-.section__footnote--inset {
-  padding-inline: var(--page-gutter);
-}
-
 .subsection__title {
   margin-bottom: var(--space-3);
   font-size: var(--text-micro);
