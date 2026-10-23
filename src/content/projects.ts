@@ -6,7 +6,7 @@ import type { Project } from './types'
  *
  * StemHub ouvre la liste : c'est le seul projet où le développement et la musique
  * ne font qu'un, et celui où la contribution est la plus lourde. Il apparaît sur
- * les deux faces de la cassette, raconté sous deux angles différents.
+ * les deux côtés du disque, raconté sous deux angles différents.
  *
  * Les chiffres proviennent de l'API GitHub (août 2026) et sont vérifiables.
  */

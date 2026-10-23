@@ -1,4 +1,5 @@
 import { Cover } from './Cover'
+import { Disc } from '../album/Disc'
 import type { Discovery } from '../content'
 import './Discoveries.css'
 
@@ -19,35 +20,37 @@ export function formatMonth(value: string): string {
 
 interface DiscoveriesProps {
   readonly items: readonly Discovery[]
-  /** En rail, la liste devient une rangée horizontale au lieu d'une grille. */
-  readonly layout?: 'grid' | 'row'
 }
 
-export function Discoveries({ items, layout = 'grid' }: DiscoveriesProps) {
+/**
+ * Les découvertes, en cartes de verre. Au survol, le disque sort par le haut
+ * de sa pochette, comme d'un étui.
+ */
+export function Discoveries({ items }: DiscoveriesProps) {
   return (
-    <ul className={`discoveries discoveries--${layout}`}>
+    <ul className="discoveries">
       {items.map((item) => (
-        <li key={item.id} className="discovery rail__item">
-          <Cover src={item.cover} title={item.title} subtitle={item.artist} />
-
-          <div className="discovery__body">
-            <div className="discovery__head">
-              <h3 className="discovery__title">
-                {item.href === undefined ? (
-                  item.title
-                ) : (
-                  <a href={item.href} target="_blank" rel="noreferrer noopener">
-                    {item.title}
-                  </a>
-                )}
-              </h3>
-              <span className="discovery__year">{item.year}</span>
-            </div>
-
-            <p className="discovery__artist">{item.artist}</p>
-            <p className="discovery__note">{item.note}</p>
-            <p className="discovery__discovered">Découvert en {formatMonth(item.discovered)}</p>
+        <li key={item.id} className="discovery">
+          <div className="discovery__art">
+            <span className="discovery__disc">
+              <Disc printed />
+            </span>
+            <Cover src={item.cover} title={item.title} subtitle={item.artist} />
           </div>
+
+          <h3 className="discovery__artist">{item.artist}</h3>
+          <p className="discovery__title">
+            {item.href === undefined ? (
+              item.title
+            ) : (
+              <a href={item.href} target="_blank" rel="noreferrer noopener">
+                {item.title}
+              </a>
+            )}
+            <span aria-hidden="true">  ·  </span>
+            <span className="discovery__year">{item.year}</span>
+          </p>
+          <p className="discovery__note">« {item.note} »</p>
         </li>
       ))}
     </ul>

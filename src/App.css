@@ -1,7 +1,30 @@
+/*
+ * Fond d'ambiance : les couleurs de la pochette, très atténuées et fixes,
+ * derrière tout le contenu. C'est sur elles que les surfaces en verre se
+ * détachent quand on a quitté le haut de page.
+ */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(45% 55% at 0% 30%, var(--art-2), transparent 70%),
+    radial-gradient(40% 50% at 100% 15%, var(--art-3), transparent 70%),
+    radial-gradient(45% 50% at 85% 100%, var(--art-4), transparent 70%),
+    radial-gradient(40% 45% at 15% 95%, var(--art-1), transparent 70%);
+  opacity: 0.16;
+  transition: opacity var(--duration-slow) var(--ease);
+}
+
+:root[data-side='b'] .ambient {
+  opacity: 0.22;
+}
+
 .page {
-  /* Le bouton flottant ne doit jamais recouvrir la fin du contenu. */
+  /* Le lecteur fixe ne doit jamais recouvrir la fin du contenu. */
   padding-bottom: var(--space-6);
-  /* Au-dessus du fil, qui vit en z-index 0. */
+  /* Au-dessus du fond d'ambiance. */
   position: relative;
   z-index: 1;
   transition:
@@ -10,7 +33,7 @@
 }
 
 /*
- * Fondu sortant pendant le retournement de la cassette.
+ * Fondu sortant pendant le retournement du disque.
  * La durée doit rester alignée sur FLIP_DURATION_MS dans App.tsx : c'est elle
  * qui décide du moment où le contenu de l'autre face est monté.
  */
@@ -38,7 +61,10 @@
 /* Aligné sur la marge de page comme le reste du site — il n'y a plus de
    conteneur centré depuis la refonte de mise en page. */
 .footer {
-  padding: var(--space-4) var(--page-gutter) var(--space-5);
+  position: relative;
+  z-index: 1;
+  /* Le bas laisse la place au lecteur fixe. */
+  padding: var(--space-4) var(--page-gutter) calc(var(--space-5) + 5rem);
   font-size: var(--text-micro);
   color: var(--ink-faint);
 }

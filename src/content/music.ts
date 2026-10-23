@@ -1,5 +1,5 @@
 /**
- * Contenu musical de la face B.
+ * Contenu musical du côté Perso.
  *
  * Ce fichier est fait pour être édité souvent — c'est la partie vivante du site.
  * Voir le guide « Tenir le site à jour » dans le README pour la marche à suivre.

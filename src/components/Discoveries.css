@@ -1,71 +1,85 @@
-.discoveries--grid {
+.discoveries {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
   gap: var(--space-3);
-}
-
-/* En rail, chaque élément prend une largeur fixe et défile latéralement. */
-.discoveries--row .discovery {
-  width: min(30rem, 82vw);
+  /* Le disque dépasse au-dessus des cartes au survol : on lui laisse la place. */
+  padding-top: var(--space-4);
 }
 
 .discovery {
-  display: grid;
-  grid-template-columns: 96px minmax(0, 1fr);
-  gap: var(--space-2);
-  padding: 0;
-  background: transparent;
-  border-radius: 0;
-  transition: none;
-  border: 0;
-}
-
-.discovery__body {
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  padding: 1.25rem 1.25rem 1.75rem;
+  border-radius: 2.25rem;
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-edge);
+  box-shadow:
+    var(--glass-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
 }
 
-.discovery__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-1);
+.discovery__art {
+  position: relative;
+  margin-bottom: 1.25rem;
 }
 
-.discovery__title {
-  font-size: var(--text-body-lg);
-  letter-spacing: var(--tracking-body);
+.discovery__art .cover {
+  position: relative;
+  border-radius: 1rem;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
 }
 
-.discovery__year {
-  flex-shrink: 0;
-  font-size: var(--text-micro);
-  font-variant-numeric: tabular-nums;
-  color: var(--ink-faint);
+/* Le disque attend derrière la pochette. */
+.discovery__disc {
+  position: absolute;
+  top: 2%;
+  left: 6%;
+  width: 88%;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .discovery:hover .discovery__disc {
+    transform: translateY(-28%);
+  }
 }
 
 .discovery__artist {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.discovery__title {
+  margin-top: 0.4rem;
   font-size: var(--text-small);
+  font-weight: 500;
+  white-space: pre-wrap;
   color: var(--ink-muted);
+}
+
+.discovery__title a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--hairline);
+  text-underline-offset: 0.2em;
+}
+
+.discovery__title a:hover {
+  color: var(--accent);
+}
+
+.discovery__year {
+  font-variant-numeric: tabular-nums;
 }
 
 .discovery__note {
-  margin-top: var(--space-1);
+  margin-top: 0.75rem;
   font-size: var(--text-small);
-  color: var(--ink-muted);
-}
-
-/* La date de découverte est volontairement visible : une section qui vieillit
-   doit se voir, plutôt que de faire semblant d'être à jour. */
-.discovery__discovered {
-  margin-top: var(--space-1);
-  font-size: var(--text-micro);
-  color: var(--ink-faint);
-}
-
-@media (max-width: 30rem) {
-  .discovery {
-    grid-template-columns: 72px minmax(0, 1fr);
-  }
+  line-height: 1.5;
+  color: var(--ink);
+  opacity: 0.85;
 }

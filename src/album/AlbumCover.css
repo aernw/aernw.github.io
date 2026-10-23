@@ -1,0 +1,40 @@
+.album-cover {
+  position: relative;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 6% 7%;
+  overflow: hidden;
+  border-radius: 3.2%;
+  color: var(--art-ink);
+  text-align: left;
+  /* Quatre taches de couleur fondues, comme sur la maquette : chacune part
+     d'un coin et s'efface vers le centre. */
+  background:
+    radial-gradient(circle at 18% 16%, var(--art-1) 0, transparent 52%),
+    radial-gradient(circle at 86% 14%, var(--art-2) 0, transparent 50%),
+    radial-gradient(circle at 14% 88%, var(--art-3) 0, transparent 52%),
+    radial-gradient(circle at 90% 90%, var(--art-4) 0, transparent 46%),
+    var(--art-base);
+  box-shadow: 0 1.5em 3.5em rgba(0, 0, 0, 0.35);
+}
+
+.album-cover__name {
+  /* La taille, posée par le composant, suit celle de la pochette : 1cqi = 1 %
+     de sa largeur. */
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+}
+
+.album-cover__line {
+  font-family: var(--font-mono);
+  font-size: max(0.625rem, 2.6cqi);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}

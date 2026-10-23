@@ -1,9 +1,7 @@
-/* Face B : mêmes structures que la face A, plus d'air et de contraste. */
+/* Côté Perso : mêmes structures que le côté Pro, plus d'air et de contraste. */
 
-/* Même traitement que « À propos » sur la face A : le texte d'introduction sort
-   du hero pour prendre sa propre section, aligné à gauche sur la colonne de
-   lecture. Dans le hero il héritait du centrage et devait esquiver le walkman
-   avec un décalage en pourcentage — d'où un pavé centré qui flottait. */
+/* Même traitement que « À propos » côté Pro : le texte d'introduction a sa
+   propre section, alignée à gauche sur la colonne de lecture. */
 .intro__about {
   display: flex;
   flex-direction: column;
@@ -13,21 +11,6 @@
   letter-spacing: var(--tracking-title);
   color: var(--ink);
   text-wrap: pretty;
-  /* Les cassettes de la scène 3D passent derrière ce texte : même halo dense
-     que sur la face A, le halo du hero ne détacherait pas les lettres. */
-  text-shadow: var(--halo-text);
-}
-
-.hero--b .hero__eyebrow {
-  margin-bottom: 0.25rem;
-}
-
-.hero--b .hero__title {
-  margin-top: 0;
-}
-
-.hero--b .hero__subtitle {
-  margin-top: 0.5rem;
 }
 
 .section__placeholder {
@@ -81,27 +64,6 @@
   gap: var(--space-2);
   margin-top: var(--space-1);
   font-size: var(--text-small);
-}
-
-/* ── Now ──────────────────────────────────────────────────────── */
-
-.now {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  max-width: var(--measure);
-}
-
-.now__item {
-  font-size: var(--text-body-reading);
-  line-height: var(--leading-body);
-  color: var(--ink-muted);
-}
-
-.now__updated {
-  margin-top: var(--space-3);
-  font-size: var(--text-micro);
-  color: var(--ink-faint);
 }
 
 /* ── Colophon ─────────────────────────────────────────────────── */

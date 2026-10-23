@@ -5,10 +5,18 @@ Portfolio d'Erwan Seytor — développeur fullstack et musicien.
 > **[ETAT.md](ETAT.md)** — concept, avancement et prochaines étapes. À lire en
 > premier pour reprendre le travail.
 
-Le site a **deux faces**, comme une cassette : la face A (pro) présente les projets,
-le parcours et les compétences ; la face B (artistique) présente la musique, le lab
-et le colophon. La bascule n'est pas mémorisée — elle met simplement à jour `?side=b`
-dans l'URL, ce qui permet de partager un lien ciblé.
+Le site est présenté comme un **disque à deux côtés**, dans le style Liquid Glass
+d'Apple Music : le côté **Pro** présente les projets, le parcours et les compétences ;
+le côté **Perso** présente la musique, le lab et le colophon. Le haut de page est une
+page d'album (pochette, CD, liste des titres) et un lecteur fixe en bas sert à naviguer
+de section en section — sans aucun son.
+
+Un clic sur le CD (ou la pochette) retourne le disque et change de côté. Le choix n'est
+pas mémorisé — il met simplement à jour `?side=perso` dans l'URL, ce qui permet de
+partager un lien ciblé (`?side=b`, l'ancienne valeur, fonctionne toujours).
+
+Les maquettes sont sur Figma : https://www.figma.com/design/OVhla9MIkAfeha1u9iH8fg
+(page « Round 3 — Pro / Perso (Chrome) »).
 
 ## Développement
 
