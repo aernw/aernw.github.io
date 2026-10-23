@@ -5,62 +5,47 @@
  * Voir le guide « Tenir le site à jour » dans le README pour la marche à suivre.
  *
  * Les pochettes sont stockées localement dans `public/covers/` et réparties par
- * type de contenu : découvertes, albums, artistes et vinyles. Le build Vite les
+ * type de contenu : découvertes, albums, artistes et concerts. Le build Vite les
  * copie automatiquement, donc on évite les URLs externes et les images qui
  * disparaissent.
  */
 
-export interface Discovery {
+/** Ce que contient une découverte : sert à l'étiquette et aux filtres. */
+export type FindKind = 'musique' | 'film' | 'série' | 'outil'
+
+export interface RecentFind {
   readonly id: string
-  readonly artist: string
+  readonly kind: FindKind
   readonly title: string
-  readonly year: string
-  /** Deux ou trois phrases : ce qui t'a marqué. C'est ce qui vaut d'être lu. */
-  readonly note: string
-  /** Mois de la découverte, au format « 2026-08 ». Sert à afficher la fraîcheur. */
-  readonly discovered: string
+  /** Artiste, réalisateur·rice ou éditeur. */
+  readonly by: string
+  readonly year?: string
+  /** Une ou deux phrases : pourquoi tu le recommandes. */
+  readonly note?: string
+  /** Image carrée, dans `public/covers/finds/`. Sans image, un dégradé la remplace. */
   readonly cover?: string
   readonly href?: string
 }
 
 /**
- * Découvertes récentes, de la plus récente à la plus ancienne.
+ * Mes découvertes récentes : musique, films et séries, outils et apps.
+ * De la plus récente à la plus ancienne.
  *
- * TODO Erwan : remplis cette liste. Une entrée d'exemple est laissée en commentaire
- * ci-dessous pour montrer le format — décommente-la et remplace son contenu.
+ * TODO Erwan : remplis cette liste. Tant qu'elle est vide, la section affiche
+ * un court message à la place des cartes. Exemple à copier :
+ *
+ *   {
+ *     id: 'titre-artiste',
+ *     kind: 'musique',
+ *     title: 'Titre de l’album',
+ *     by: 'Artiste',
+ *     year: '2026',
+ *     note: 'Pourquoi je le recommande, en une ou deux phrases.',
+ *     cover: '/covers/finds/titre-artiste.webp',
+ *     href: 'https://open.spotify.com/…',
+ *   },
  */
-export const discoveries: readonly Discovery[] = [
-  {
-    id: 'fennes-sleepless-sun',
-    artist: 'Fennes',
-    title: 'Sleepless Sun',
-    year: '2026',
-    note: 'Une matière lumineuse et un peu désolée, qui tient la route sans jamais tomber dans le grandiloquent.',
-    discovered: '2026-08',
-    cover: '/covers/discoveries/fennes.svg',
-    href: 'https://open.spotify.com/',
-  },
-  {
-    id: 'saaz-nocturne',
-    artist: 'Saaz',
-    title: 'Nocturne de pierre',
-    year: '2025',
-    note: 'Des rythmes qui avancent sans hâte, avec une vraie envie de laisser l’espace respirer.',
-    discovered: '2026-06',
-    cover: '/covers/discoveries/saaz.svg',
-    href: 'https://open.spotify.com/',
-  },
-  {
-    id: 'the-quiet-ones-warm-lights',
-    artist: 'The Quiet Ones',
-    title: 'Warm Lights',
-    year: '2024',
-    note: 'Cette chanson a cette qualité rare de faire sentir le lieu sans jamais l’expliquer.',
-    discovered: '2026-04',
-    cover: '/covers/discoveries/quiet-ones.svg',
-    href: 'https://open.spotify.com/',
-  },
-]
+export const recentFinds: readonly RecentFind[] = []
 
 export interface FavouriteAlbum {
   readonly id: string
@@ -184,68 +169,4 @@ export const topArtists: readonly FavouriteArtist[] = [
   { id: 'ptite-soeur', name: 'Ptite Soeur', cover: '/covers/artists/ptite-soeur.webp' },
   { id: 'lancey-foux', name: 'Lancey Foux', cover: '/covers/artists/lancey-foux.webp' },
   { id: 'kid-cudi', name: 'Kid Cudi', cover: '/covers/artists/kid-cudi.webp' },
-]
-
-export interface Vinyl {
-  readonly id: string
-  readonly artist: string
-  readonly title: string
-  readonly year: string
-  readonly pressing?: string
-  readonly cover?: string
-}
-
-/**
- * Collection de vinyles.
- *
- * `year` est l'année de sortie de l'album ; `pressing` ne sert qu'à signaler
- * une édition qui a un intérêt (réédition, vinyle coloré, coffret). Sur les
- * disques pressés à leur sortie, il est simplement omis.
- */
-export const vinyls: readonly Vinyl[] = [
-  {
-    id: 'vinyl-radiohead-ok-computer',
-    artist: 'Radiohead',
-    title: 'OK Computer',
-    year: '1997',
-    pressing: 'Réédition 2016',
-    cover: '/covers/vinyls/radiohead-ok-computer.webp',
-  },
-  {
-    id: 'vinyl-nirvana-nevermind',
-    artist: 'Nirvana',
-    title: 'Nevermind',
-    year: '1991',
-    pressing: 'Réédition 2011',
-    cover: '/covers/vinyls/nirvana-nevermind.webp',
-  },
-  {
-    id: 'vinyl-rhcp-californication',
-    artist: 'Red Hot Chili Peppers',
-    title: 'Californication',
-    year: '1999',
-    pressing: 'Réédition 2012',
-    cover: '/covers/vinyls/red-hot-chili-peppers-californication.webp',
-  },
-  {
-    id: 'vinyl-the-weeknd-starboy',
-    artist: 'The Weeknd',
-    title: 'Starboy',
-    year: '2016',
-    cover: '/covers/vinyls/the-weeknd-starboy.webp',
-  },
-  {
-    id: 'vinyl-the-weeknd-after-hours',
-    artist: 'The Weeknd',
-    title: 'After Hours',
-    year: '2020',
-    cover: '/covers/vinyls/the-weeknd-after-hours.webp',
-  },
-  {
-    id: 'vinyl-the-weeknd-dawn-fm',
-    artist: 'The Weeknd',
-    title: 'Dawn FM',
-    year: '2022',
-    cover: '/covers/vinyls/the-weeknd-dawn-fm.webp',
-  },
 ]

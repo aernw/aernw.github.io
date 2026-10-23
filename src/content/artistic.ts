@@ -20,14 +20,3 @@ export const aboutDraft = {
     'Les deux demandent la même chose : une forme claire, une contrainte acceptée, et le bon moment pour laisser le travail respirer.',
   ],
 } as const
-
-/** Colophon : ce qui a servi à faire ce site. */
-export const colophon: readonly {
-  readonly label: string
-  readonly value: string
-  readonly href?: string
-}[] = [
-  { label: 'Construit avec', value: 'React, TypeScript, Vite' },
-  { label: 'Hébergé sur', value: 'GitHub Pages' },
-  { label: 'Dessiné sur', value: 'Figma, dans le style Liquid Glass d’Apple' },
-]

@@ -1,7 +1,6 @@
 export type {
   Education,
   Experience,
-  LabItem,
   Link,
   Profile,
   Project,
@@ -13,11 +12,12 @@ export { education, experiences, profile, skillGroups } from './profile'
 export { projects } from './projects'
 export { albums } from './album'
 export type { Album, Track } from './album'
-export { labItems } from './lab'
-export { aboutDraft, colophon } from './artistic'
+export { aboutDraft } from './artistic'
+export { concerts } from './concerts'
+export type { Concert, ConcertKind } from './concerts'
 
-export { discoveries, topAlbums, topArtists, vinyls } from './music'
-export type { Discovery, FavouriteAlbum, FavouriteArtist, Vinyl } from './music'
+export { recentFinds, topAlbums, topArtists } from './music'
+export type { FavouriteAlbum, FavouriteArtist, FindKind, RecentFind } from './music'
 
 export { lessons, media } from './personal'
 export type { Lesson, MediaItem, MediaKind } from './personal'

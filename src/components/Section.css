@@ -88,13 +88,6 @@
   }
 }
 
-/* Mention de fraîcheur en fin de section (ex. « dernier ajout en août 2026 »). */
-.section__footnote {
-  margin-top: var(--space-3);
-  font-size: var(--text-micro);
-  color: var(--ink-faint);
-}
-
 .subsection__title {
   margin-bottom: var(--space-3);
   font-size: var(--text-micro);

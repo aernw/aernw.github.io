@@ -1,0 +1,160 @@
+.concerts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.concerts__label {
+  margin-bottom: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+
+.concerts__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(30rem, 100%), 1fr));
+  gap: 1.25rem;
+}
+
+/*
+ * Un billet : l'image en fond, assombrie à gauche pour le texte ; un talon
+ * en verre à droite, séparé par un pointillé et deux encoches (les cercles
+ * aux couleurs du fond de page).
+ */
+.ticket {
+  --stub: clamp(6.5rem, 22%, 9.5rem);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--stub);
+  min-height: 12.25rem;
+  overflow: hidden;
+  border-radius: 1.4rem;
+  color: #ffffff;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4) 55%, rgba(0, 0, 0, 0.2)),
+    var(--ticket-image) center / cover no-repeat;
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+
+/* Sans image : un dégradé aux couleurs du côté. */
+.ticket--plain {
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.15)),
+    linear-gradient(135deg, var(--art-3), var(--art-1) 55%, var(--art-2));
+}
+
+.ticket--upcoming {
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.ticket::before,
+.ticket::after {
+  content: '';
+  position: absolute;
+  right: calc(var(--stub) - 0.75rem);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--ground);
+  z-index: 1;
+}
+
+.ticket::before {
+  top: -0.75rem;
+}
+
+.ticket::after {
+  bottom: -0.75rem;
+}
+
+.ticket__main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  padding: 1.5rem 1.75rem;
+}
+
+.ticket__tags {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.25rem;
+}
+
+.ticket__tag {
+  padding: 0.2rem 0.55rem;
+  border-radius: 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.ticket__tag--upcoming {
+  color: var(--art-base);
+  background: var(--accent);
+}
+
+.ticket__title {
+  font-size: clamp(1.25rem, 2.2vw, 1.875rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.ticket__venue {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  opacity: 0.88;
+}
+
+.ticket__stub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  font-family: var(--font-mono);
+  text-align: center;
+  background: rgba(24, 24, 29, 0.4);
+  border-left: 2px dashed rgba(255, 255, 255, 0.35);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.ticket__day {
+  font-size: clamp(2.25rem, 4vw, 3.125rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.06em;
+}
+
+.ticket--upcoming .ticket__day {
+  color: var(--accent);
+}
+
+.ticket__month {
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  opacity: 0.85;
+}
+
+.ticket__yr {
+  margin-top: 0.2rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  opacity: 0.65;
+}

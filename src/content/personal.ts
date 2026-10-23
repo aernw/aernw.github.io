@@ -137,12 +137,12 @@ export const lessons: readonly Lesson[] = [
   },
   {
     id: 'lesson-3',
-    statement: 'Un bon interface se construit en se mettant dans la peau d’un utilisateur flemmard.',
-    context: 'Pour qu’un interface soit utile à celui qui l’utilise, il doit être pensé pour que les actions quotidiennes soient les plus simples et rapides possibles : limiter le nombre de clics, de pages, de champs à remplir à la main, ...',
+    statement: 'Une bonne interface se construit en se mettant dans la peau d’un utilisateur flemmard.',
+    context: 'Pour qu’une interface soit utile à celui qui l’utilise, elle doit être pensée pour que les actions quotidiennes soient les plus simples et rapides possibles : limiter le nombre de clics, de pages, de champs à remplir à la main, ...',
   },
   {
     id: 'lesson-4',
-    statement: 'N’aie pas peur de donner ton avis et tes recommendations, peu importe ta position dans l’entreprise.',
+    statement: 'N’aie pas peur de donner ton avis et tes recommandations, peu importe ta position dans l’entreprise.',
     context: 'Toutes les personnes ont une sensibilité différente et peuvent avoir des idées ou des remarques intéressantes et utiles. Même si tu es junior, ton avis peut être précieux et aider à améliorer le produit ou le projet.',
   }
 ]

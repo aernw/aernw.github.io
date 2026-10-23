@@ -1,0 +1,124 @@
+.bookshelf {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, 19rem);
+  align-items: end;
+  gap: var(--space-4);
+}
+
+/* La rangée de tranches, posée sur une planche en verre (le ::after). */
+.bookshelf__row {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.25rem;
+  height: clamp(15rem, 26vw, 22rem);
+  padding: 0 1.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.bookshelf__row::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.25rem;
+  border-radius: 0.5rem;
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-edge);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  pointer-events: none;
+}
+
+.bookshelf__slot {
+  display: flex;
+  align-items: flex-end;
+  height: calc(100% - 1.25rem);
+  margin-bottom: 1.25rem;
+}
+
+.spine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: clamp(2.6rem, 4vw, 3.6rem);
+  height: var(--spine-height);
+  padding: 1rem 0;
+  border-radius: 0.3rem;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  color: var(--spine-ink);
+  background: linear-gradient(
+    to left,
+    color-mix(in srgb, var(--spine-bg) 80%, #000) 0,
+    var(--spine-bg) 18%,
+    color-mix(in srgb, var(--spine-bg) 88%, #fff) 50%,
+    color-mix(in srgb, var(--spine-bg) 75%, #000) 100%
+  );
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.35);
+  transition: translate var(--duration) var(--ease-out);
+}
+
+.spine--out {
+  translate: 0 -1.5rem;
+}
+
+.spine__title {
+  overflow: hidden;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.spine__author {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.bookshelf__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  padding: 1.75rem;
+  border-radius: 1.75rem;
+}
+
+.bookshelf__title {
+  font-size: 1.625rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.bookshelf__author {
+  color: var(--ink-muted);
+}
+
+.bookshelf__note {
+  margin-top: 0.25rem;
+  font-size: var(--text-small);
+  line-height: 1.5;
+}
+
+@media (max-width: 52rem) {
+  .bookshelf {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spine {
+    transition: none;
+  }
+}
