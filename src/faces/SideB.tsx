@@ -10,7 +10,6 @@ import {
   labItems,
   lessons,
   media,
-  profile,
   topAlbums,
   topArtists,
   vinyls,
@@ -26,9 +25,9 @@ function Placeholder({ children }: PlaceholderProps) {
 }
 
 /**
- * Face B — artistique et personnelle.
+ * Côté Perso — musique et expériences personnelles.
  *
- * Chaque section ne s'affiche que si son contenu existe : une face plus courte
+ * Chaque section ne s'affiche que si son contenu existe : un côté plus court
  * vaut mieux qu'une section vide. Les emplacements à remplir sont marqués par
  * des TODO dans src/content/music.ts, personal.ts et artistic.ts.
  */
@@ -41,16 +40,6 @@ export function SideB() {
 
   return (
     <>
-      <section className="hero hero--b" aria-labelledby="hero-b-title">
-        <div className="hero__inner">
-          <p className="hero__eyebrow">Face B</p>
-          <h1 id="hero-b-title" className="hero__title">
-            {profile.name}
-          </h1>
-          <p className="hero__subtitle">Musique et expériences personnelles</p>
-        </div>
-      </section>
-
       <Section id="a-propos" title="À propos" hideTitle width="text">
         <div className="intro__about">
           {aboutDraft.body.map((line) => (
@@ -106,18 +95,16 @@ export function SideB() {
         id="decouvertes"
         title="Découvertes"
         lead="Ce que j'écoute en ce moment et que je veux faire découvrir."
-        width="bleed"
+        width="full"
       >
         {discoveries.length > 0 ? (
-          <Rail label="Découvertes musicales">
-            <Discoveries items={discoveries} layout="row" />
-          </Rail>
+          <Discoveries items={discoveries} />
         ) : (
           <Placeholder>Ajoute ici tes découvertes récentes pour remplir la section.</Placeholder>
         )}
 
         {latestDiscovery !== null ? (
-            <p className="section__footnote section__footnote--inset">
+            <p className="section__footnote">
               Dernier ajout en {formatMonth(latestDiscovery)}
             </p>
           ) : null}

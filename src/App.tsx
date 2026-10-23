@@ -1,17 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
 import { SideProvider, useSide } from './side/SideContext'
-import { Walkman } from './walkman/Walkman'
+import { AlbumHero } from './album/AlbumHero'
+import { Player } from './album/Player'
+import { useScrollTurn } from './album/useScrollTurn'
+import { useTrackScroll } from './album/useTrackScroll'
 import { SideA } from './faces/SideA'
 import { SideB } from './faces/SideB'
-import { profile } from './content'
+import { albums, profile } from './content'
 import type { Side } from './content'
 import './App.css'
 
-/** Durée du fondu au retournement de la cassette. Doit rester alignée sur App.css. */
+/** Durée du fondu au retournement du disque. Doit rester alignée sur App.css. */
 const FLIP_DURATION_MS = 260
 
 function Faces() {
-  const { side } = useSide()
+  const { side, flip } = useSide()
 
   // Face réellement affichée : elle change après le fondu sortant, pas pendant.
   const [renderedSide, setRenderedSide] = useState<Side>(side)
@@ -48,20 +51,29 @@ function Faces() {
     return () => window.clearTimeout(timer)
   }, [side, renderedSide])
 
+  useScrollTurn()
+  const scroll = useTrackScroll(albums[renderedSide].tracks)
+
   return (
     <>
       <a className="skip-link" href="#contenu">
         Aller au contenu
       </a>
 
+      {/* Les couleurs de la pochette, très atténuées, derrière toute la page :
+          sans couleur dessous, les surfaces en verre ne se verraient pas. */}
+      <div className="ambient" aria-hidden="true" />
+
       <main id="contenu" className={`page${flipping ? ' page--flipping' : ''}`}>
-        {/* Dans le flux de la page, et non fixé au viewport : la scène est
-            ancrée en haut et défile avec le hero, qu'elle habille. */}
-        <Walkman />
+        <AlbumHero side={renderedSide} active={scroll.active} onFlip={flip} />
         <div className="page__content">
           {renderedSide === 'a' ? <SideA /> : <SideB />}
         </div>
       </main>
+
+      {/* Hors de `main` : pendant le retournement, `.page` est transformée, et
+          un élément fixe à l'intérieur se calerait sur elle plutôt que sur l'écran. */}
+      <Player side={renderedSide} {...scroll} />
 
       <footer className="footer">
         <p>

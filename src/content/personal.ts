@@ -1,7 +1,7 @@
 /**
- * Contenu personnel non-musical de la face B.
+ * Contenu personnel non-musical du côté Perso.
  *
- * Ces sections font déborder la face B de son thème : sans elles, l'artistique
+ * Ces sections font déborder le côté Perso de son thème : sans elles, l'artistique
  * se réduit à de la musique. Voir le guide dans le README pour les éditer.
  */
 
