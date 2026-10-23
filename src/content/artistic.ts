@@ -36,6 +36,53 @@ export const now = {
   ] as readonly string[],
 }
 
+export interface Track {
+  readonly id: string
+  readonly title: string
+  /** Durée imprimée au dos du boîtier, au format « 3:12 ». Le lecteur lit la vraie durée du fichier. */
+  readonly duration: string
+  /** Fichier audio, rangé dans `public/audio/`. MP3 de préférence : c'est le seul format lu partout. */
+  readonly src: string
+  /** Une ligne sur le morceau, dans le même esprit que les notes d'albums. */
+  readonly note?: string
+}
+
+export interface Disc {
+  readonly title: string
+  readonly year: string
+  /** Visuel imprimé sur la face du disque. Sans visuel, le disque porte une sérigraphie sobre. */
+  readonly cover?: string
+  /** L'ordre du tableau est l'ordre de lecture. */
+  readonly tracks: readonly Track[]
+}
+
+/**
+ * Le disque du lecteur CD de la face B : tes propres morceaux.
+ *
+ * Les fichiers ne sont téléchargés qu'au moment où l'on appuie sur lecture —
+ * le poids de la page ne change pas, quelle que soit la longueur du disque.
+ * Une liste vide retire la section.
+ *
+ * TODO Erwan : les trois pistes ci-dessous sont des maquettes générées pour
+ * tester le lecteur, pas de la vraie musique. Remplace les fichiers de
+ * `public/audio/` par tes morceaux, puis les titres, durées et notes.
+ */
+export const disc: Disc = {
+  title: 'Maquettes',
+  year: '2026',
+  tracks: [
+    {
+      id: 'demo-1',
+      title: 'Démo 1',
+      duration: '0:27',
+      src: 'audio/demo-1.mp3',
+      note: 'Morceau de remplacement, généré pour tester le lecteur.',
+    },
+    { id: 'demo-2', title: 'Démo 2', duration: '0:24', src: 'audio/demo-2.mp3' },
+    { id: 'demo-3', title: 'Démo 3', duration: '0:17', src: 'audio/demo-3.mp3' },
+  ],
+}
+
 /**
  * Colophon : ce qui a servi à faire ce site.
  *

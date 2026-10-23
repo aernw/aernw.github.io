@@ -3,9 +3,11 @@ import { Discoveries, formatMonth } from '../components/Discoveries'
 import { Rail } from '../components/Rail'
 import { TopAlbums, TopArtists } from '../components/TopList'
 import { LessonList, MediaList, VinylGrid } from '../components/Personal'
+import { CdPlayer } from '../player/CdPlayer'
 import {
   aboutDraft,
   colophon,
+  disc,
   discoveries,
   labItems,
   lessons,
@@ -58,6 +60,17 @@ export function SideB() {
           ))}
         </div>
       </Section>
+
+      {disc.tracks.length > 0 ? (
+        <Section
+          id="musique"
+          title="Ma musique"
+          lead="Mes morceaux, à écouter sans quitter la page."
+          width="full"
+        >
+          <CdPlayer />
+        </Section>
+      ) : null}
 
       <Section
         id="lab"
