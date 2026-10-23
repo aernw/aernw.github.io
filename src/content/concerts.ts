@@ -49,6 +49,14 @@ export const concerts: readonly Concert[] = [
     endDate: '2026-06-07',
   },
   {
+    id: 'jeune-morty-2026',
+    title: 'Jeune Morty',
+    venue: 'La Cigale · Paris',
+    kind: 'Concert',
+    date: '2026-04-29',
+    image: '/covers/concerts/jeune-morty.webp',
+  },
+  {
     id: 'sim01-2026',
     title: 'Sim01',
     venue: 'FGO-Barbara · Paris',
