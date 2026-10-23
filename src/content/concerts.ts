@@ -65,6 +65,14 @@ export const concerts: readonly Concert[] = [
     image: '/covers/concerts/theodora.webp',
   },
   {
+    id: 'tiakola-2025',
+    title: 'Tiakola',
+    venue: 'Accor Arena · Paris',
+    kind: 'Concert',
+    date: '2025-03-27',
+    image: '/covers/concerts/tiakola.webp',
+  },
+  {
     id: 'houdi-2025',
     title: 'Houdi',
     venue: 'Zénith Paris – La Villette',
