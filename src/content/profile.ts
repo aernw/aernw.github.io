@@ -32,8 +32,8 @@ export const experiences: readonly Experience[] = [
       " Développement de l'API REST et de la base de données." +
       " Puis conception de la plateforme web des studios et de son assistant IA, Lyra.",
     highlights: [
-      "Refonte de toute l'interface de l'application iOS et Android : nouveau design system, parcours artiste et studio repensés, architecture React Native + expo, déploiement sur App Store et Play Store",
-      "Lyra, assistants IA de réservation : un agent Mistral à outils qui comprend la demande d'un artiste, cherche dans le catalogue des studios, lit les plannings et prépare la réservation.",
+      "Refonte de toute l'interface de l'application iOS et Android : nouveau design system, parcours artiste et studio repensés, architecture React Native + Expo, déploiement sur App Store et Play Store",
+      "Lyra, assistant IA de réservation : un agent Mistral à outils qui comprend la demande d'un artiste, cherche dans le catalogue des studios, lit les plannings et prépare la réservation.",
       'Plateforme web conçue sur Figma puis développée : espace studio (planning, réservations, équipe, finances) et réservation côté artiste, en ligne sur featuring.pro',
       'Réservation et paiement de bout en bout avec Stripe : validation par le studio, Apple Pay et Google Pay, remboursements, reversements Stripe Connect',
       "Correctifs d'un audit de sécurité de l'API : aucune donnée sensible renvoyée, validation de chaque requête, CORS restreint, webhooks Stripe traités une seule fois",
@@ -50,8 +50,8 @@ export const experiences: readonly Experience[] = [
     period: '09/2025 — 07/2026',
     brief: 'Migration d’une infrastructure fragmentée entre plusieurs fournisseurs vers une architecture unifiée sur AWS.',
     summary:
-      "Conception et pilotage de la migration de l'infrastructure " +
-      '(AWS + Vercel + Firebase + OVH) vers une architecture unifiée sur AWS avec un backend centralisé.',
+      "Conception et pilotage de la migration : l'infrastructure, répartie entre AWS, Vercel, Firebase " +
+      'et OVH, est regroupée autour d’un backend centralisé.',
     highlights: [
       "Refonte complète de l'intranet de l'entreprise : UI modernisée, automatisation de l'intégration HubSpot et Tiime avec Make",
       'Conception BDD et API REST (Django + MySQL) partagée sur 3 plateformes, en remplacement de Firebase',
@@ -68,8 +68,7 @@ export const experiences: readonly Experience[] = [
     period: '07/2024 — 12/2024',
     brief: 'Cadrage et pilotage d’un PoC d’IA au sein du département innovation.',
     summary:
-      "Cadrage et pilotage d'un projet IA au sein du département innovation : " +
-      "définition du périmètre et des livrables. " + "Utilisation de Ollama pour créer un agent IA capable de répondre aux questions des agents et du personnel sur les procédures internes.",
+      'Définition du périmètre et des livrables, puis réalisation du PoC avec Ollama.',
     highlights: [
       'Cadrage projet : étude de faisabilité, budget, matrice de risques',
       'Création d’un agent IA capable de répondre aux questions des agents et du personnel sur les procédures internes',
