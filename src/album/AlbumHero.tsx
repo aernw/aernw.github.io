@@ -3,13 +3,19 @@ import { albums, profile } from '../content'
 import type { Side } from '../content'
 import { AlbumCover } from './AlbumCover'
 import { Disc } from './Disc'
-import { NowPlayingIcon, PlayIcon, ShuffleIcon } from './icons'
+import { NowPlayingIcon, PlayIcon } from './icons'
 import { formatDuration, useReadingTimes } from './useReadingTimes'
 import { goToTrack } from './useTrackScroll'
 import './AlbumHero.css'
 
 /** Durée du demi-tour du disque avant de passer à l'autre côté. Alignée sur AlbumHero.css. */
 const TURN_MS = 560
+
+/** Libellés des deux côtés dans la barre du haut. */
+const SIDE_LABELS: Record<Side, string> = {
+  a: 'Mon profil',
+  b: 'En savoir plus sur moi',
+}
 
 interface AlbumHeroProps {
   readonly side: Side
@@ -51,34 +57,40 @@ export function AlbumHero({ side, active, onFlip }: AlbumHeroProps) {
     }, TURN_MS)
   }, [turning, onFlip])
 
-  const playRandom = () => {
-    const candidates = album.tracks.filter((_, index) => index !== active)
-    goToTrack(candidates[Math.floor(Math.random() * candidates.length)])
-  }
-
-  const totalSeconds = durations?.reduce((sum, value) => sum + value, 0) ?? null
-  const meta = [
-    profile.location,
-    `${album.tracks.length} titres`,
-    totalSeconds === null ? null : `${Math.max(1, Math.round(totalSeconds / 60))} min`,
-  ].filter((part) => part !== null)
-
   return (
     <header className="album" aria-labelledby="album-title">
       <div className="album__bleed" aria-hidden="true" />
 
-      <nav className="album__links" aria-label="Liens">
-        {profile.links.map((link) => (
-          <a
-            key={link.href}
-            href={link.href}
-            className="album__link"
-            {...(link.href.startsWith('mailto:') ? {} : { target: '_blank', rel: 'noreferrer noopener' })}
-          >
-            {link.label}
-          </a>
-        ))}
-      </nav>
+      <div className="album__bar">
+        {/* Pour qui n'aurait pas vu qu'on retourne le disque : les deux côtés,
+            nommés, en haut de page. */}
+        <nav className="album__sides" aria-label="Côtés du site">
+          {(['a', 'b'] as const).map((key) => (
+            <button
+              key={key}
+              type="button"
+              className={`album__side${key === side ? ' album__side--current' : ''}`}
+              aria-current={key === side ? 'page' : undefined}
+              onClick={key === side ? undefined : turn}
+            >
+              {SIDE_LABELS[key]}
+            </button>
+          ))}
+        </nav>
+
+        <nav className="album__links" aria-label="Liens">
+          {profile.links.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="album__link"
+              {...(link.href.startsWith('mailto:') ? {} : { target: '_blank', rel: 'noreferrer noopener' })}
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      </div>
 
       <div className="album__head">
         <button
@@ -100,16 +112,12 @@ export function AlbumHero({ side, active, onFlip }: AlbumHeroProps) {
             {profile.name}
           </h1>
           <p className="album__subtitle">{album.subtitle}</p>
-          <p className="album__meta">{meta.join('  ·  ')}</p>
+          <p className="album__meta">{profile.location}</p>
 
           <div className="album__actions">
             <button type="button" className="album__play" onClick={() => goToTrack(album.tracks[0])}>
               <PlayIcon size={18} />
               Lecture
-            </button>
-            <button type="button" className="album__shuffle" onClick={playRandom}>
-              <ShuffleIcon size={18} />
-              Section au hasard
             </button>
           </div>
         </div>
