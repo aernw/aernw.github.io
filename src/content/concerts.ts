@@ -28,7 +28,7 @@ export const concerts: readonly Concert[] = [
     id: 'arch-club-2026',
     title: 'Arch Club',
     venue: 'Élysée Montmartre · Paris',
-    kind: 'Concert',
+    kind: 'Soirée',
     date: '2026-10-10',
     image: '/covers/concerts/arch-club.webp',
   },

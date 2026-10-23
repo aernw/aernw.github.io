@@ -31,7 +31,7 @@ export function SideB() {
         </div>
       </Section>
 
-      <Section id="appris" title="Ce que j'ai appris" width="full">
+      <Section id="appris" title="Ce que j'ai appris en tant que développeur" width="full">
         <ol className="lessons">
           {lessons.map((lesson, index) => (
             <li key={lesson.id} className="lesson glass">
@@ -60,14 +60,14 @@ export function SideB() {
 
       <Section
         id="top"
-        title="Mon top de tous les temps"
+        title="Les albums et artistes qui m'ont marqués"
         lead="Cliquez sur un disque pour le sortir de l'étagère."
         width="full"
       >
         <TopShelf albums={topAlbums} artists={topArtists} />
       </Section>
 
-      <Section id="concerts" title="Concerts" lead="Les concerts et festivals que j'ai vus." width="full">
+      <Section id="concerts" title="Concerts" lead="Les concerts et festivals auxquels j'ai participé." width="full">
         <Concerts items={concerts} />
       </Section>
     </>

@@ -7,9 +7,9 @@ export const profile: Profile = {
   email: 'erwan.seytor@epitech.eu',
   availability: 'Heureux de participer à de nouveaux projets !',
   summary:
-    "Développeur en 4ème année à Epitech. Je viens de la programmation système (C/C++)." +
-    " J'ai pour passe-temps de créer des logiciels qui optimisent mon temps et celui des autres. Je suis aussi un passioné de musique : " +
-    "les deux se rejoignent plus souvent qu'on ne le croit.",
+    "Développeur en 4ème année à Epitech. J'aime aider les personnes à développer leurs idées et suis passionné par mon travail." +
+    " J'aime créer des logiciels et des plateformes qui permettent de faire gagner du temps aux utilisateurs et aux entreprises." +
+    " Ma passion principale est la musique et j'aime travailler sur des projets qui y sont liés de près ou de loin.",
   links: [
     { label: 'GitHub', href: 'https://github.com/aernw' },
     { label: 'LinkedIn', href: 'https://linkedin.com/in/erwan-seytor' },
@@ -22,19 +22,18 @@ export const experiences: readonly Experience[] = [
     id: 'featuring',
     role: 'Développeur fullstack',
     company: 'Featuring',
-    // La marque blanche sur Night de la charte, comme l'icône de l'app.
     logo: 'experiences/featuring-logo.svg',
     logoBackground: '#0D1112',
     location: 'Paris',
     period: "09/2026 — aujourd'hui",
-    brief: 'Seul développeur d’une startup qui relie artistes et studios : refonte de l’app mobile, plateforme web des studios et assistante IA Lyra.',
+    brief: 'Développeur d’une plateforme web et mobile qui vise à relier artistes et studios.',
     summary:
-      "Seul développeur d'une startup qui met en relation artistes et studios d'enregistrement. " +
-      "Reprise de l'application mobile et de l'API livrées par une agence, refonte complète de l'application, " +
-      'puis conception de la plateforme web des studios et de son assistante IA, Lyra.',
+      "Design et déploiement de l’application mobile (iOS et Android)." +
+      " Développement de l'API REST et de la base de données." +
+      " Puis conception de la plateforme web des studios et de son assistant IA, Lyra.",
     highlights: [
-      "Refonte de toute l'interface de l'application iOS et Android : nouveau design system, parcours artiste et studio séparés, mode sombre, builds TestFlight",
-      "Lyra, assistante IA de réservation : un agent Mistral à outils qui comprend la demande d'un artiste, cherche dans le vrai catalogue, lit les plannings et prépare la réservation, sans jamais inventer de studio ni de prix",
+      "Refonte de toute l'interface de l'application iOS et Android : nouveau design system, parcours artiste et studio repensés, architecture React Native + expo, déploiement sur App Store et Play Store",
+      "Lyra, assistants IA de réservation : un agent Mistral à outils qui comprend la demande d'un artiste, cherche dans le catalogue des studios, lit les plannings et prépare la réservation.",
       'Plateforme web conçue sur Figma puis développée : espace studio (planning, réservations, équipe, finances) et réservation côté artiste, en ligne sur featuring.pro',
       'Réservation et paiement de bout en bout avec Stripe : validation par le studio, Apple Pay et Google Pay, remboursements, reversements Stripe Connect',
       "Correctifs d'un audit de sécurité de l'API : aucune donnée sensible renvoyée, validation de chaque requête, CORS restreint, webhooks Stripe traités une seule fois",
@@ -49,13 +48,13 @@ export const experiences: readonly Experience[] = [
     logo: 'experiences/travelme-logo.webp',
     location: 'Paris',
     period: '09/2025 — 07/2026',
-    brief: 'Migration d’une infrastructure éclatée (AWS, Vercel, Firebase, OVH) vers une architecture unifiée sur AWS.',
+    brief: 'Migration d’une infrastructure fragmentée entre plusieurs fournisseurs vers une architecture unifiée sur AWS.',
     summary:
-      "Conception et pilotage de la migration d'une infrastructure fragmentée " +
+      "Conception et pilotage de la migration de l'infrastructure" +
       '(AWS + Vercel + Firebase + OVH) vers une architecture unifiée sur AWS avec un backend centralisé.',
     highlights: [
-      "Refonte complète de l'intranet : UI modernisée, intégrations HubSpot et Tiime avec Make",
-      'Conception BDD et API REST (Django + MySQL) partagée sur 3 plateformes, en remplacement de Firebase NoSQL',
+      "Refonte complète de l'intranet de l'entreprise : UI modernisée, automatisation de l'intégration HubSpot et Tiime avec Make",
+      'Conception BDD et API REST (Django + MySQL) partagée sur 3 plateformes, en remplacement de Firebase',
       'Améliorations UI/UX, déploiements AWS, migration Firebase, applications iOS et Android',
     ],
     stack: ['React', 'Next.js', 'Django', 'AWS', 'PostgreSQL', 'Firebase', 'OVH', 'GitHub Actions', 'Make'],
@@ -64,16 +63,16 @@ export const experiences: readonly Experience[] = [
     id: 'dilt',
     role: 'Chef de projet IA',
     company: 'DILT — Préfecture de Police',
-    // DILT n'a pas de logo propre : c'est l'emblème « PP » de la Préfecture de Police.
     logo: 'experiences/dilt-logo.webp',
     location: 'Paris',
     period: '07/2024 — 12/2024',
-    brief: 'Cadrage et pilotage d’un projet IA au sein du département innovation.',
+    brief: 'Cadrage et pilotage d’un PoC d’IA au sein du département innovation.',
     summary:
       "Cadrage et pilotage d'un projet IA au sein du département innovation : " +
-      'définition du périmètre et des livrables.',
+      "définition du périmètre et des livrables." + "Utilisation de Ollama pour créer un agent IA capable de répondre aux questions des agents et du personnel sur les procédures internes.",
     highlights: [
       'Cadrage projet : étude de faisabilité, budget, matrice de risques',
+      'Création d’un agent IA capable de répondre aux questions des agents et du personnel sur les procédures internes',
       "Animation de sessions de sensibilisation à l'IA pour les agents et le personnel",
     ],
   },
@@ -90,7 +89,6 @@ export const education: readonly Education[] = [
   {
     id: 'efrei',
     school: 'Efrei Paris',
-    // Le dôme du Panthéon seul : le logotype complet est trop large pour la tuile.
     logo: 'education/efrei-logo.webp',
     detail: 'Classe préparatoire, section internationale (cours en anglais)',
     period: '2022 — 2023',

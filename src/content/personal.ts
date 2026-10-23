@@ -12,18 +12,11 @@ export interface MediaItem {
   readonly title: string
   readonly author: string
   readonly kind: MediaKind
-  /** Une ou deux phrases. Ce qui vaut d'être lu, c'est l'avis, pas le titre. */
   readonly note?: string
   readonly year?: string
 }
 
-/**
- * Ce que tu lis et regardes.
- *
- * Les titres sont gardés en anglais : ce sont les éditions lues.
- * `year` est l'année de l'édition possédée, pas celle de la parution originale.
- * `note` est volontairement vide — à remplir à la main, livre par livre.
- */
+
 export const media: readonly MediaItem[] = [
   {
     id: 'blood-meridian',
@@ -127,22 +120,22 @@ export interface Lesson {
 export const lessons: readonly Lesson[] = [
   {
     id: 'lesson-1',
+    statement: 'N’aie pas peur de donner ton avis et tes recommandations, peu importe ta position dans l’entreprise.',
+    context: 'Toutes les personnes ont une sensibilité différente et peuvent avoir des idées ou des remarques intéressantes et utiles. Même si tu es junior, ton avis peut être précieux et aider à améliorer le produit ou le projet.',
+  },
+  {
+    id: 'lesson-2',
     statement: 'Il est important de passer tout le temps nécessaire sur l’architecture avant de coder : les futurs développeurs te remercieront.',
     context: 'Un projet construit sur des fondations fragiles et des coins d’ombres finira par demander beaucoup plus de temps pour être maintenu et de nouvelles features auront du mal à s’y intégrer si elles n’ont pas été anticipées dès le départ.',
   },
   {
-    id: 'lesson-2',
+    id: 'lesson-3',
     statement: '"Laisse le code plus propre que tu l’as trouvé."',
     context: '10 pour 1 : voici le ratio lecture/écriture de code des développeurs. Qu’il s’agisse d’un simple nom de variable, de simplifier une fonction ou d’un refactor : chaque amélioration sera très appréciée par les prochains développeurs qui passeront après toi.',
   },
   {
-    id: 'lesson-3',
+    id: 'lesson-4',
     statement: 'Une bonne interface se construit en se mettant dans la peau d’un utilisateur flemmard.',
     context: 'Pour qu’une interface soit utile à celui qui l’utilise, elle doit être pensée pour que les actions quotidiennes soient les plus simples et rapides possibles : limiter le nombre de clics, de pages, de champs à remplir à la main, ...',
   },
-  {
-    id: 'lesson-4',
-    statement: 'N’aie pas peur de donner ton avis et tes recommandations, peu importe ta position dans l’entreprise.',
-    context: 'Toutes les personnes ont une sensibilité différente et peuvent avoir des idées ou des remarques intéressantes et utiles. Même si tu es junior, ton avis peut être précieux et aider à améliorer le produit ou le projet.',
-  }
 ]

@@ -1,22 +1,7 @@
-/**
- * Contenu du côté Perso (artistique).
- *
- * ⚠️ Ce fichier contient des emplacements à remplir par Erwan. Rien n'y est inventé :
- * les champs vides sont vides, et les sections concernées ne s'affichent pas tant
- * qu'ils le sont. Voir les TODO ci-dessous.
- */
-
-/**
- * Le texte qui relie les deux côtés. C'est la section la plus personnelle du site
- * et celle que les gens retiennent.
- *
- * TODO Erwan : réécris ce texte avec tes mots. Le brouillon ci-dessous n'est là que
- * pour tenir la mise en page — il dit une banalité, pas ce que tu penses vraiment.
- */
 export const aboutDraft = {
   isDraft: true,
   body: [
-    'Je fais de la musique et j’écris du code, et j’ai toujours eu du mal à séparer les deux.',
-    'Les deux demandent la même chose : une forme claire, une contrainte acceptée, et le bon moment pour laisser le travail respirer.',
+    'Un parcours c\'est bien mais une personnalité marquante c\'est mieux.',
+    'Je ne suis pas un simple développeur, j\'adore partager aux gens ce que j\'aime, et voici justement un endroit où je peux le faire.',
   ],
 } as const

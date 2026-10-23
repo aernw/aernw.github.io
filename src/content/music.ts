@@ -27,24 +27,6 @@ export interface RecentFind {
   readonly href?: string
 }
 
-/**
- * Mes découvertes récentes : musique, films et séries, outils et apps.
- * De la plus récente à la plus ancienne.
- *
- * TODO Erwan : remplis cette liste. Tant qu'elle est vide, la section affiche
- * un court message à la place des cartes. Exemple à copier :
- *
- *   {
- *     id: 'titre-artiste',
- *     kind: 'musique',
- *     title: 'Titre de l’album',
- *     by: 'Artiste',
- *     year: '2026',
- *     note: 'Pourquoi je le recommande, en une ou deux phrases.',
- *     cover: '/covers/finds/titre-artiste.webp',
- *     href: 'https://open.spotify.com/…',
- *   },
- */
 export const recentFinds: readonly RecentFind[] = []
 
 export interface FavouriteAlbum {
@@ -57,17 +39,6 @@ export interface FavouriteAlbum {
   readonly href?: string
 }
 
-/**
- * Top albums de tous les temps.
- *
- * L'ordre du tableau EST le classement — la première entrée est le n° 1.
- * Pas de notes en étoiles : sur un top all-time, tout serait à cinq étoiles et
- * la note n'apprendrait rien. La position seule porte le jugement.
- *
- * Classement établi d'après les écoutes cumulées (stats.fm, toute la période).
- * Le champ `note` est volontairement vide : à remplir à la main, une ligne par
- * disque, quand l'envie vient.
- */
 export const topAlbums: readonly FavouriteAlbum[] = [
   {
     id: 'bladee-333',

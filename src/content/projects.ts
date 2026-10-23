@@ -30,7 +30,6 @@ export const projects: readonly Project[] = [
     sides: ['a', 'b'],
     accent: '#9c57df',
     logo: 'projects/stemhub-logo.svg',
-    // Le logo en pleine pochette : le même dessin, sur un carré sans coins arrondis.
     cover: 'projects/stemhub-cover.svg',
   },
   {
@@ -49,7 +48,6 @@ export const projects: readonly Project[] = [
     sides: ['a'],
     accent: '#ff3ea5',
     logo: 'projects/music-masters-logo.webp',
-    // L'icône du site (music-masters.trade/icon.svg), carrée pour remplir la pochette.
     cover: 'projects/music-masters-cover.svg',
   },
   {
@@ -67,8 +65,6 @@ export const projects: readonly Project[] = [
     year: '2025',
     sides: ['a'],
     accent: '#3ecfa0',
-    // Le jeu n'a pas de logo : son emblème est le vaisseau du joueur, repris du
-    // dépôt (assets/spaceships/player_blue.png), sur le violet de ses niveaux.
     cover: 'projects/rtype-cover.webp',
   },
   {
@@ -87,8 +83,6 @@ export const projects: readonly Project[] = [
     year: '2026',
     sides: ['a'],
     accent: '#4b8bf5',
-    // Logo repris du dépôt (frontend/web/src/assets/logo), vectorisé pour rester
-    // net en grand : bleu nuit dans les notes, blanc sur bleu nuit en pochette.
     logo: 'projects/area-logo.svg',
     cover: 'projects/area-cover.svg',
   },
@@ -106,8 +100,6 @@ export const projects: readonly Project[] = [
     year: '2025',
     sides: ['a'],
     accent: '#5fb87a',
-    // Logos de Onepoint, organisateur du hackathon, repris de groupeonepoint.com :
-    // le monogramme dans les notes, le logo complet sur la pochette.
     logo: 'projects/onepoint-logo.webp',
     cover: 'projects/onepoint-cover.webp',
   },
