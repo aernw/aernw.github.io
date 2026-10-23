@@ -91,7 +91,7 @@ export function AlbumHero({ side, active, onFlip }: AlbumHeroProps) {
             <Disc label={`Erwan Seytor · ${album.name}`} printed={side === 'b'} />
           </span>
           <span className="album__cover">
-            <AlbumCover album={album} hint="Cliquer pour changer de côté" />
+            <AlbumCover album={album} flippable />
           </span>
         </button>
 

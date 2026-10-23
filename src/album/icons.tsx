@@ -77,6 +77,22 @@ export function ShuffleIcon(props: IconProps) {
 }
 
 /** Égaliseur : marque la piste en cours dans les listes. */
+/** Flèche circulaire : un clic retourne le disque. */
+export function FlipIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path
+        d="M21 12a9 9 0 1 1-9-9c2.5 0 4.9 1 6.7 2.7L21 8M21 3v5h-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  )
+}
+
 export function NowPlayingIcon(props: IconProps) {
   return (
     <Svg {...props}>
