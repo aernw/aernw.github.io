@@ -117,12 +117,16 @@ p {
   color: var(--ink);
   border-radius: var(--radius-pill);
   box-shadow: var(--shadow-float);
-  transform: translateY(-200%);
-  transition: transform var(--duration-fast) var(--ease);
+  /* Masqué par découpe, pas en le poussant au-dessus de la page : le rebond du
+     défilement en haut de page le dévoilerait. */
+  clip-path: inset(50%);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease);
 }
 
 .skip-link:focus-visible {
-  transform: translateY(0);
+  clip-path: none;
+  opacity: 1;
 }
 
 .visually-hidden {
