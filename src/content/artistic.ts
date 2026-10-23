@@ -7,7 +7,7 @@
  */
 
 /**
- * Le texte qui relie les deux faces. C'est la section la plus personnelle du site
+ * Le texte qui relie les deux côtés. C'est la section la plus personnelle du site
  * et celle que les gens retiennent.
  *
  * TODO Erwan : réécris ce texte avec tes mots. Le brouillon ci-dessous n'est là que
@@ -20,21 +20,6 @@ export const aboutDraft = {
     'Les deux demandent la même chose : une forme claire, une contrainte acceptée, et le bon moment pour laisser le travail respirer.',
   ],
 } as const
-
-/**
- * Section « now » : ce sur quoi tu travailles en ce moment.
- * Elle donne une raison de revenir sur le site — à condition de la tenir à jour.
- *
- * TODO Erwan : remplis-la, ou on retire la section.
- */
-export const now = {
-  updated: 'août 2026',
-  items: [
-    'Nouveau morceau inspiré par les ambiances de nuit et les synthés analogiques.',
-    'Travail sur un petit outil de génération visuelle pour mes sessions de création.',
-    'Mise en place d’une archive de morceaux enregistrés en studio et en live.',
-  ] as readonly string[],
-}
 
 /** Colophon : ce qui a servi à faire ce site. */
 export const colophon: readonly {

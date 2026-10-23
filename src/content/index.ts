@@ -14,7 +14,7 @@ export { projects } from './projects'
 export { albums } from './album'
 export type { Album, Track } from './album'
 export { labItems } from './lab'
-export { aboutDraft, colophon, now } from './artistic'
+export { aboutDraft, colophon } from './artistic'
 
 export { discoveries, topAlbums, topArtists, vinyls } from './music'
 export type { Discovery, FavouriteAlbum, FavouriteArtist, Vinyl } from './music'
