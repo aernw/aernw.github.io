@@ -1,11 +1,12 @@
 import type { CSSProperties } from 'react'
 import type { Album } from '../content'
+import { FlipIcon } from './icons'
 import './AlbumCover.css'
 
 interface AlbumCoverProps {
   readonly album: Album
-  /** Petite indication posée en bas à droite de la pochette. */
-  readonly hint?: string
+  /** Affiche, en bas à droite, l'icône qui dit qu'un clic retourne le disque. */
+  readonly flippable?: boolean
 }
 
 /**
@@ -13,7 +14,7 @@ interface AlbumCoverProps {
  * nom en grand, une petite ligne en bas. Dessinée en CSS, sans image : elle
  * suit la palette quand on retourne le disque.
  */
-export function AlbumCover({ album, hint }: AlbumCoverProps) {
+export function AlbumCover({ album, flippable = false }: AlbumCoverProps) {
   // Un nom court s'écrit plus grand : « Pro » et « Perso » occupent à peu près
   // la même largeur sur la pochette.
   const nameStyle: CSSProperties = { fontSize: album.name.length <= 3 ? '38cqi' : '30cqi' }
@@ -25,7 +26,11 @@ export function AlbumCover({ album, hint }: AlbumCoverProps) {
       </span>
       <span className="album-cover__foot">
         <span className="album-cover__line">{album.coverLine}</span>
-        {hint === undefined ? null : <span className="album-cover__hint">↻ {hint}</span>}
+        {flippable ? (
+          <span className="album-cover__flip">
+            <FlipIcon size={22} />
+          </span>
+        ) : null}
       </span>
     </span>
   )
