@@ -131,7 +131,6 @@ export const topAlbums: readonly FavouriteAlbum[] = [
     title: 'YuriMh',
     year: '2021',
     cover: '/covers/albums/yuri-online-mh-yurimh.webp',
-    note: 'Un EP '
   },
   {
     id: 'lancey-foux-friend-or-foux',
