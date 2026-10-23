@@ -15,9 +15,20 @@
   margin: 0;
 }
 
+/*
+ * Le fond du <html> est ce qu'on voit quand on tire la page au-delà de ses
+ * bords. En haut de page, il prend la teinte de la pochette, pour qu'un rebond
+ * ne dévoile pas une bande de --ground au-dessus d'elle ; plus bas, il revient
+ * à --ground, pour le rebond en bas de page.
+ */
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  background: var(--ground);
+}
+
+html[data-at-top] {
+  background: var(--art-top);
 }
 
 @media (prefers-reduced-motion: reduce) {

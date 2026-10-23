@@ -10,25 +10,6 @@
   text-wrap: pretty;
 }
 
-.intro__availability {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-top: var(--space-4);
-  font-size: var(--text-body-lg);
-  font-weight: 600;
-  color: var(--accent);
-}
-
-.status-dot {
-  flex-shrink: 0;
-  width: 0.625rem;
-  height: 0.625rem;
-  border-radius: 50%;
-  background: #34c759;
-  box-shadow: 0 0 0.6rem rgba(52, 199, 89, 0.55);
-}
-
 /* ── Parcours ─────────────────────────────────────────────────── */
 
 .jobs {
