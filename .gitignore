@@ -1,6 +1,5 @@
 node_modules
 dist
 .DS_Store
-.claude/*
-!.claude/settings.json
+.claude
 modèles/
