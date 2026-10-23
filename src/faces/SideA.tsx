@@ -3,6 +3,13 @@ import { ProjectShelf } from '../components/ProjectShelf'
 import { education, experiences, profile, projects, skillGroups } from '../content'
 import './SideA.css'
 
+/** Nombre de technologies affichées sous chaque expérience. */
+const STACK_PREVIEW = 5
+
+/** Les liens externes s'ouvrent dans un nouvel onglet ; le mail, non. */
+const externalProps = (href: string) =>
+  href.startsWith('mailto:') ? {} : { target: '_blank', rel: 'noreferrer noopener' }
+
 /**
  * Côté Pro.
  *
@@ -12,100 +19,114 @@ import './SideA.css'
  */
 export function SideA() {
   const visible = projects.filter((project) => project.sides.includes('a'))
+  const email = profile.links.find((link) => link.href.startsWith('mailto:'))
 
   return (
     <>
-      <Section id="intro" title="À propos" hideTitle width="text">
+      <Section id="intro" title="À propos" hideTitle width="wide">
         <p className="intro__summary">{profile.summary}</p>
-        <p className="intro__availability">{profile.availability}</p>
+        <p className="intro__availability">
+          <span className="status-dot" aria-hidden="true" />
+          {profile.availability}
+        </p>
       </Section>
 
       <Section id="projets" title="Projets" width="full">
         <ProjectShelf projects={visible} />
       </Section>
 
-      <Section id="parcours" title="Parcours" stickyTitle>
-        <ol className="timeline">
-          {experiences.map((experience) => (
-            <li key={experience.id} className="timeline__item">
-              <div className="timeline__head">
-                <h3 className="timeline__role">
-                  {/* Décoratif : le nom de l'entreprise suit dans le titre. */}
-                  {experience.logo === undefined ? null : (
-                    <img
-                      className="logo-tile timeline__logo"
-                      src={experience.logo}
-                      alt=""
-                      decoding="async"
-                      style={
-                        experience.logoBackground === undefined
-                          ? undefined
-                          : { background: experience.logoBackground }
-                      }
-                    />
-                  )}
-                  {experience.role} — {experience.company}
-                </h3>
-                <span className="timeline__period">{experience.period}</span>
+      <Section id="parcours" title="Parcours" width="full">
+        <ol className="jobs">
+          {experiences.map((job) => (
+            <li key={job.id} className="job glass">
+              {/* Décoratif : l'entreprise est nommée dans le titre. */}
+              {job.logo === undefined ? null : (
+                <span
+                  className="job__logo"
+                  style={job.logoBackground === undefined ? undefined : { background: job.logoBackground }}
+                >
+                  <img src={job.logo} alt="" decoding="async" />
+                </span>
+              )}
+              <div className="job__body">
+                <div className="job__head">
+                  <h3 className="job__role">
+                    {job.role} — {job.company}
+                  </h3>
+                  <span className="job__period">{job.period}</span>
+                </div>
+                <p className="job__brief">{job.brief}</p>
+                {job.stack && job.stack.length > 0 ? (
+                  <ul className="job__stack" aria-label="Technologies">
+                    {job.stack.slice(0, STACK_PREVIEW).map((item) => (
+                      <li key={item} className="chip">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
-              <p className="timeline__summary">{experience.summary}</p>
-              <ul className="timeline__highlights">
-                {experience.highlights.map((highlight) => (
-                  <li key={highlight}>{highlight}</li>
-                ))}
-              </ul>
-              {experience.stack ? (
-                <p className="timeline__stack">{experience.stack.join(' · ')}</p>
-              ) : null}
             </li>
           ))}
         </ol>
 
-        <ol className="education">
+        <h3 className="eyebrow schools__title">Formation</h3>
+        <ol className="schools">
           {education.map((entry) => (
-            <li
-              key={entry.id}
-              className={`education__item${entry.logo === undefined ? '' : ' education__item--logo'}`}
-            >
-              {/* Décoratif : le nom de l'école suit. */}
+            <li key={entry.id} className="school glass">
               {entry.logo === undefined ? null : (
-                <img className="logo-tile education__logo" src={entry.logo} alt="" decoding="async" />
+                <span className="school__logo">
+                  <img src={entry.logo} alt="" decoding="async" />
+                </span>
               )}
-              <span className="education__school">{entry.school}</span>
-              <span className="education__detail">{entry.detail}</span>
-              <span className="education__period">{entry.period}</span>
+              <span className="school__name">{entry.school}</span>
+              <span className="school__detail">{entry.detail}</span>
+              <span className="school__period">{entry.period}</span>
             </li>
           ))}
         </ol>
       </Section>
 
-      <Section id="competences" title="Compétences">
-        <div className="skills">
+      <Section id="competences" title="Compétences" width="full">
+        <div className="skills glass">
           {skillGroups.map((group) => (
             <div key={group.id} className="skills__group">
-              <h3 className="skills__label">{group.label}</h3>
-              <p className="skills__items">{group.items.join(' · ')}</p>
+              <h3 className="eyebrow">{group.label}</h3>
+              <ul className="skills__items">
+                {group.items.map((item) => (
+                  <li key={item} className="chip">
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
       </Section>
 
-      <Section id="contact" title="Contact" lead={profile.availability}>
-        <ul className="contact__links">
-          {profile.links.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                {...(link.href.startsWith('mailto:')
-                  ? {}
-                  : { target: '_blank', rel: 'noreferrer noopener' })}
-                className="contact__link"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+      <Section id="contact" title="Contact" width="full">
+        <div className="contact glass">
+          <p className="contact__lead">{profile.availability}</p>
+          {email === undefined ? null : (
+            <a className="contact__email" href={email.href}>
+              {profile.email}
+            </a>
+          )}
+          <ul className="contact__links">
+            {/* Le mail d'abord : c'est le geste principal. */}
+            {[...profile.links].sort((a, b) => Number(b === email) - Number(a === email)).map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  className={`contact__link${link === email ? ' contact__link--primary' : ''}`}
+                  {...externalProps(link.href)}
+                >
+                  {link === email ? 'Écrire un email' : link.label} ↗
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </Section>
     </>
   )
