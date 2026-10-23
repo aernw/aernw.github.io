@@ -28,14 +28,21 @@
   transition: background var(--duration-slow) var(--ease);
 }
 
-/* ── Liens ──────────────────────────────────────────────────────── */
+/* ── Barre du haut : les deux côtés à gauche, les liens à droite ── */
 
+.album__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.album__sides,
 .album__links {
   display: flex;
-  justify-content: flex-end;
   gap: 0.25rem;
   width: fit-content;
-  margin-left: auto;
   padding: 0.375rem;
   border-radius: var(--radius-pill);
   background: var(--glass-on-art);
@@ -45,9 +52,33 @@
 }
 
 /* Perso : verre sombre et neutre, pour ne pas prendre la teinte bleutée de la pochette. */
+:root[data-side='b'] .album__sides,
 :root[data-side='b'] .album__links {
   background: rgba(22, 22, 27, 0.45);
   border-color: rgba(255, 255, 255, 0.16);
+}
+
+.album__side {
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-micro);
+  font-weight: 600;
+  color: var(--art-ink);
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    color var(--duration-fast) var(--ease);
+}
+
+.album__side:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Le côté affiché : une pastille pleine, comme un onglet sélectionné. */
+.album__side--current,
+.album__side--current:hover {
+  color: var(--art-base);
+  background: var(--art-ink);
+  cursor: default;
 }
 
 .album__link {
