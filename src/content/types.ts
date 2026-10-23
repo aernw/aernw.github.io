@@ -42,10 +42,11 @@ export interface Experience {
   readonly logoBackground?: string
   readonly location: string
   readonly period: string
-  /** Une phrase : ce qui est affiché dans la section Parcours. */
+  /** Une phrase d'accroche, en tête de la carte dans la section Parcours. */
   readonly brief: string
-  /** Version longue, gardée pour référence (CV, futures pages). */
+  /** La description, affichée sous l'accroche. */
   readonly summary: string
+  /** Les réalisations, affichées en liste sous la description. */
   readonly highlights: readonly string[]
   /** Les premières technologies sont affichées en étiquettes : mets les plus parlantes en tête. */
   readonly stack?: readonly string[]
