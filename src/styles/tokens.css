@@ -64,7 +64,7 @@
   --space-5: 4rem;
   --space-6: 6rem;
   /* Respiration entre les sections : large, puisque rien ne les sépare visuellement. */
-  --space-section: clamp(6rem, 14vh, 12rem);
+  --space-section: clamp(4rem, 9vh, 7rem);
 
   /* La mesure s'applique au TEXTE, jamais aux sections : c'est ce qui permet
      d'occuper toute la largeur sans rendre les paragraphes illisibles. */
@@ -91,6 +91,8 @@
   --art-4: #ff3ea5;
   /* Texte posé sur la pochette et sur le haut de page qu'elle teinte. */
   --art-ink: #ffffff;
+  /* Teinte moyenne du haut de la pochette : couleur du rebond au-dessus de la page. */
+  --art-top: #374cb3;
 
   /* Verre : fond translucide, flou de ce qui passe dessous, liseré clair. */
   --glass-fill: rgba(255, 255, 255, 0.55);
@@ -132,6 +134,7 @@
   --art-3: #3c3f4a;
   --art-4: #e0d2ff;
   --art-ink: #f4f4f7;
+  --art-top: #636782;
 
   --glass-fill: rgba(24, 24, 29, 0.55);
   --glass-fill-strong: rgba(24, 24, 29, 0.72);

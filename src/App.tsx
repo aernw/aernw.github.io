@@ -51,6 +51,18 @@ function Faces() {
     return () => window.clearTimeout(timer)
   }, [side, renderedSide])
 
+  // Haut de page : le rebond au-dessus de la pochette prend sa teinte (base.css).
+  useEffect(() => {
+    const root = document.documentElement
+    const update = () => root.toggleAttribute('data-at-top', window.scrollY < window.innerHeight / 2)
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', update)
+      root.removeAttribute('data-at-top')
+    }
+  }, [])
+
   useScrollTurn()
   const scroll = useTrackScroll(albums[renderedSide].tracks)
 
