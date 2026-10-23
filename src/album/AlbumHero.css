@@ -201,8 +201,7 @@
   margin-top: var(--space-2);
 }
 
-.album__play,
-.album__shuffle {
+.album__play {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -222,21 +221,11 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
-.album__shuffle {
-  color: var(--art-ink);
-  background: var(--glass-on-art);
-  border: 1px solid var(--glass-on-art-edge);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-}
-
-.album__play:hover,
-.album__shuffle:hover {
+.album__play:hover {
   transform: translateY(-1px);
 }
 
-.album__play:focus-visible,
-.album__shuffle:focus-visible {
+.album__play:focus-visible {
   outline-color: var(--art-ink);
 }
 

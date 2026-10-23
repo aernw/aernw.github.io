@@ -3,7 +3,7 @@ import { albums, profile } from '../content'
 import type { Side } from '../content'
 import { AlbumCover } from './AlbumCover'
 import { Disc } from './Disc'
-import { NowPlayingIcon, PlayIcon, ShuffleIcon } from './icons'
+import { NowPlayingIcon, PlayIcon } from './icons'
 import { formatDuration, useReadingTimes } from './useReadingTimes'
 import { goToTrack } from './useTrackScroll'
 import './AlbumHero.css'
@@ -56,18 +56,6 @@ export function AlbumHero({ side, active, onFlip }: AlbumHeroProps) {
       onFlip()
     }, TURN_MS)
   }, [turning, onFlip])
-
-  const playRandom = () => {
-    const candidates = album.tracks.filter((_, index) => index !== active)
-    goToTrack(candidates[Math.floor(Math.random() * candidates.length)])
-  }
-
-  const totalSeconds = durations?.reduce((sum, value) => sum + value, 0) ?? null
-  const meta = [
-    profile.location,
-    `${album.tracks.length} titres`,
-    totalSeconds === null ? null : `${Math.max(1, Math.round(totalSeconds / 60))} min`,
-  ].filter((part) => part !== null)
 
   return (
     <header className="album" aria-labelledby="album-title">
@@ -124,16 +112,12 @@ export function AlbumHero({ side, active, onFlip }: AlbumHeroProps) {
             {profile.name}
           </h1>
           <p className="album__subtitle">{album.subtitle}</p>
-          <p className="album__meta">{meta.join('  ·  ')}</p>
+          <p className="album__meta">{profile.location}</p>
 
           <div className="album__actions">
             <button type="button" className="album__play" onClick={() => goToTrack(album.tracks[0])}>
               <PlayIcon size={18} />
               Lecture
-            </button>
-            <button type="button" className="album__shuffle" onClick={playRandom}>
-              <ShuffleIcon size={18} />
-              Section au hasard
             </button>
           </div>
         </div>

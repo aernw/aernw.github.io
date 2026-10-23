@@ -61,21 +61,6 @@ export function ListIcon(props: IconProps) {
   )
 }
 
-export function ShuffleIcon(props: IconProps) {
-  return (
-    <Svg {...props}>
-      <path
-        d="M3 7h3.5c2 0 3.2 1 4.3 2.8l2.4 4.4C14.3 16 15.5 17 17.5 17H21M3 17h3.5c2 0 3.2-1 4.3-2.8M13.2 9.8C14.3 8 15.5 7 17.5 7H21M18.5 4.5 21 7l-2.5 2.5M18.5 14.5 21 17l-2.5 2.5"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </Svg>
-  )
-}
-
 /** Égaliseur : marque la piste en cours dans les listes. */
 export function NowPlayingIcon(props: IconProps) {
   return (
