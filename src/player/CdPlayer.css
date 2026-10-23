@@ -1,0 +1,364 @@
+/*
+ * Le lecteur et sa liste de pistes.
+ *
+ * Le boîtier est un objet, comme le walkman : graphite, avec son propre
+ * afficheur ambré. Seules les commandes reprennent l'accent de la face, puisque
+ * ce sont elles qui sont actionnables.
+ */
+
+.cd-stage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-5) clamp(var(--space-4), 7vw, var(--space-6));
+}
+
+/* ── Boîtier ──────────────────────────────────────────────────── */
+
+.cd-player {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: clamp(17rem, 26vw, 22rem);
+  padding: 1rem 1rem 1.25rem;
+  color: #f7f3e8;
+  /* Le halo de section n'a rien à faire sur un objet opaque. */
+  text-shadow: none;
+  background: linear-gradient(165deg, #2c2822 0%, #1d1a16 55%, #171512 100%);
+  border-radius: 2.4rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+/* Le logement du disque, creusé dans le boîtier. */
+.cd-player__well {
+  position: relative;
+  padding: 3%;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, #0c0b09 62%, #15130f 100%);
+  border-radius: 50%;
+  box-shadow:
+    inset 0 3px 14px rgba(0, 0, 0, 0.75),
+    0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* L'axe qui tient le disque par son trou central. */
+.cd-player__spindle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  background: radial-gradient(
+    circle,
+    #9b978f 0 18%,
+    #3b3731 21% 36%,
+    #b1ada4 40%,
+    #6a665e 68%,
+    #2d2a25 100%
+  );
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Afficheur ────────────────────────────────────────────────── */
+
+.cd-lcd {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0.7rem 0.95rem 0.6rem;
+  font-family: var(--font-mono);
+  color: #ffb54d;
+  text-shadow: 0 0 6px rgba(255, 170, 60, 0.45);
+  background: #0b0a08;
+  border-radius: 0.9rem;
+  box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.8);
+}
+
+.cd-lcd__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.cd-lcd__cell--end {
+  align-items: flex-end;
+}
+
+.cd-lcd__label {
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+.cd-lcd__value {
+  font-size: 1.6rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* En pause, le temps clignote : c'est ce que font les vrais lecteurs. */
+.cd-lcd__value--blink {
+  animation: cd-lcd-blink 1s steps(1) infinite;
+}
+
+@keyframes cd-lcd-blink {
+  50% {
+    opacity: 0.18;
+  }
+}
+
+/* ── Position ─────────────────────────────────────────────────── */
+
+.cd-player__seek {
+  --progress: 0%;
+  width: 100%;
+  height: 1.25rem;
+  margin: -0.25rem 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+}
+
+.cd-player__seek::-webkit-slider-runnable-track {
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    var(--accent) var(--progress),
+    rgba(247, 243, 232, 0.14) var(--progress)
+  );
+  border-radius: 2px;
+}
+
+.cd-player__seek::-moz-range-track {
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    var(--accent) var(--progress),
+    rgba(247, 243, 232, 0.14) var(--progress)
+  );
+  border-radius: 2px;
+}
+
+.cd-player__seek::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  margin-top: -4px;
+  background: #f7f3e8;
+  border-radius: 50%;
+  appearance: none;
+}
+
+.cd-player__seek::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: #f7f3e8;
+  border: none;
+  border-radius: 50%;
+}
+
+.cd-player__seek:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+/* ── Touches ──────────────────────────────────────────────────── */
+
+.cd-player__controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.cd-key {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  color: #f7f3e8;
+  background: #2f2a23;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 0 rgba(0, 0, 0, 0.4);
+  transition:
+    background-color var(--duration-fast) var(--ease),
+    transform var(--duration-fast) var(--ease);
+}
+
+.cd-key svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.cd-key:hover:not(:disabled) {
+  background: #3b352c;
+}
+
+.cd-key:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.cd-key:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
+.cd-key--play {
+  width: 3.3rem;
+  height: 3.3rem;
+  color: #17150f;
+  background: var(--accent);
+}
+
+.cd-key--play:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.cd-key--play svg {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+/* ── Liste des pistes ─────────────────────────────────────────── */
+
+.cd-notes {
+  flex: 1 1 20rem;
+  max-width: 34rem;
+}
+
+.cd-notes__title {
+  font-size: var(--text-heading);
+}
+
+.cd-notes__meta {
+  margin-top: 0.4rem;
+  font-size: var(--text-small);
+  color: var(--ink-faint);
+}
+
+.tracklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-top: var(--space-3);
+}
+
+.tracklist__button {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--space-2);
+  width: calc(100% + 1.5rem);
+  margin-inline: -0.75rem;
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  border-radius: 0.75rem;
+  transition: background-color var(--duration-fast) var(--ease);
+}
+
+.tracklist__button:hover {
+  background: var(--surface);
+}
+
+.tracklist__number,
+.tracklist__duration {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-faint);
+}
+
+.tracklist__number {
+  font-size: var(--text-micro);
+}
+
+.tracklist__duration {
+  font-size: var(--text-small);
+}
+
+.tracklist__title {
+  font-size: var(--text-body-lg);
+  color: var(--ink-muted);
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.tracklist__button:hover .tracklist__title,
+.tracklist__item--current .tracklist__title {
+  color: var(--ink);
+}
+
+.tracklist__item--current .tracklist__number {
+  color: var(--accent);
+}
+
+.tracklist__note {
+  max-width: var(--measure);
+  padding: 0 0 0.4rem calc(2.25rem + var(--space-2));
+  font-size: var(--text-small);
+  color: var(--ink-faint);
+}
+
+/* Trois barres à la place du numéro de la piste qui joue. */
+.tracklist__bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 0.8rem;
+}
+
+.tracklist__bars span {
+  width: 3px;
+  height: 40%;
+  background: var(--accent);
+  border-radius: 1px;
+  animation: tracklist-bars 0.9s var(--ease) infinite alternate;
+}
+
+.tracklist__bars span:nth-child(2) {
+  animation-delay: -0.35s;
+}
+
+.tracklist__bars span:nth-child(3) {
+  animation-delay: -0.6s;
+}
+
+@keyframes tracklist-bars {
+  from {
+    height: 25%;
+  }
+  to {
+    height: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-key,
+  .tracklist__button,
+  .tracklist__title {
+    transition: none;
+  }
+
+  .cd-key:active:not(:disabled) {
+    transform: none;
+  }
+
+  .cd-lcd__value--blink,
+  .tracklist__bars span {
+    animation: none;
+  }
+
+  .tracklist__bars span:nth-child(2) {
+    height: 100%;
+  }
+
+  .tracklist__bars span:nth-child(3) {
+    height: 65%;
+  }
+}

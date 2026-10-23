@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { SideProvider, useSide } from './side/SideContext'
 import { Walkman } from './walkman/Walkman'
+import { PlayerProvider } from './player/PlayerContext'
+import { MiniPlayer } from './player/MiniPlayer'
 import { SideA } from './faces/SideA'
 import { SideB } from './faces/SideB'
 import { profile } from './content'
@@ -63,6 +65,10 @@ function Faces() {
         </div>
       </main>
 
+      {/* Hors de `main` : pendant le retournement, `.page` est transformée, et
+          un élément fixe à l'intérieur se calerait sur elle plutôt que sur l'écran. */}
+      <MiniPlayer />
+
       <footer className="footer">
         <p>
           © {new Date().getFullYear()} {profile.name}
@@ -75,7 +81,9 @@ function Faces() {
 export function App() {
   return (
     <SideProvider>
-      <Faces />
+      <PlayerProvider>
+        <Faces />
+      </PlayerProvider>
     </SideProvider>
   )
 }
