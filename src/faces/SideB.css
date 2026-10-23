@@ -1,91 +1,83 @@
-/* Côté Perso : mêmes structures que le côté Pro, plus d'air et de contraste. */
+/* ── À propos ─────────────────────────────────────────────────── */
 
-/* Même traitement que « À propos » côté Pro : le texte d'introduction a sa
-   propre section, alignée à gauche sur la colonne de lecture. */
-.intro__about {
+.about {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  font-size: var(--text-title);
-  line-height: 1.3;
-  letter-spacing: var(--tracking-title);
-  color: var(--ink);
+  padding-top: clamp(3rem, 7vw, 6rem);
+}
+
+.about__quote {
+  position: absolute;
+  top: -0.15em;
+  left: -0.05em;
+  font-size: clamp(8rem, 16vw, 14rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.35;
+}
+
+.about__lead {
+  position: relative;
+  max-width: 26ch;
+  font-size: clamp(1.875rem, 3.6vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
   text-wrap: pretty;
 }
 
-.section__placeholder {
-  max-width: var(--measure);
-  padding: var(--space-3);
-  color: var(--ink-faint);
-  background: var(--surface);
-  border-radius: var(--radius-card);
-}
-
-/* ── Lab ──────────────────────────────────────────────────────── */
-
-/* Flex plutôt que grille : les éléments ont des largeurs variables, ce qui
-   évite les rangées parfaitement régulières qui font « catalogue ». */
-.lab {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-5) var(--space-4);
-}
-
-.lab__item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  flex: 1 1 20rem;
-  max-width: 34rem;
-}
-
-/* Un élément sur trois prend plus de place : la respiration devient irrégulière. */
-.lab__item:nth-child(3n + 1) {
-  flex-basis: 28rem;
-}
-
-.lab__name {
-  font-size: var(--text-heading);
-}
-
-.lab__description {
+.about__line {
+  max-width: 44ch;
+  font-size: clamp(1.25rem, 2vw, 1.625rem);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
   color: var(--ink-muted);
 }
 
-.lab__stack {
-  font-family: var(--font-mono);
-  font-size: var(--text-micro);
-  color: var(--ink-faint);
+/* ── Ce que j'ai appris ───────────────────────────────────────── */
+
+.lessons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
 }
 
-.lab__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-top: var(--space-1);
-  font-size: var(--text-small);
+@media (max-width: 52rem) {
+  .lessons {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
-/* ── Colophon ─────────────────────────────────────────────────── */
-
-.colophon {
+.lesson {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 1rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border-radius: 2rem;
 }
 
-.colophon__row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
+.lesson__number {
+  font-family: var(--font-mono);
+  font-size: 2.75rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.85;
+}
+
+.lesson__statement {
+  font-size: clamp(1.25rem, 1.8vw, 1.375rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.lesson__context {
   font-size: var(--text-small);
-}
-
-.colophon__label {
-  min-width: 10ch;
-  color: var(--ink-faint);
-}
-
-.colophon__value {
+  line-height: 1.55;
   color: var(--ink-muted);
 }

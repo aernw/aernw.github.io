@@ -1,197 +1,243 @@
+/* ── À propos ─────────────────────────────────────────────────── */
+
 .intro__summary {
-  font-size: var(--text-title);
-  line-height: 1.3;
-  letter-spacing: var(--tracking-title);
+  max-width: 34ch;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.28;
+  letter-spacing: -0.03em;
   color: var(--ink);
   text-wrap: pretty;
 }
 
 .intro__availability {
-  margin-top: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: var(--space-4);
   font-size: var(--text-body-lg);
+  font-weight: 600;
   color: var(--accent);
+}
+
+.status-dot {
+  flex-shrink: 0;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  background: #34c759;
+  box-shadow: 0 0 0.6rem rgba(52, 199, 89, 0.55);
 }
 
 /* ── Parcours ─────────────────────────────────────────────────── */
 
-.timeline {
+.jobs {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: 1rem;
 }
 
-.timeline__head {
+.job {
   display: flex;
-  /* Centré plutôt qu'aligné sur la ligne de base : le titre commence par un logo. */
   align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 2rem;
+}
+
+/* Tuile commune au parcours et aux études : des logos de formes très
+   différentes gardent la même empreinte. */
+.job__logo,
+.school__logo {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.job__logo {
+  width: 4.5rem;
+  height: 4.5rem;
+  padding: 0.6rem;
+  border-radius: 1rem;
+}
+
+.job__logo img,
+.school__logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.job__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.job__head {
+  display: flex;
+  align-items: baseline;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--space-1);
+  gap: 0.25rem 1rem;
 }
 
-.timeline__role {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  font-size: var(--text-heading);
+.job__role {
+  font-size: clamp(1.125rem, 1.6vw, 1.3125rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
-/* Tuile blanche commune au parcours et aux études : des logos de formes très
-   différentes (marque, logotype large, emblème rond) gardent la même empreinte. */
-.logo-tile {
-  flex-shrink: 0;
-  padding: 0.12em;
-  object-fit: contain;
-  background: #ffffff;
-  border-radius: 12%;
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink-faint) 30%, transparent);
-}
-
-.timeline__logo {
-  width: 1.7em;
-  height: 1.7em;
-}
-
-.timeline__period {
-  font-size: var(--text-micro);
+.job__period,
+.school__period {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
   color: var(--ink-faint);
 }
 
-.timeline__summary {
-  max-width: var(--measure);
-  margin-top: var(--space-1);
-  font-size: var(--text-body-reading);
-  line-height: var(--leading-body);
-  color: var(--ink-muted);
-}
-
-.timeline__highlights {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  max-width: var(--measure);
-  margin-top: var(--space-2);
-}
-
-.timeline__highlights li {
-  position: relative;
-  padding-left: 1.1rem;
+.job__brief {
+  max-width: var(--measure-wide);
+  margin-top: 0.5rem;
   font-size: var(--text-small);
+  line-height: 1.5;
   color: var(--ink-muted);
 }
 
-.timeline__highlights li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.62em;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--ink-faint);
+.job__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
 }
 
-.timeline__stack {
-  margin-top: var(--space-2);
-  font-family: var(--font-mono);
-  font-size: var(--text-micro);
-  color: var(--ink-faint);
+.schools__title {
+  margin-top: var(--space-5);
+  margin-bottom: 1rem;
 }
 
-.education {
+.schools {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+  gap: 1rem;
+}
+
+.school {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  margin-top: var(--space-5);
+  gap: 0.5rem;
+  padding: 1.375rem;
+  border-radius: 1.5rem;
 }
 
-.education__item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0 var(--space-2);
-  align-items: baseline;
+.school__logo {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 0.75rem;
 }
 
-/* Avec un logo : il occupe une colonne à gauche, sur la hauteur du nom et du détail. */
-.education__item--logo {
-  grid-template-columns: auto minmax(0, 1fr) auto;
-}
-
-.education__logo {
-  grid-row: 1 / span 2;
-  grid-column: 1;
-  align-self: center;
-  width: 2.75rem;
-  height: 2.75rem;
-}
-
-.education__school {
+.school__name {
+  font-size: 1.0625rem;
   font-weight: 600;
 }
 
-.education__item--logo .education__school,
-.education__item--logo .education__detail {
-  grid-column: 2;
-}
-
-.education__item--logo .education__period {
-  grid-column: 3;
-}
-
-.education__detail {
-  grid-column: 1;
-  font-size: var(--text-body-reading);
-  line-height: var(--leading-body);
+.school__detail {
+  font-size: var(--text-small);
+  line-height: 1.4;
   color: var(--ink-muted);
 }
 
-.education__period {
-  grid-row: 1;
-  grid-column: 2;
-  font-size: var(--text-micro);
-  font-variant-numeric: tabular-nums;
-  color: var(--ink-faint);
+@media (max-width: 40rem) {
+  .job {
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+  }
+
+  .job__logo {
+    width: 3.25rem;
+    height: 3.25rem;
+    padding: 0.45rem;
+  }
 }
 
 /* ── Compétences ──────────────────────────────────────────────── */
 
 .skills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4) var(--space-6);
-}
-
-.skills__group {
-  flex: 1 1 16rem;
-  max-width: 26rem;
-}
-
-.skills__label {
-  font-size: var(--text-micro);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-label);
-  color: var(--ink-faint);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+  gap: var(--space-4);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border-radius: 2rem;
 }
 
 .skills__items {
-  margin-top: var(--space-1);
-  font-size: var(--text-body);
-  color: var(--ink);
-  line-height: var(--leading-body);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 0.875rem;
+}
+
+.skills__items .chip {
+  font-size: 0.875rem;
 }
 
 /* ── Contact ──────────────────────────────────────────────────── */
 
+.contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: clamp(2.5rem, 6vw, 4rem) var(--space-3);
+  border-radius: 2.75rem;
+  text-align: center;
+}
+
+.contact__lead {
+  font-size: var(--text-heading);
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+/* Le contact est le dernier geste de la page : il mérite d'être grand. */
+.contact__email {
+  max-width: 100%;
+  font-size: clamp(1.5rem, 5vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  overflow-wrap: anywhere;
+}
+
 .contact__links {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3) var(--space-5);
+  justify-content: center;
+  gap: 0.75rem;
 }
 
 .contact__link {
-  /* Le contact est le dernier geste de la page : il mérite d'être grand. */
-  font-size: clamp(1.5rem, 4vw, 3rem);
-  letter-spacing: var(--tracking-title);
+  display: inline-flex;
+  padding: 0.7rem 1.25rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-small);
+  font-weight: 600;
+  background: var(--glass-fill-strong);
+  border: 1px solid var(--glass-edge);
+}
+
+.contact__link--primary {
+  color: #ffffff;
+  background: var(--accent);
+  border-color: transparent;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.contact__link--primary:hover {
+  color: #ffffff;
+  background: var(--accent-hover);
 }

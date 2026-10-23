@@ -57,8 +57,12 @@ export interface Experience {
   readonly logoBackground?: string
   readonly location: string
   readonly period: string
+  /** Une phrase : ce qui est affiché dans la section Parcours. */
+  readonly brief: string
+  /** Version longue, gardée pour référence (CV, futures pages). */
   readonly summary: string
   readonly highlights: readonly string[]
+  /** Les premières technologies sont affichées en étiquettes : mets les plus parlantes en tête. */
   readonly stack?: readonly string[]
 }
 
@@ -78,14 +82,6 @@ export interface SkillGroup {
 }
 
 /** Expérience du lab : petit, curieux, sans prétention de produit fini. */
-export interface LabItem {
-  readonly id: string
-  readonly name: string
-  readonly description: string
-  readonly stack: readonly string[]
-  readonly links: readonly Link[]
-}
-
 export interface Profile {
   readonly name: string
   readonly title: string
