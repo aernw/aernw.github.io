@@ -1,3 +1,6 @@
+import { concerts } from './concerts'
+import { recentFinds, topAlbums, topArtists } from './music'
+import { lessons, media } from './personal'
 import { profile } from './profile'
 import type { Side } from './types'
 
@@ -27,6 +30,20 @@ export interface Album {
   readonly coverLine: string
   readonly tracks: readonly Track[]
 }
+
+/**
+ * Nombre d'éléments de chaque section du côté Perso. Une section vide est
+ * retirée de la liste des titres, donc aussi de la page et du lecteur.
+ */
+const persoCounts: Readonly<Record<string, number>> = {
+  appris: lessons.length,
+  top: topAlbums.length + topArtists.length,
+  concerts: concerts.length,
+  decouvertes: recentFinds.length,
+  lectures: media.length,
+}
+
+const hasContent = (track: Track) => (persoCounts[track.id] ?? 1) > 0
 
 export const albums: Readonly<Record<Side, Album>> = {
   a: {
@@ -68,18 +85,18 @@ export const albums: Readonly<Record<Side, Album>> = {
         description: 'La musique et le code, deux choses que j’ai du mal à séparer',
       },
       { id: 'appris', title: 'Ce que j’ai appris', description: 'Leçons et constats que je veux garder' },
-      {
-        id: 'lectures',
-        title: 'Ce que je lis et regarde',
-        description: 'Blood Meridian, Project Hail Mary, Sapiens…',
-      },
+      { id: 'top', title: 'Mon top de tous les temps', description: 'Bladee, Retro X, Ecco2k, Yung Lean…' },
+      { id: 'concerts', title: 'Concerts', description: 'The Weeknd, Bladee, Houdi, We Love Green…' },
       {
         id: 'decouvertes',
         title: 'Mes découvertes récentes',
         description: 'Musique, films et outils que je recommande',
       },
-      { id: 'top', title: 'Mon top de tous les temps', description: 'Bladee, Retro X, Ecco2k, Yung Lean…' },
-      { id: 'concerts', title: 'Concerts', description: 'The Weeknd, Bladee, Houdi, We Love Green…' },
-    ],
+      {
+        id: 'lectures',
+        title: 'Ce que je lis et regarde',
+        description: 'Blood Meridian, Project Hail Mary, Sapiens…',
+      },
+    ].filter(hasContent),
   },
 }
