@@ -1,10 +1,11 @@
 /**
  * Types du contenu du portfolio.
  *
- * Le site a deux faces (comme une cassette) : la face A est professionnelle,
- * la face B est artistique. Chaque contenu déclare la ou les faces où il apparaît.
+ * Le site a deux côtés, comme un disque : « Pro » et « Perso ». Chaque contenu
+ * déclare le ou les côtés où il apparaît.
  */
 
+/** `a` = Pro, `b` = Perso. Les noms affichés vivent dans album.ts. */
 export type Side = 'a' | 'b'
 
 export interface Link {

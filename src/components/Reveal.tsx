@@ -5,9 +5,9 @@ import './Reveal.css'
 /**
  * Balises acceptées.
  *
- * Volontairement restreint aux éléments HTML utilisés ici : depuis l'ajout de
- * Three.js, `ElementType` englobe aussi les éléments de scène 3D, dont les
- * props sont incompatibles avec celles d'un conteneur DOM.
+ * Volontairement restreint aux éléments HTML utilisés ici : un `ElementType`
+ * générique accepterait aussi des composants dont les props sont incompatibles
+ * avec celles d'un conteneur DOM.
  */
 type RevealTag = 'div' | 'header' | 'section' | 'li' | 'article'
 

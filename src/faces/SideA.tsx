@@ -1,45 +1,27 @@
 import { Section } from '../components/Section'
-import { ProjectCrate } from '../components/ProjectCrate'
+import { ProjectShelf } from '../components/ProjectShelf'
 import { education, experiences, profile, projects, skillGroups } from '../content'
 import './SideA.css'
 
 /**
- * Face A — professionnelle.
+ * Côté Pro.
  *
- * C'est la face par défaut : un visiteur inconnu (souvent un recruteur) doit
- * voir les projets avant tout le reste.
+ * C'est le côté par défaut : un visiteur inconnu (souvent un recruteur) doit
+ * voir les projets avant tout le reste. Le hero (page d'album) est commun aux
+ * deux côtés, dans src/album/.
  */
 export function SideA() {
   const visible = projects.filter((project) => project.sides.includes('a'))
 
   return (
     <>
-      {/*
-        Hero réduit au nom et au métier, centré et plein écran : le walkman se
-        pose par-dessus, et le texte long descend sous la ligne de flottaison.
-      */}
-      <section className="hero" aria-labelledby="hero-title">
-        <div className="hero__inner">
-          <p className="hero__eyebrow">{profile.location}</p>
-          <h1 id="hero-title" className="hero__title">
-            {profile.name}
-          </h1>
-          <p className="hero__subtitle">{profile.title}</p>
-        </div>
-      </section>
-
       <Section id="intro" title="À propos" hideTitle width="text">
         <p className="intro__summary">{profile.summary}</p>
         <p className="intro__availability">{profile.availability}</p>
       </Section>
 
-      <Section
-        id="projets"
-        title="Projets"
-        lead="Ce que j'ai construit, avec mon rôle sur chacun."
-        width="full"
-      >
-        <ProjectCrate projects={visible} />
+      <Section id="projets" title="Projets" width="full">
+        <ProjectShelf projects={visible} />
       </Section>
 
       <Section id="parcours" title="Parcours" stickyTitle>

@@ -9,9 +9,9 @@
 .section {
   padding-block: var(--space-section);
   padding-inline: var(--page-gutter);
-  /* Le halo dense : une section peut croiser des objets 3D complexes (pas
-     seulement le walkman du hero), pas besoin d'empiler un flou en plus. */
-  text-shadow: var(--halo-text-dense);
+  /* Le lecteur fixe ne doit pas masquer le début d'une section atteinte
+     depuis la liste des pistes. */
+  scroll-margin-top: var(--space-3);
 }
 
 /* Respiration irrégulière : une section sur deux respire davantage, pour éviter
