@@ -7,7 +7,8 @@ Portfolio d'Erwan Seytor — développeur fullstack et musicien.
 
 Le site est présenté comme un **disque à deux côtés**, dans le style Liquid Glass
 d'Apple Music : le côté **Pro** présente les projets, le parcours et les compétences ;
-le côté **Perso** présente la musique, le lab et le colophon. Le haut de page est une
+le côté **Perso** présente ce que j'ai appris, mes lectures, mes découvertes récentes, mon top
+de tous les temps et mes concerts. Le haut de page est une
 page d'album (pochette, CD, liste des titres) et un lecteur fixe en bas sert à naviguer
 de section en section — sans aucun son.
 
@@ -33,7 +34,7 @@ npm run build
 
 | Chemin | Rôle |
 |---|---|
-| `src/content/` | Toutes les données du site (projets, profil, lab). Aucun texte n'est codé en dur dans les composants. |
+| `src/content/` | Toutes les données du site (projets, profil, musique, concerts). Aucun texte n'est codé en dur dans les composants. |
 | `src/side/` | Contexte React de la face active et synchronisation de l'URL. |
 | `src/faces/` | Composition des deux faces. |
 | `src/components/` | Composants partagés (section, pochettes et notes de projet, bascule). |
@@ -42,7 +43,7 @@ npm run build
 ## À compléter
 
 Plusieurs fichiers de `src/content/` contiennent des `TODO` : musique et plateformes
-(`artistic.ts`), découvertes, top et vinyles (`music.ts`), lectures et apprentissages
+(`artistic.ts`), découvertes récentes et top (`music.ts`), concerts (`concerts.ts`), lectures et apprentissages
 (`personal.ts`). Les sections concernées ne s'affichent pas tant que leur contenu est vide.
 
 **Voir [CONTENU.md](CONTENU.md)** pour la marche à suivre, avec des exemples copiables.

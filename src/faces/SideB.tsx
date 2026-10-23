@@ -1,169 +1,74 @@
 import { Section } from '../components/Section'
-import { Discoveries, formatMonth } from '../components/Discoveries'
-import { Rail } from '../components/Rail'
-import { TopAlbums, TopArtists } from '../components/TopList'
-import { LessonList, MediaList, VinylGrid } from '../components/Personal'
-import {
-  aboutDraft,
-  colophon,
-  discoveries,
-  labItems,
-  lessons,
-  media,
-  topAlbums,
-  topArtists,
-  vinyls,
-} from '../content'
+import { Bookshelf } from '../components/Bookshelf'
+import { Concerts } from '../components/Concerts'
+import { RecentFinds } from '../components/RecentFinds'
+import { TopShelf } from '../components/TopShelf'
+import { aboutDraft, concerts, lessons, media, recentFinds, topAlbums, topArtists } from '../content'
 import './SideB.css'
 
-interface PlaceholderProps {
-  readonly children: string
-}
-
-function Placeholder({ children }: PlaceholderProps) {
-  return <p className="section__placeholder">{children}</p>
-}
+const pad = (value: number) => String(value).padStart(2, '0')
 
 /**
  * Côté Perso — musique et expériences personnelles.
  *
- * Chaque section ne s'affiche que si son contenu existe : un côté plus court
- * vaut mieux qu'une section vide. Les emplacements à remplir sont marqués par
- * des TODO dans src/content/music.ts, personal.ts et artistic.ts.
+ * Les sections sont toujours affichées : la liste des titres du hero et le
+ * lecteur s'appuient sur elles. Une liste encore vide affiche un court message
+ * à la place (voir les TODO dans src/content/).
  */
 export function SideB() {
-  /** Fraîcheur de la section découvertes, calculée depuis l'entrée la plus récente. */
-  const latestDiscovery = discoveries.reduce<string | null>(
-    (latest, item) => (latest === null || item.discovered > latest ? item.discovered : latest),
-    null,
-  )
-
   return (
     <>
-      <Section id="a-propos" title="À propos" hideTitle width="text">
-        <div className="intro__about">
-          {aboutDraft.body.map((line) => (
-            <p key={line}>{line}</p>
+      <Section id="a-propos" title="À propos" hideTitle width="wide">
+        <div className="about">
+          <span className="about__quote" aria-hidden="true">
+            “
+          </span>
+          {aboutDraft.body.map((line, index) => (
+            <p key={line} className={index === 0 ? 'about__lead' : 'about__line'}>
+              {line}
+            </p>
           ))}
         </div>
       </Section>
 
-      <Section
-        id="lab"
-        title="Lab"
-        lead="Des outils et des expériences faits par curiosité, pas pour être finis."
-        stickyTitle
-      >
-        <ul className="lab">
-          {labItems.map((item) => (
-            <li key={item.id} className="lab__item">
-              <h3 className="lab__name">{item.name}</h3>
-              <p className="lab__description">{item.description}</p>
-              <p className="lab__stack">{item.stack.join(' · ')}</p>
-              <ul className="lab__links">
-                {item.links.map((link) => (
-                  <li key={link.href}>
-                    <a href={link.href} target="_blank" rel="noreferrer noopener">
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+      <Section id="appris" title="Ce que j'ai appris" width="full">
+        <ol className="lessons">
+          {lessons.map((lesson, index) => (
+            <li key={lesson.id} className="lesson glass">
+              <span className="lesson__number" aria-hidden="true">
+                {pad(index + 1)}
+              </span>
+              <p className="lesson__statement">{lesson.statement}</p>
+              {lesson.context ? <p className="lesson__context">{lesson.context}</p> : null}
             </li>
           ))}
-        </ul>
+        </ol>
       </Section>
 
-      <Section id="appris" title="Ce que j'ai appris" width="full">
-        {lessons.length > 0 ? (
-          <LessonList items={lessons} />
-        ) : (
-          <Placeholder>Ajoute ici quelques leçons ou constats que tu veux garder.</Placeholder>
-        )}
-      </Section>
-
-
-      <Section id="lectures" title="Ce que je lis et regarde">
-        {media.length > 0 ? (
-          <MediaList items={media} />
-        ) : (
-          <Placeholder>Ajoute ici les livres, films ou séries qui comptent en ce moment.</Placeholder>
-        )}
+      <Section id="lectures" title="Ce que je lis et regarde" width="full">
+        <Bookshelf items={media} />
       </Section>
 
       <Section
         id="decouvertes"
-        title="Découvertes"
-        lead="Ce que j'écoute en ce moment et que je veux faire découvrir."
+        title="Mes découvertes récentes"
+        lead="Ce que j'ai découvert ces derniers temps et que je recommande."
         width="full"
       >
-        {discoveries.length > 0 ? (
-          <Discoveries items={discoveries} />
-        ) : (
-          <Placeholder>Ajoute ici tes découvertes récentes pour remplir la section.</Placeholder>
-        )}
-
-        {latestDiscovery !== null ? (
-            <p className="section__footnote">
-              Dernier ajout en {formatMonth(latestDiscovery)}
-            </p>
-          ) : null}
+        <RecentFinds items={recentFinds} />
       </Section>
 
       <Section
         id="top"
         title="Mon top de tous les temps"
-        stickyTitle
+        lead="Cliquez sur un disque pour le sortir de l'étagère."
+        width="full"
       >
-        {topAlbums.length > 0 ? (
-          <>
-            <h3 className="subsection__title">Albums</h3>
-            <TopAlbums items={topAlbums} />
-          </>
-        ) : (
-          <Placeholder>Ajoute quelques albums pour faire apparaître ce classement.</Placeholder>
-        )}
-
-        {topArtists.length > 0 ? (
-          <>
-            <h3 className="subsection__title subsection__title--spaced">Artistes</h3>
-            <TopArtists items={topArtists} />
-          </>
-        ) : null}
+        <TopShelf albums={topAlbums} artists={topArtists} />
       </Section>
 
-      <Section
-        id="vinyles"
-        title="Vinyles"
-        lead="les disques qui comptent."
-        width="bleed"
-      >
-        {vinyls.length > 0 ? (
-          <Rail label="Collection de vinyles">
-            <VinylGrid items={vinyls} layout="row" />
-          </Rail>
-        ) : (
-          <Placeholder>Ajoute quelques pochettes de vinyles pour afficher cette rangée.</Placeholder>
-        )}
-      </Section>
-
-      <Section id="colophon" title="Colophon">
-        <dl className="colophon">
-          {colophon.map((entry) => (
-            <div key={entry.value} className="colophon__row">
-              <dt className="colophon__label">{entry.label}</dt>
-              <dd className="colophon__value">
-                {entry.href === undefined ? (
-                  entry.value
-                ) : (
-                  <a href={entry.href} target="_blank" rel="noreferrer noopener">
-                    {entry.value}
-                  </a>
-                )}
-              </dd>
-            </div>
-          ))}
-        </dl>
+      <Section id="concerts" title="Concerts" lead="Les concerts et festivals que j'ai vus." width="full">
+        <Concerts items={concerts} />
       </Section>
     </>
   )

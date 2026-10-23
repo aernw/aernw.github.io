@@ -27,6 +27,7 @@ export const experiences: readonly Experience[] = [
     logoBackground: '#0D1112',
     location: 'Paris',
     period: "09/2026 — aujourd'hui",
+    brief: 'Seul développeur d’une startup qui relie artistes et studios : refonte de l’app mobile, plateforme web des studios et assistante IA Lyra.',
     summary:
       "Seul développeur d'une startup qui met en relation artistes et studios d'enregistrement. " +
       "Reprise de l'application mobile et de l'API livrées par une agence, refonte complète de l'application, " +
@@ -39,7 +40,7 @@ export const experiences: readonly Experience[] = [
       "Correctifs d'un audit de sécurité de l'API : aucune donnée sensible renvoyée, validation de chaque requête, CORS restreint, webhooks Stripe traités une seule fois",
       'Déploiement Docker sur VPS OVH via GitHub Actions, avec environnements dev et production',
     ],
-    stack: ['Next.js', 'React Native', 'Expo', 'NestJS', 'MySQL', 'Stripe', 'Mistral AI', 'Docker', 'GitHub Actions'],
+    stack: ['Next.js', 'React Native', 'NestJS', 'Stripe', 'Mistral AI', 'Expo', 'MySQL', 'Docker', 'GitHub Actions'],
   },
   {
     id: 'travelme',
@@ -48,6 +49,7 @@ export const experiences: readonly Experience[] = [
     logo: 'experiences/travelme-logo.webp',
     location: 'Paris',
     period: '09/2025 — 07/2026',
+    brief: 'Migration d’une infrastructure éclatée (AWS, Vercel, Firebase, OVH) vers une architecture unifiée sur AWS.',
     summary:
       "Conception et pilotage de la migration d'une infrastructure fragmentée " +
       '(AWS + Vercel + Firebase + OVH) vers une architecture unifiée sur AWS avec un backend centralisé.',
@@ -56,7 +58,7 @@ export const experiences: readonly Experience[] = [
       'Conception BDD et API REST (Django + MySQL) partagée sur 3 plateformes, en remplacement de Firebase NoSQL',
       'Améliorations UI/UX, déploiements AWS, migration Firebase, applications iOS et Android',
     ],
-    stack: ['React', 'Next.js', 'Django', 'postgresql', 'Firebase', 'AWS', 'OVH', 'GitHub Actions', 'Make'],
+    stack: ['React', 'Next.js', 'Django', 'AWS', 'PostgreSQL', 'Firebase', 'OVH', 'GitHub Actions', 'Make'],
   },
   {
     id: 'dilt',
@@ -66,6 +68,7 @@ export const experiences: readonly Experience[] = [
     logo: 'experiences/dilt-logo.webp',
     location: 'Paris',
     period: '07/2024 — 12/2024',
+    brief: 'Cadrage et pilotage d’un projet IA au sein du département innovation.',
     summary:
       "Cadrage et pilotage d'un projet IA au sein du département innovation : " +
       'définition du périmètre et des livrables.',
