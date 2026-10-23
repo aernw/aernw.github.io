@@ -16,9 +16,6 @@ Un clic sur le CD (ou la pochette) retourne le disque et change de côté. Le ch
 pas mémorisé — il met simplement à jour `?side=perso` dans l'URL, ce qui permet de
 partager un lien ciblé (`?side=b`, l'ancienne valeur, fonctionne toujours).
 
-Les maquettes sont sur Figma : https://www.figma.com/design/OVhla9MIkAfeha1u9iH8fg
-(page « Round 3 — Pro / Perso (Chrome) »).
-
 ## Développement
 
 ```bash
