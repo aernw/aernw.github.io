@@ -50,7 +50,7 @@ export const experiences: readonly Experience[] = [
     period: '09/2025 — 07/2026',
     brief: 'Migration d’une infrastructure fragmentée entre plusieurs fournisseurs vers une architecture unifiée sur AWS.',
     summary:
-      "Conception et pilotage de la migration de l'infrastructure" +
+      "Conception et pilotage de la migration de l'infrastructure " +
       '(AWS + Vercel + Firebase + OVH) vers une architecture unifiée sur AWS avec un backend centralisé.',
     highlights: [
       "Refonte complète de l'intranet de l'entreprise : UI modernisée, automatisation de l'intégration HubSpot et Tiime avec Make",
@@ -69,7 +69,7 @@ export const experiences: readonly Experience[] = [
     brief: 'Cadrage et pilotage d’un PoC d’IA au sein du département innovation.',
     summary:
       "Cadrage et pilotage d'un projet IA au sein du département innovation : " +
-      "définition du périmètre et des livrables." + "Utilisation de Ollama pour créer un agent IA capable de répondre aux questions des agents et du personnel sur les procédures internes.",
+      "définition du périmètre et des livrables. " + "Utilisation de Ollama pour créer un agent IA capable de répondre aux questions des agents et du personnel sur les procédures internes.",
     highlights: [
       'Cadrage projet : étude de faisabilité, budget, matrice de risques',
       'Création d’un agent IA capable de répondre aux questions des agents et du personnel sur les procédures internes',

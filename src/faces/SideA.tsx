@@ -52,6 +52,14 @@ export function SideA() {
                   <span className="job__period">{job.period}</span>
                 </div>
                 <p className="job__brief">{job.brief}</p>
+                <p className="job__summary">{job.summary}</p>
+                {job.highlights.length > 0 ? (
+                  <ul className="job__highlights">
+                    {job.highlights.map((highlight) => (
+                      <li key={highlight}>{highlight}</li>
+                    ))}
+                  </ul>
+                ) : null}
                 {job.stack && job.stack.length > 0 ? (
                   <ul className="job__stack" aria-label="Technologies">
                     {job.stack.slice(0, STACK_PREVIEW).map((item) => (
