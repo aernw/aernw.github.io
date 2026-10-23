@@ -38,37 +38,3 @@
   text-transform: uppercase;
   opacity: 0.85;
 }
-
-.album-cover__foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-/* Dit qu'un clic retourne le disque, sans bouton ni texte : une icône dans
-   une pastille en verre, qui tourne un peu au survol de la pochette. */
-.album-cover__flip {
-  display: grid;
-  flex-shrink: 0;
-  place-items: center;
-  width: max(2.5rem, 11cqi);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--glass-on-art);
-  border: 1px solid var(--glass-on-art-edge);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-}
-
-.album-cover__flip svg {
-  width: 50%;
-  height: 50%;
-  transition: rotate var(--duration-slow) var(--ease-out);
-}
-
-@media (hover: hover) {
-  .album__art:hover .album-cover__flip svg {
-    rotate: 160deg;
-  }
-}
