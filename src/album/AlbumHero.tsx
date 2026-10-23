@@ -11,6 +11,12 @@ import './AlbumHero.css'
 /** Durée du demi-tour du disque avant de passer à l'autre côté. Alignée sur AlbumHero.css. */
 const TURN_MS = 560
 
+/** Libellés des deux côtés dans la barre du haut. */
+const SIDE_LABELS: Record<Side, string> = {
+  a: 'Mon profil',
+  b: 'En savoir plus sur moi',
+}
+
 interface AlbumHeroProps {
   readonly side: Side
   /** Piste en cours, -1 dans le hero. */
@@ -67,18 +73,36 @@ export function AlbumHero({ side, active, onFlip }: AlbumHeroProps) {
     <header className="album" aria-labelledby="album-title">
       <div className="album__bleed" aria-hidden="true" />
 
-      <nav className="album__links" aria-label="Liens">
-        {profile.links.map((link) => (
-          <a
-            key={link.href}
-            href={link.href}
-            className="album__link"
-            {...(link.href.startsWith('mailto:') ? {} : { target: '_blank', rel: 'noreferrer noopener' })}
-          >
-            {link.label}
-          </a>
-        ))}
-      </nav>
+      <div className="album__bar">
+        {/* Pour qui n'aurait pas vu qu'on retourne le disque : les deux côtés,
+            nommés, en haut de page. */}
+        <nav className="album__sides" aria-label="Côtés du site">
+          {(['a', 'b'] as const).map((key) => (
+            <button
+              key={key}
+              type="button"
+              className={`album__side${key === side ? ' album__side--current' : ''}`}
+              aria-current={key === side ? 'page' : undefined}
+              onClick={key === side ? undefined : turn}
+            >
+              {SIDE_LABELS[key]}
+            </button>
+          ))}
+        </nav>
+
+        <nav className="album__links" aria-label="Liens">
+          {profile.links.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="album__link"
+              {...(link.href.startsWith('mailto:') ? {} : { target: '_blank', rel: 'noreferrer noopener' })}
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      </div>
 
       <div className="album__head">
         <button
