@@ -17,7 +17,7 @@
 /* Respiration irrégulière : une section sur deux respire davantage, pour éviter
    le rythme métronomique qui fait « liste de sections ». */
 .section:nth-of-type(even) {
-  padding-block: calc(var(--space-section) * 1.35);
+  padding-block: calc(var(--space-section) * 1.2);
 }
 
 .section__header {

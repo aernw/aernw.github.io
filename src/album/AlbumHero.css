@@ -44,6 +44,12 @@
   backdrop-filter: var(--glass-blur);
 }
 
+/* Perso : verre sombre et neutre, pour ne pas prendre la teinte bleutée de la pochette. */
+:root[data-side='b'] .album__links {
+  background: rgba(22, 22, 27, 0.45);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
 .album__link {
   padding: 0.4rem 0.9rem;
   border-radius: var(--radius-pill);

@@ -25,10 +25,6 @@ export function SideA() {
     <>
       <Section id="intro" title="À propos" hideTitle width="wide">
         <p className="intro__summary">{profile.summary}</p>
-        <p className="intro__availability">
-          <span className="status-dot" aria-hidden="true" />
-          {profile.availability}
-        </p>
       </Section>
 
       <Section id="projets" title="Projets" width="full">
