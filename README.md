@@ -28,7 +28,6 @@ npm run build
 | `src/content/` | Toutes les données du site (projets, profil, lab). Aucun texte n'est codé en dur dans les composants. |
 | `src/side/` | Contexte React de la face active et synchronisation de l'URL. |
 | `src/faces/` | Composition des deux faces. |
-| `src/player/` | Lecteur CD de la face B : lecture audio, disque qui tourne, version réduite en bas d'écran. |
 | `src/components/` | Composants partagés (section, pochettes et notes de projet, bascule). |
 | `src/styles/` | Tokens de design et styles de base. |
 
@@ -37,10 +36,6 @@ npm run build
 Plusieurs fichiers de `src/content/` contiennent des `TODO` : musique et plateformes
 (`artistic.ts`), découvertes, top et vinyles (`music.ts`), lectures et apprentissages
 (`personal.ts`). Les sections concernées ne s'affichent pas tant que leur contenu est vide.
-
-Le lecteur CD de la face B joue pour l'instant trois **maquettes générées**, pas de vraie
-musique : remplace les fichiers de `public/audio/` par tes morceaux (MP3), puis la liste
-`disc` dans `artistic.ts` (titres, durées, notes).
 
 **Voir [CONTENU.md](CONTENU.md)** pour la marche à suivre, avec des exemples copiables.
 
