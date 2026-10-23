@@ -1,12 +1,16 @@
 /*
  * Tokens de design.
  *
- * Deux faces, deux palettes, un seul jeu de variables : les composants ne
+ * Deux côtés, deux palettes, un seul jeu de variables : les composants ne
  * connaissent que les rôles (--ground, --ink, --accent…), jamais les valeurs.
- * Basculer de face redéfinit les valeurs, rien d'autre.
+ * Retourner le disque redéfinit les valeurs, rien d'autre.
  *
- * Face A (pro)        : noir et blanc, rigueur Apple, un bleu rationné.
- * Face B (artistique) : fond sombre, touches jaune / orange / ocre.
+ * Pro   : clair, rigueur Apple, un bleu rationné ; pochette bleu / violet.
+ * Perso : sombre « chrome », gris froids et reflets lavande.
+ *
+ * Le verre (Liquid Glass) ne se voit que sur de la couleur : chaque côté a
+ * donc aussi les couleurs de sa pochette (--art-*), qui teintent le haut de
+ * page et le fond derrière les surfaces en verre.
  *
  * Principe repris d'Apple : l'accent ne sert qu'aux éléments actionnables
  * (liens, boutons). Il ne teinte jamais un titre ni un fond.
@@ -15,7 +19,7 @@
  */
 
 :root {
-  /* ── Face A : pro ─────────────────────────────────────────────── */
+  /* ── Pro ──────────────────────────────────────────────────────── */
   --ground: #f5f5f7;
   --surface: #ffffff;
   --ink: #1d1d1f;
@@ -36,7 +40,6 @@
   --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
 
   /* Échelle fluide : le site joue avec l'écran entier, la typo suit la fenêtre. */
-  --text-display: clamp(2.75rem, 7vw, 6.5rem);
   --text-title: clamp(1.75rem, 3.4vw, 3.5rem);
   --text-heading: clamp(1.25rem, 1.9vw, 1.75rem);
   --text-body-lg: clamp(1.0625rem, 1.35vw, 1.375rem);
@@ -46,13 +49,11 @@
   --text-micro: 0.8125rem;
 
   /* Letter-spacing serré sur les grandes tailles, à la manière d'Apple. */
-  --tracking-display: -0.035em;
   --tracking-title: -0.025em;
   --tracking-body: -0.01em;
   --tracking-label: 0.08em;
 
   --leading-tight: 1.05;
-  --leading-snug: 1.2;
   --leading-body: 1.6;
 
   /* ── Espacement ───────────────────────────────────────────────── */
@@ -82,34 +83,24 @@
   /* Ombre réservée aux éléments flottants, jamais au contenu. */
   --shadow-float: 0 8px 40px rgba(0, 0, 0, 0.12);
 
-  /*
-   * Halo posé derrière le texte du hero, qui passe devant l'objet 3D.
-   *
-   * Un contour net (quatre décalages à moins d'1px, opaques) qui détache
-   * vraiment les lettres, plus un flou léger pour adoucir le bord. Volontairement
-   * discret : un flou large lit comme une brume sale sur un fond qui varie
-   * (l'interface audio rouge, par exemple), pas comme une séparation propre.
-   * Le halo reprend la couleur du fond plutôt qu'un noir d'ombre portée — il
-   * s'agit de séparer, pas d'ajouter un relief que le reste du site n'a pas.
-   */
-  --halo-text:
-    -0.5px 0 0 rgba(245, 245, 247, 1), 0.5px 0 0 rgba(245, 245, 247, 1),
-    0 -0.5px 0 rgba(245, 245, 247, 1), 0 0.5px 0 rgba(245, 245, 247, 1),
-    0 0 2px rgba(245, 245, 247, 0.35);
+  /* Couleurs de la pochette : fond, puis quatre taches de couleur. */
+  --art-base: #0a2a6b;
+  --art-1: #0071e3;
+  --art-2: #9c57df;
+  --art-3: #3ecfa0;
+  --art-4: #ff3ea5;
+  /* Texte posé sur la pochette et sur le haut de page qu'elle teinte. */
+  --art-ink: #ffffff;
 
-  /*
-   * Variante dense, pour le texte qui croise les cassettes du sketchbook ou
-   * d'autres objets complexes (l'interface audio de la section Projets).
-   *
-   * Le halo du hero suffit contre le walkman, qui est clair et rouge. Les
-   * cassettes sont presque noires : sous un texte noir, il faut un noyau opaque
-   * qui remplisse réellement les contre-formes des lettres — un flou un peu
-   * plus marqué que le halo de base, mais toujours net, jamais nébuleux.
-   */
-  --halo-text-dense:
-    -0.5px 0 0 rgba(245, 245, 247, 1), 0.5px 0 0 rgba(245, 245, 247, 1),
-    0 -0.5px 0 rgba(245, 245, 247, 1), 0 0.5px 0 rgba(245, 245, 247, 1),
-    0 0 3px rgba(245, 245, 247, 0.6);
+  /* Verre : fond translucide, flou de ce qui passe dessous, liseré clair. */
+  --glass-fill: rgba(255, 255, 255, 0.55);
+  --glass-fill-strong: rgba(255, 255, 255, 0.72);
+  --glass-edge: rgba(255, 255, 255, 0.75);
+  --glass-blur: blur(24px) saturate(180%);
+  --glass-shadow: 0 14px 40px rgba(0, 0, 0, 0.12);
+  /* Le verre posé sur la pochette (haut de page), toujours clair. */
+  --glass-on-art: rgba(255, 255, 255, 0.18);
+  --glass-on-art-edge: rgba(255, 255, 255, 0.45);
 
   /* ── Motion : courte et utilitaire, sans rebond ────────────────── */
   --ease: cubic-bezier(0.4, 0, 0.6, 1);
@@ -121,31 +112,31 @@
   --duration-slow: 0.6s;
 }
 
-/* ── Face B : artistique ────────────────────────────────────────── */
+/* ── Perso : chrome ──────────────────────────────────────────── */
 :root[data-side='b'] {
-  --ground: #0e0d0b;
-  --surface: #17150f;
-  --ink: #f7f3e8;
-  --ink-muted: #b3a893;
-  --ink-faint: #8a806e;
-  --accent: #f5a524;
-  --accent-hover: #ffb949;
-  --accent-quiet: #d98324;
-  --hairline: rgba(247, 243, 232, 0.12);
-
+  --ground: #0b0b0d;
+  --surface: #16161b;
+  --ink: #f2f2f5;
+  --ink-muted: #a6a6ae;
+  --ink-faint: #8c8c95;
+  --accent: #cfd6ff;
+  --accent-hover: #e6e9ff;
+  --accent-quiet: #b9c2ff;
+  --hairline: rgba(242, 242, 245, 0.12);
 
   --shadow-float: 0 8px 40px rgba(0, 0, 0, 0.5);
 
-  /* Le halo suit le fond, qui est sombre ici : il assombrit au lieu d'éclaircir. */
-  --halo-text:
-    -0.5px 0 0 rgba(14, 13, 11, 1), 0.5px 0 0 rgba(14, 13, 11, 1),
-    0 -0.5px 0 rgba(14, 13, 11, 1), 0 0.5px 0 rgba(14, 13, 11, 1),
-    0 0 2px rgba(14, 13, 11, 0.32);
+  --art-base: #16161b;
+  --art-1: #6b6f80;
+  --art-2: #b9c2ff;
+  --art-3: #3c3f4a;
+  --art-4: #e0d2ff;
+  --art-ink: #f4f4f7;
 
-  --halo-text-dense:
-    -0.5px 0 0 rgba(14, 13, 11, 1), 0.5px 0 0 rgba(14, 13, 11, 1),
-    0 -0.5px 0 rgba(14, 13, 11, 1), 0 0.5px 0 rgba(14, 13, 11, 1),
-    0 0 3px rgba(14, 13, 11, 0.55);
+  --glass-fill: rgba(24, 24, 29, 0.55);
+  --glass-fill-strong: rgba(24, 24, 29, 0.72);
+  --glass-edge: rgba(255, 255, 255, 0.14);
+  --glass-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
 }
 
 /* Le respect de prefers-reduced-motion est un argument technique visible. */

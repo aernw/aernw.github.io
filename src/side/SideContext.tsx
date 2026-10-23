@@ -3,6 +3,8 @@ import type { ReactNode } from 'react'
 import type { Side } from '../content'
 
 const SIDE_PARAM = 'side'
+/** Valeur écrite dans l'URL pour le côté Perso : lisible quand on partage le lien. */
+const PERSO_PARAM = 'perso'
 const DEFAULT_SIDE: Side = 'a'
 
 interface SideContextValue {
@@ -13,18 +15,19 @@ interface SideContextValue {
 
 const SideContext = createContext<SideContextValue | null>(null)
 
+/** `b` reste accepté : c'était la valeur des liens partagés avant le renommage des côtés. */
 function parseSide(value: string | null): Side {
-  return value === 'b' ? 'b' : DEFAULT_SIDE
+  return value === PERSO_PARAM || value === 'b' ? 'b' : DEFAULT_SIDE
 }
 
-/** Lit la face demandée dans l'URL. Toute valeur inattendue retombe sur la face A. */
+/** Lit le côté demandé dans l'URL. Toute valeur inattendue retombe sur le côté Pro. */
 function readSideFromUrl(): Side {
   if (typeof window === 'undefined') return DEFAULT_SIDE
   return parseSide(new URLSearchParams(window.location.search).get(SIDE_PARAM))
 }
 
 /**
- * Écrit la face dans l'URL sans créer d'entrée d'historique.
+ * Écrit le côté dans l'URL sans créer d'entrée d'historique.
  *
  * Le choix n'est volontairement pas mémorisé (pas de localStorage) : la bascule
  * reste un geste libre. L'URL sert uniquement à pouvoir partager un lien ciblé.
@@ -35,7 +38,7 @@ function writeSideToUrl(side: Side): void {
   if (side === DEFAULT_SIDE) {
     url.searchParams.delete(SIDE_PARAM)
   } else {
-    url.searchParams.set(SIDE_PARAM, side)
+    url.searchParams.set(SIDE_PARAM, PERSO_PARAM)
   }
 
   window.history.replaceState(null, '', url)
