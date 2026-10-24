@@ -29,93 +29,200 @@ export interface RecentFind {
 
 export const recentFinds: readonly RecentFind[] = []
 
-export interface FavouriteAlbum {
+/** Une sortie : un album, ou un volume d'une série. */
+export interface AlbumRelease {
+  readonly title: string
+  /** Date de la sortie originale : AAAA-MM-JJ, ou AAAA-MM / AAAA si le jour n'est pas connu. */
+  readonly released: string
+  /** Image carrée, dans `public/covers/albums/`. */
+  readonly cover?: string
+  readonly label?: string
+  /** Producteurs, du plus présent sur l'album au moins présent. */
+  readonly producers?: readonly string[]
+  /** Artistes invités sur la tracklist. Une liste vide affiche « Aucun ». */
+  readonly features?: readonly string[]
+}
+
+interface AlbumEntry {
   readonly id: string
   readonly artist: string
-  readonly title: string
-  readonly year: string
   readonly note?: string
-  readonly cover?: string
   readonly href?: string
 }
+
+/** Un album seul : ses crédits sont posés à plat. */
+export interface SingleAlbum extends AlbumEntry, AlbumRelease {}
+
+/**
+ * Plusieurs albums qui ne font qu'un (une trilogie…) : ils partagent un rang,
+ * et chaque volume garde sa pochette et ses crédits.
+ */
+export interface AlbumSeries extends AlbumEntry {
+  /** Nom de la série, affiché à côté de l'artiste. */
+  readonly title: string
+  readonly volumes: readonly [AlbumRelease, ...AlbumRelease[]]
+}
+
+export type FavouriteAlbum = SingleAlbum | AlbumSeries
+
+/** Les sorties d'un rang : l'album lui-même, ou les volumes de la série. */
+export const releasesOf = (album: FavouriteAlbum): readonly [AlbumRelease, ...AlbumRelease[]] =>
+  'volumes' in album ? album.volumes : [album]
 
 export const topAlbums: readonly FavouriteAlbum[] = [
   {
     id: 'bladee-333',
     artist: 'Bladee',
     title: '333',
-    year: '2020',
+    released: '2020-07-16',
+    label: 'YEAR0001',
+    features: [],
     cover: '/covers/albums/bladee-333.webp',
     note: 'Un album magnifique. Les productions mélancoliques et organiques parfois oniriques sont accompagnées de textes profonds et positifs sur la vie.'
-  },
-  {
-    id: 'retro-x-heroes',
-    artist: 'Retro X',
-    title: 'Heroes',
-    year: '2018',
-    cover: '/covers/albums/retro-x-heroes.webp',
-    note: 'Album très personnel et sombre aux productions variées mais cohérentes. Cet album se démarque par un nouveau style de cloud rap peu présent en France à cette époque.'
-  },
-  {
-    id: 'retro-x-24',
-    artist: 'Retro X',
-    title: '24',
-    year: '2019',
-    cover: '/covers/albums/retro-x-24.webp',
-    note: 'Heroes en plus travaillé : album sans aucun défaut presque trop parfait qui marque le pic de la carrière de Retro X.'
   },
   {
     id: 'ecco2k-e',
     artist: 'Ecco2k',
     title: 'E',
-    year: '2019',
+    released: '2019-11-27',
+    label: 'YEAR0001',
+    features: [],
     cover: '/covers/albums/ecco2k-e.webp',
     note: 'Plus qu’un album, une véritable expérience musicale qu’il faut absolument vivre. Un style qui se démarque à la croisée des genres et une direction artistique léchée comme on en voit peu.'
   },
   {
-    id: 'bladee-the-fool',
-    artist: 'Bladee',
-    title: 'The Fool',
-    year: '2021',
-    cover: '/covers/albums/bladee-the-fool.webp',
-    note: 'Pour moi l’un des meilleurs projets de Bladee qui prouve sa capacité à évoluer à et se renouveler avec un rythme soutenu d’un album par an depuis 2018 : tous très différents, tous très bons.'
+    id: 'thaiboy-digital-tiger',
+    artist: 'Thaiboy Digital',
+    title: 'Tiger',
+    released: '2014-11-17',
+    label: 'YEAR0001',
+    features: ['Yung Lean', 'Bladee'],
+    cover: '/covers/albums/thaiboy-digital-tiger.webp',
   },
   {
-    id: 'bladee-icedancer',
-    artist: 'Bladee',
-    title: 'Icedancer',
-    year: '2018',
-    cover: '/covers/albums/bladee-icedancer.webp',
-    note: 'L’album le plus emblématique de la carrière de Bladee, ce qui se rapproche le plus d’un "pic" de carrière bien qu’il nous montre tous les ans qu’il ne l’a jamais atteint. Les productions de ripsquadd sont possiblement aussi emblématiques que les textes de bladee.'
-  },
-  {
-    id: 'bladee-red-light',
-    artist: 'Bladee',
-    title: 'Red Light',
-    year: '2018',
-    cover: '/covers/albums/bladee-red-light.webp',
-    note: 'J’adore retourner sur celui-ci, cet album ne prend pas une ride : productions entraînantes et magnifiques, punchlines emblématiques, un niveau de rap et de chant jamais vu chez Bladee. Cet album n’a juste aucun défaut et c’est celà qui le rend moins emblématique car ce style "trop" parfait ne sied pas à Bladee.'
-  },
-  {
-    id: 'yuri-online-mh-yurimh',
-    artist: 'Yuri Online, MH',
-    title: 'YuriMh',
-    year: '2021',
-    cover: '/covers/albums/yuri-online-mh-yurimh.webp',
+    id: 'bitsu-nml',
+    artist: 'Bitsu',
+    title: 'NML',
+    released: '2017-06-04',
+    features: ['Ril3y', 'Croisade', 'Realo'],
+    cover: '/covers/albums/bitsu-nml.webp',
   },
   {
     id: 'lancey-foux-friend-or-foux',
     artist: 'Lancey Foux',
     title: 'FRIEND OR FOUX',
-    year: '2019',
+    released: '2019-12-06',
+    label: 'PSYKE. / Human Re Sources',
+    features: ['Bakar', 'Monkey 67', 'Kesh', 'Skepta', 'Chip', 'Suave Sinatra'],
     cover: '/covers/albums/lancey-foux-friend-or-foux.webp',
   },
   {
-    id: 'bladee-thaiboy-digital-ecco2k-trash-island',
-    artist: 'Bladee, Thaiboy Digital, Ecco2k',
-    title: 'Trash Island',
-    year: '2019',
-    cover: '/covers/albums/bladee-thaiboy-digital-ecco2k-trash-island.webp',
+    id: 'kid-cudi-man-on-the-moon-2',
+    artist: 'Kid Cudi',
+    title: 'Man on the Moon II: The Legend of Mr. Rager',
+    released: '2010-11-09',
+    label: 'Universal Motown',
+    features: ['Cee-Lo', 'Mary J. Blige', 'Kanye West', 'Cage', 'St. Vincent', 'GLC', 'Chip Tha Ripper', 'Nicole Wray'],
+    cover: '/covers/albums/kid-cudi-man-on-the-moon-2.webp',
+  },
+  {
+    id: 'the-weeknd-after-hours',
+    artist: 'The Weeknd',
+    title: 'After Hours',
+    released: '2020-03-20',
+    label: 'XO, Republic',
+    features: [],
+    cover: '/covers/albums/the-weeknd-after-hours.webp',
+  },
+  {
+    id: 'pnl-deux-freres',
+    artist: 'PNL',
+    title: 'Deux frères',
+    released: '2019-04-05',
+    label: 'QLF Records',
+    features: [],
+    cover: '/covers/albums/pnl-deux-freres.webp',
+  },
+  {
+    id: 'ptite-soeur-nouvelle-economie',
+    artist: 'Ptite Soeur',
+    title: 'Nouvelle économie',
+    released: '2023-12-18',
+    features: ['Rosaliedu38', 'Esone', 'reivilose'],
+    cover: '/covers/albums/ptite-soeur-nouvelle-economie.webp',
+  },
+  {
+    id: 'yung-lean-stranger',
+    artist: 'Yung Lean',
+    title: 'Stranger',
+    released: '2017-11-10',
+    label: 'YEAR0001',
+    features: [],
+    cover: '/covers/albums/yung-lean-stranger.webp',
+  },
+  {
+    id: 'chief-keef-finally-rich',
+    artist: 'Chief Keef',
+    title: 'Finally Rich',
+    released: '2012-12-18',
+    label: 'Interscope',
+    features: ['Lil Reese', '50 Cent', 'Wiz Khalifa', 'French Montana', 'Young Jeezy', 'Rick Ross'],
+    cover: '/covers/albums/chief-keef-finally-rich.webp',
+  },
+  {
+    id: 'young-thug-beautiful-thugger-girls',
+    artist: 'Young Thug',
+    title: 'Beautiful Thugger Girls',
+    released: '2017-06-16',
+    label: 'Atlantic',
+    features: ['Millie Go Lightly', 'Gunna', 'Future', 'Quavo', 'Lil Durk', 'Snoop Dogg', 'Jacquees'],
+    cover: '/covers/albums/young-thug-beautiful-thugger-girls.webp',
+  },
+  {
+    id: 'destroy-lonely-broken-hearts',
+    artist: 'Destroy Lonely',
+    title: 'Broken Hearts',
+    volumes: [
+      {
+        title: '</3',
+        released: '2026-05-17',
+        label: 'Cecil Park Records',
+        features: [],
+        cover: '/covers/albums/destroy-lonely-broken-hearts-1.webp',
+      },
+      {
+        title: '</3²',
+        released: '2020-10-31',
+        label: 'Cecil Park Records',
+        features: [],
+        cover: '/covers/albums/destroy-lonely-broken-hearts-2.webp',
+      },
+      {
+        title: '</3³',
+        released: '2025-09-19',
+        label: 'Opium, Interscope',
+        features: ['Ken Carson'],
+        cover: '/covers/albums/destroy-lonely-broken-hearts-3.webp',
+      },
+    ],
+  },
+  {
+    id: 'theodora-bad-boy-lovestory',
+    artist: 'Theodora',
+    title: 'BAD BOY LOVESTORY',
+    released: '2024-11-01',
+    label: 'Maison Neptune, NBFD',
+    features: ['Jeez Suave', 'Jahlys'],
+    cover: '/covers/albums/theodora-bad-boy-lovestory.webp',
+  },
+  {
+    id: 'jeune-morty-eponyme',
+    artist: 'Jeune Morty',
+    title: 'Éponyme',
+    released: '2025-06-20',
+    label: 'Jetset Farot',
+    features: [],
+    cover: '/covers/albums/jeune-morty-eponyme.webp',
   },
 ]
 
