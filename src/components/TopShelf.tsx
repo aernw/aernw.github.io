@@ -13,6 +13,19 @@ interface TopShelfProps {
 /** Albums par planche : trois rangées de cinq pour un top 15. */
 const PER_SHELF = 5
 
+/**
+ * Au-delà de 12 producteurs (une mixtape en compte parfois des dizaines), seuls
+ * les 10 plus présents sont nommés, suivis du nombre des autres.
+ */
+const PRODUCERS_MAX = 12
+const PRODUCERS_SHOWN = 10
+
+function listProducers(producers: readonly string[]): string {
+  if (producers.length <= PRODUCERS_MAX) return producers.join(', ')
+  const rest = producers.length - PRODUCERS_SHOWN
+  return `${producers.slice(0, PRODUCERS_SHOWN).join(', ')} et ${rest} autres`
+}
+
 /** Place d'une pochette dans une pile : la première devant, les suivantes derrière. */
 type StackStyle = CSSProperties & { readonly '--i': number; readonly '--n': number }
 
@@ -69,7 +82,7 @@ function Credits({ release }: { readonly release: AlbumRelease }) {
       {producers === undefined || producers.length === 0 ? null : (
         <>
           <dt>Production</dt>
-          <dd>{producers.join(', ')}</dd>
+          <dd>{listProducers(producers)}</dd>
         </>
       )}
       {features === undefined ? null : (
