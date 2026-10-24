@@ -54,6 +54,47 @@
   }
 }
 
+/* Une série : les volumes empilés, le premier devant, les suivants décalés
+   vers le haut à droite. La pile garde l'empreinte carrée d'une pochette. */
+.top-sleeve__stack {
+  --step: 8%;
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+}
+
+.top-sleeve__layer {
+  position: absolute;
+  left: calc(var(--i) * var(--step));
+  top: calc((var(--n) - 1 - var(--i)) * var(--step));
+  z-index: calc(var(--n) - var(--i));
+  width: calc(100% - (var(--n) - 1) * var(--step));
+  rotate: calc(var(--i) * 3deg);
+  transition: rotate var(--duration) var(--ease-out);
+}
+
+/* Au survol, la pile s'évase un peu plus, sans quitter l'étagère. */
+@media (hover: hover) {
+  .top-sleeve:hover .top-sleeve__layer {
+    rotate: calc(var(--i) * 6deg);
+  }
+}
+
+/* Un liseré clair sépare des pochettes sombres posées l'une sur l'autre. */
+.top-sleeve__layer .cover {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.16),
+    0 8px 18px rgba(0, 0, 0, 0.5);
+}
+
+.top-sleeve__layer:not(:first-child) .cover {
+  filter: brightness(0.7);
+}
+
+.top-sleeve__stack + .top-sleeve__rank {
+  z-index: 10;
+}
+
 .top-sleeve__rank {
   position: absolute;
   left: 0.6rem;
@@ -207,8 +248,69 @@
   color: var(--ink-muted);
 }
 
+.top-dialog__volumes {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.top-dialog__volume {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  width: 4.5rem;
+  font-size: var(--text-micro);
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.top-dialog__volume .cover {
+  border-radius: 0.25rem;
+  opacity: 0.55;
+  transition:
+    opacity var(--duration-fast) var(--ease),
+    box-shadow var(--duration-fast) var(--ease);
+}
+
+.top-dialog__volume:hover .cover {
+  opacity: 0.85;
+}
+
+.top-dialog__volume[aria-pressed='true'] {
+  color: var(--ink);
+}
+
+.top-dialog__volume[aria-pressed='true'] .cover {
+  opacity: 1;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+/* Les crédits : une colonne d'intitulés, une colonne de valeurs. */
+.top-dialog__credits {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.45rem 1.25rem;
+  margin-top: 1.25rem;
+  font-size: var(--text-small);
+  line-height: 1.45;
+}
+
+.top-dialog__credits dt {
+  padding-top: 0.15em;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.top-dialog__credits dd {
+  color: var(--ink);
+}
+
 .top-dialog__note {
-  margin-top: 1rem;
+  margin-top: 1.25rem;
   line-height: 1.55;
   opacity: 0.88;
 }
@@ -252,6 +354,15 @@
 
   .top-dialog__art {
     width: 60%;
+  }
+}
+
+/* Sur un écran étroit ou bas, le panneau peut dépasser : le dialogue défile. */
+@media (max-width: 48rem), (max-height: 50rem) {
+  .top-dialog {
+    max-height: calc(100dvh - 2rem);
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 }
 
