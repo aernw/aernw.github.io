@@ -33,29 +33,19 @@ export interface Experience {
   readonly id: string
   readonly role: string
   readonly company: string
-  /** Logo de l'entreprise, affiché dans une tuile blanche devant l'intitulé du poste. */
   readonly logo?: string
-  /**
-   * Fond de la tuile, pour un logo dessiné sur un aplat : sa couleur prolonge
-   * l'aplat jusqu'aux bords, sans liseré blanc. Blanc par défaut.
-   */
   readonly logoBackground?: string
   readonly location: string
   readonly period: string
-  /** Une phrase d'accroche, en tête de la carte dans la section Parcours. */
   readonly brief: string
-  /** La description, affichée sous l'accroche. */
   readonly summary: string
-  /** Les réalisations, affichées en liste sous la description. */
   readonly highlights: readonly string[]
-  /** Les premières technologies sont affichées en étiquettes : mets les plus parlantes en tête. */
   readonly stack?: readonly string[]
 }
 
 export interface Education {
   readonly id: string
   readonly school: string
-  /** Logo de l'école, affiché dans une tuile blanche à gauche du nom. */
   readonly logo?: string
   readonly detail: string
   readonly period: string
@@ -67,7 +57,6 @@ export interface SkillGroup {
   readonly items: readonly string[]
 }
 
-/** Expérience du lab : petit, curieux, sans prétention de produit fini. */
 export interface Profile {
   readonly name: string
   readonly title: string

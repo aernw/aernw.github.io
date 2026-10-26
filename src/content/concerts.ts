@@ -25,6 +25,14 @@ export interface Concert {
 
 export const concerts: readonly Concert[] = [
   {
+    id: 'young-thug-2026',
+    title: 'Young Thug',
+    venue: 'Adidas Arena · Paris',
+    kind: 'Concert',
+    date: '2026-10-24',
+    image: '/covers/concerts/youngthug.webp',
+  },
+  {
     id: 'arch-club-2026',
     title: 'Arch Club',
     venue: 'Élysée Montmartre · Paris',
@@ -47,6 +55,7 @@ export const concerts: readonly Concert[] = [
     kind: 'Festival',
     date: '2026-06-05',
     endDate: '2026-06-07',
+    image: '/covers/concerts/we-love-green-2024.webp',
   },
   {
     id: 'jeune-morty-2026',
