@@ -84,7 +84,7 @@ export const topAlbums: readonly FavouriteAlbum[] = [
     producers: ['Whitearmor', 'Gud', 'Mechatok', 'Lusi', 'Joakim Benon'],
     features: [],
     cover: '/covers/albums/bladee-333.webp',
-    note: 'Un album magnifique. Les productions mélancoliques et organiques parfois oniriques sont accompagnées de textes profonds et positifs sur la vie.'
+    note: '333 est un voyage dont on ne revient pas indemne. Bladee nous transporte dans un univers féerique et mélancolique sur un ton très personnel et spirituel. Benjamin nous fais ouvrir les yeux sur l\'amour, la tristesse, l\'existence. Noblest Strive est un des morceaux les plus marquants de ma vie : une véritable leçon de vie qui fait prendre du recul sur le malheur et les choses négatives qui nous arrivent. Cet album fait passer un message de résilience et de positivité qui m\'a beaucoup aidé dans ma vie.'
   },
   {
     id: 'ecco2k-e',
@@ -95,29 +95,40 @@ export const topAlbums: readonly FavouriteAlbum[] = [
     producers: ['Gud', 'Whitearmor', 'Shanti', 'Mechatok'],
     features: [],
     cover: '/covers/albums/ecco2k-e.webp',
-    note: 'Plus qu’un album, une véritable expérience musicale qu’il faut absolument vivre. Un style qui se démarque à la croisée des genres et une direction artistique léchée comme on en voit peu.'
+    note: 'Plus qu’un album, une véritable expérience musicale qu’il faut absolument vivre. Un style qui se démarque à la croisée des genres et une direction artistique léchée comme on en voit peu. E est pour moi une avancée dans la monde de la musique tant les ambiances, les sonorités, les textures et les émotions transmises sont uniques.'
+  },
+  {
+    id: 'energie-ril3y',
+    artist: 'Ril3y',
+    title: 'Énergie',
+    released: '2020-05-22',
+    label: 'Autoproduit',
+    producers: ['Ril3y', 'Croisade', 'Jeunecartier', 'Migu', 'Bitsu'],
+    features: ['Croisade', 'Realo', 'Bitsu'],
+    cover: '/covers/albums/energie.jpg',
+    note: 'Énergie est sans doute le projet pour lequel j\'ai le plus de nostalgie et d\'attachement. Déjà il est sorti durant 2020, une année très particulière pour moi qui est sans doute celle où j\'ai le plus évolué et grandi dans ma tête. Énergie représente cette énergie innocente et naîve que j\'ai ressenti à ce moment-là. Ensuite Ril3y est un artiste qui m\'a beaucoup marqué par la simplicité et le ton insouciant de ses textes dans lesquels je me suis recconu. Enfin, Énergie est un projet qui m\'a beaucoup plu par sa sobriété et sa cohérence : un rock alternatif mélodique rare sur soundcloud et qui m\'a fait découvrir un style musical que j\'écoutais peu à l\'époque.' 
   },
   {
     id: 'thaiboy-digital-tiger',
     artist: 'Thaiboy Digital',
     title: 'Tiger',
-    // Sorti en téléchargement libre : les sources ne s'accordent pas sur le jour.
     released: '2014-11',
     label: 'YEAR0001',
     producers: ['Whitearmor', 'Gud', 'Yung Sherman'],
     features: ['Yung Lean', 'Bladee'],
     cover: '/covers/albums/thaiboy-digital-tiger.webp',
+    note: 'La genèse du cloud rap, cet album a été une vraie claque pour moi. Un mélange de rap et d\'EDM qui a influencé toute une génération d\'artistes encore aujourd\'hui.'
   },
   {
     id: 'bitsu-nml',
     artist: 'Bitsu',
     title: 'No More Lemon (NML)',
-    // Sorti sur SoundCloud, puis sur les plateformes sous le titre « NML ».
     released: '2017-06-04',
     label: 'Autoproduit',
     producers: ['Risky Business', 'Croisade', 'Jeunecartier', 'Migu', 'Bitsu'],
     features: ['Croisade', 'Realo', 'Ril3y'],
     cover: '/covers/albums/bitsu-nml.webp',
+    note: 'À l\'époque de la sortie de NML, Bitsu était la figure de proue du rap français underground. Du rap mélodique, des productions planantes et des textes introspectifs qui m’ont marqué et fait ressentir beaucoup d\'émotions.'
   },
   {
     id: 'lancey-foux-friend-or-foux',
@@ -131,6 +142,7 @@ export const topAlbums: readonly FavouriteAlbum[] = [
     ],
     features: ['Bakar', 'Monkey 67', 'KESH', 'Skepta', 'Chip', 'Suave Sinatra'],
     cover: '/covers/albums/lancey-foux-friend-or-foux.webp',
+    note: 'Album unique en son genre, Lancey est un artiste qui se démarque énormément dans le paysage du rap. Il apporte un vent de renouveau dans la trap et utilise sa voix comme un instrument à part entière. Mon album UK préféré.'
   },
   {
     id: 'kid-cudi-man-on-the-moon-2',
@@ -144,6 +156,7 @@ export const topAlbums: readonly FavouriteAlbum[] = [
     ],
     features: ['Cee-Lo', 'Mary J. Blige', 'Kanye West', 'Cage', 'St. Vincent', 'GLC', 'Chip tha Ripper', 'Nicole Wray'],
     cover: '/covers/albums/kid-cudi-man-on-the-moon-2.webp',
+    note: 'Un album qu\'on ne peut oublier. Kid Cudi m\'a marqué dans sa manière de raconter ses épisodes dépressifs et ses addictions avec beaucoup d\'images et de symboles amenant une légèreté à des sujets difficiles à aborder sans être trop lourd.'
   },
   {
     id: 'the-weeknd-after-hours',
@@ -157,6 +170,7 @@ export const topAlbums: readonly FavouriteAlbum[] = [
     ],
     features: [],
     cover: '/covers/albums/the-weeknd-after-hours.webp',
+    note: 'Possiblement l\'album le plus abouti et le mieux produit de The Weeknd. Des productions d\'une qualité exceptionnelle, une identité visuelle marquante et un tout cohérent qui marque un renouveau dans sa carrière. Je me vois encore en train de jouer à Star Citizen en écoutant les productions sombres et planantes de cet album: un moment inoubliable. Mention spéciale à Heartless qui est possiblement la meilleure performance d\'un duo producteur / chanteur que j\'ai jamais entendu.'
   },
   {
     id: 'pnl-deux-freres',
@@ -167,6 +181,7 @@ export const topAlbums: readonly FavouriteAlbum[] = [
     producers: ['BBP', 'Nk.F', 'Joa', 'MKSB', 'Adsa', 'Yann Dakta', 'Rednose', 'Sam H', 'Anaika', 'IBØ'],
     features: [],
     cover: '/covers/albums/pnl-deux-freres.webp',
+    note: 'Deux frères est un vent d\'air frais dans le rap français. À cette époque dominée par la trap et le rap gangsta, PNL est sorti du lot avec une identité forte et un style unique déjà établi par leurs précédents projets. Des façons de poser et d\'écrire propres à eux. Une aura se dégage de leur musique et Deux frères représente à la fois la fin et l\'apogée de la carrière de Nabil et Tarik.'
   },
   {
     id: 'ptite-soeur-nouvelle-economie',
@@ -174,20 +189,10 @@ export const topAlbums: readonly FavouriteAlbum[] = [
     title: 'NOUVELLE ÉCONOMIE',
     released: '2023-12-18',
     label: 'Autoproduit',
-    // prxpvne est l'alias de producteur de Ptite Soeur.
     producers: ['neophron', 'prxpvne', 'esone', 'Rosaliedu38', 'reivilose'],
     features: [],
     cover: '/covers/albums/ptite-soeur-nouvelle-economie.webp',
-  },
-  {
-    id: 'yung-lean-stranger',
-    artist: 'Yung Lean',
-    title: 'Stranger',
-    released: '2017-11-10',
-    label: 'YEAR0001',
-    producers: ['Gud', 'Whitearmor', 'Yung Sherman'],
-    features: [],
-    cover: '/covers/albums/yung-lean-stranger.webp',
+    note:'En tant que figure montante de l\'underground français, Ptite Soeur se positionne à l\'antithèse des clichés du rap. Petite soeur parle dans cet album de l\'identité de genre, de la santé mentale, de l\'injustice sociale et de scandales politiques. Des choses qui font échos à la jeunesse d\'aujourd\'hui et qui sont rarement abordées dans le rap français. Un album qui m\'a marqué par son ton cru et son audace.'
   },
   {
     id: 'chief-keef-finally-rich',
@@ -198,6 +203,7 @@ export const topAlbums: readonly FavouriteAlbum[] = [
     producers: ['Young Chop', 'Mike Will Made It', 'A+', 'K.E. on the Track', 'YGOnDaBeat', 'Leek-E-Leek', 'Casa Di'],
     features: ['Lil Reese', '50 Cent', 'Wiz Khalifa', 'French Montana', 'Young Jeezy', 'Rick Ross'],
     cover: '/covers/albums/chief-keef-finally-rich.webp',
+    note: 'Album tellement important et influent dans le rap. Finally Rich est l\'emblème de la drill de Chicago et a influencé le rap à une échelle qu\'on ne peut pas quantifier. Les productions de Young Chop amenant des nouvelles sonorités de synthé et des flows nouveaux ont fait naître une toute nouvelle génération d\'artistes qui ont toujours décrit Chief Keef comme une influence majeure dans leur carrière.'
   },
   {
     id: 'young-thug-beautiful-thugger-girls',
@@ -211,6 +217,7 @@ export const topAlbums: readonly FavouriteAlbum[] = [
     ],
     features: ['Millie Go Lightly', 'Gunna', 'Future', 'Quavo', 'Snoop Dogg', 'Lil Durk', 'Jacquees'],
     cover: '/covers/albums/young-thug-beautiful-thugger-girls.webp',
+    note: 'Beautiful Thugger Girls montre la versatilité de Young Thug, des productions proches de la Country, du R&B et des productions légères presque niaises qui prouvent que la voix de Young Thug suffit elle-même à façonner un univers unique.' 
   },
   {
     id: 'destroy-lonely-broken-hearts',
@@ -248,6 +255,7 @@ export const topAlbums: readonly FavouriteAlbum[] = [
         cover: '/covers/albums/destroy-lonely-broken-hearts-3.webp',
       },
     ],
+    note: 'Destroy Lonely souvent réduit injustement à une copie de Playboi Carti nous montre avec cette trilogie qu\'il a un style de trap unique. Des productions propres à son style : des 808 et des basses très présentes, beaucoup de samples, une voix et des flows jamais vu chez aucun autre artiste. Broken Hearts est un véritable manifeste de l\'évolution de la trap et une preuve de plus que Destroy Lonely maîtrise son art à la perfection.'
   },
   {
     id: 'theodora-bad-boy-lovestory',
@@ -261,6 +269,7 @@ export const topAlbums: readonly FavouriteAlbum[] = [
     ],
     features: ['Jahlys', 'Zoomy'],
     cover: '/covers/albums/theodora-bad-boy-lovestory.webp',
+    note: 'Véritable bombe culturelle en France, Bad boy lovestory est un album qui amène sur le devant de la scène des styles musicaux peu représentés dans le paysage musical français : Bouyon, Dancehall, Pop, variété française, R&B, Amapiano, ... Théodora a une voix unique et montre son incroyable capacité à interpréter différents styles musicaux en y apportant une couleur unique et nouvelle. Cet album marque les jeunes générations qui se sentent représentées par une artiste en dehors des normes de beautés, de genres et de couleurs. Car Thédora est une artiste engagée et parle ouvertement de sa bisexualité, est fière de sa couleur de peau et de son physique aux antipodes de la norme.' 
   },
   {
     id: 'jeune-morty-eponyme',
@@ -274,6 +283,7 @@ export const topAlbums: readonly FavouriteAlbum[] = [
     ],
     features: [],
     cover: '/covers/albums/jeune-morty-eponyme.webp',
+    note: 'Jeune Morty : un artiste qui amène ses racines africaines dans sa musique et qui mélange les inspirations de la trap, de la drill, de l\'afrobeat et du cloud rap. Éponyme est un album qui était très attendu par les fans de Jeune Morty qui passe d\'un artiste qui manque de sérieux à un artiste capable de produire des projets cohérents et aboutis. J\'ai été marqué par la qualité de production et la variété des flows de Jeune Morty qui était déjà connu pour sa voix et sa façon de poser unique.'
   },
 ]
 

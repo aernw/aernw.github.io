@@ -47,7 +47,7 @@ export const experiences: readonly Experience[] = [
     company: 'Travel Me',
     logo: 'experiences/travelme-logo.webp',
     location: 'Paris',
-    period: '09/2025 — 07/2026',
+    period: '09/2025 — 07/2026 (10 mois)',
     brief: 'Migration d’une infrastructure fragmentée entre plusieurs fournisseurs vers une architecture unifiée sur AWS.',
     summary:
       "Conception et pilotage de la migration : l'infrastructure, répartie entre AWS, Vercel, Firebase " +
@@ -65,7 +65,7 @@ export const experiences: readonly Experience[] = [
     company: 'DILT — Préfecture de Police',
     logo: 'experiences/dilt-logo.webp',
     location: 'Paris',
-    period: '07/2024 — 12/2024',
+    period: '07/2024 — 12/2024 (6 mois)',
     brief: 'Cadrage et pilotage d’un PoC d’IA au sein du département innovation.',
     summary:
       'Définition du périmètre et des livrables, puis réalisation du PoC avec Ollama.',
