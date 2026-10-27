@@ -116,7 +116,7 @@
 .top-artists {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
-  gap: var(--space-3) var(--space-2);
+  gap: var(--space-3) var(--space-1);
 }
 
 .top-artist {
@@ -128,7 +128,7 @@
 }
 
 .top-artist .cover {
-  width: min(100%, 6.5rem);
+  width: max(100%, 6.5rem);
   border-radius: 50%;
   box-shadow:
     0 0 0 2px color-mix(in srgb, var(--ink) 18%, transparent),
@@ -311,29 +311,43 @@
 
 .top-dialog__note {
   margin-top: 1.25rem;
+  text-align: justify;
   line-height: 1.55;
   opacity: 0.88;
 }
 
 .top-dialog__nav {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 2;
   display: flex;
   gap: 0.6rem;
-  margin-top: 1.5rem;
 }
 
 .top-dialog__nav button {
-  padding: 0.55rem 1rem;
+  display: grid;
+  place-items: center stretch;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
   border-radius: var(--radius-pill);
-  font-size: var(--text-small);
+  font-size: 1.5rem;
+  line-height: 0.5rem;
   font-weight: 600;
   color: var(--accent);
   border: 1px solid var(--glass-edge);
 }
 
+.top-dialog__nav button span {
+  position: relative;
+  top: -0.08em;
+}
+
 .top-dialog__close {
   position: absolute;
   top: 1.25rem;
-  right: 1.25rem;
+  left: 1.25rem;
   display: grid;
   place-items: center;
   width: 2.5rem;

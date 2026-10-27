@@ -116,6 +116,15 @@ function AlbumPanel({ album, rank, previous, next, onStep, onClose }: AlbumPanel
 
   return (
     <div className="top-dialog__panel glass">
+      <div className="top-dialog__nav">
+        <button type="button" onClick={() => onStep(-1)} aria-label={`Album précédent : ${previous}`}>
+          <span aria-hidden="true">‹</span>
+        </button>
+        <button type="button" onClick={() => onStep(1)} aria-label={`Album suivant : ${next}`}>
+          <span aria-hidden="true">›</span>
+        </button>
+      </div>
+
       {/* La clé rejoue la sortie du vinyle à chaque changement de volume. */}
       <div className="top-dialog__art" key={volume}>
         <span className="top-dialog__vinyl" aria-hidden="true">
@@ -125,10 +134,6 @@ function AlbumPanel({ album, rank, previous, next, onStep, onClose }: AlbumPanel
       </div>
 
       <div className="top-dialog__info">
-        <p className="top-dialog__rank">
-          N° {rank}
-          {isSeries ? `  ·  ${releases.length} volumes` : ''}
-        </p>
         <h3 id="top-dialog-title" className="top-dialog__title">
           {release.title}
         </h3>
@@ -163,14 +168,6 @@ function AlbumPanel({ album, rank, previous, next, onStep, onClose }: AlbumPanel
           <p className="top-dialog__note">« {album.note.trim()} »</p>
         ) : null}
 
-        <div className="top-dialog__nav">
-          <button type="button" onClick={() => onStep(-1)}>
-            ‹ N° {previous}
-          </button>
-          <button type="button" onClick={() => onStep(1)}>
-            N° {next} ›
-          </button>
-        </div>
       </div>
 
       <button type="button" className="top-dialog__close" onClick={onClose}>

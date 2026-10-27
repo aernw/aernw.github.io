@@ -85,7 +85,7 @@ export const albums: Readonly<Record<Side, Album>> = {
         description: 'La musique et le code, deux choses que j’ai du mal à séparer',
       },
       { id: 'appris', title: 'Ce que j’ai appris', description: 'Leçons et constats que je veux garder' },
-      { id: 'top', title: 'Mon top de tous les temps', description: 'Bladee, Retro X, Ecco2k, Yung Lean…' },
+      { id: 'top', title: 'Les albums et artistes qui m\'ont marqués', description: 'Bladee, Ecco2k, Ril3y, Yung Lean…' },
       { id: 'concerts', title: 'Concerts', description: 'The Weeknd, Bladee, Houdi, We Love Green…' },
       {
         id: 'decouvertes',
