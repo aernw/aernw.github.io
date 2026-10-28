@@ -108,7 +108,7 @@ interface AlbumPanelProps {
  * L'album ouvert. Pour une série, des vignettes passent d'un volume à l'autre :
  * le vinyle ressort, et les crédits suivent.
  */
-function AlbumPanel({ album, rank, previous, next, onStep, onClose }: AlbumPanelProps) {
+function AlbumPanel({ album, previous, next, onStep, onClose }: AlbumPanelProps) {
   const [volume, setVolume] = useState(0)
   const releases = releasesOf(album)
   const release = releases[volume] ?? releases[0]
